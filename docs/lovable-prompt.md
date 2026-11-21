@@ -82,7 +82,7 @@ STAFF (Bolničar: med. sestra Maja Kos). Desktop-first but still works on mobile
 
 12. Nova rehabilitacija (open at discharge), short form in steps:
 - Choose a template (6 big cards): "Srčno popuščanje", "Po infarktu ali operaciji srca", "Nov kolk ali koleno", "KOPB", "Možganska kap", "Rak na sistemskem zdravljenju".
-- "Davčna številka bolnika", "Ime in priimek" (only if new), editable list of medicines pre-filled from the template, end date pre-filled (e.g. +30 dni).
+- "Davčna številka bolnika", "Ime in priimek" (only if new), medicines step: the template's recommended medicines as cards (e.g. Furosemid, Bisoprolol, Ramipril, Spironolakton, Dapagliflozin) with a tick box and big dose chips (Furosemid "20 mg" "40 mg" "80 mg", plus "zjutraj" / "zvečer"), a small "Uredi" link per card for a custom dose, and "+ Dodaj zdravilo" with a search field at the bottom; end date pre-filled (e.g. +30 dni).
 - Button "Odpri rehabilitacijo", then show the printable "Prijavni listek": davčna številka, "Začasno geslo: KM7P-4XQ2", "Velja do: 28. 11. 2026", a QR placeholder, and the note "Hranite ločeno od odpustnice." Buttons "Natisni" and "Novo začasno geslo".
 
 MOCK DATA: Janez Novak (78, srčno popuščanje, dry weight 72 kg, weights over 5 days 72,0 → 72,4 → 73,1 → 74,0 → 74,5, status red), plus about 20 other patients across the six templates, mostly green, a few yellow. Use made-up names only.

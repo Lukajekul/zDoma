@@ -38,7 +38,7 @@ For every group: pill reminders, because medicine problems are the most common h
 
 ### Templates
 
-Each group is one **template**: a hand-written data file with check-in questions, red-flag rules, default medicines, exercises and a default rehabilitacija length. The code is generic. One check-in screen shows the template's questions, and one function checks the answers against the template's rules and returns a status and a reason. A new condition is one new file, with no new screens. There's no AI.
+Each group is one **template**: a hand-written data file with check-in questions, red-flag rules, recommended medicines with their usual doses, exercises and a default rehabilitacija length. The code is generic. One check-in screen shows the template's questions, and one function checks the answers against the template's rules and returns a status and a reason. A new condition is one new file, with no new screens. There's no AI.
 
 ## Users
 
@@ -79,6 +79,7 @@ Odpuščenec and zadolženec describe a relationship to a patient, not an accoun
 
 ### Staff (bolničar): as little work as possible
 - **Discharge in about 1 minute:** pick a template, enter the patient's davčna številka, adjust medicines and the end date.
+- **Medicines in a few taps:** the template recommends the usual medicines for that illness, merged with what the patient already takes (eRecept). Tick one and tap a usual dose (Furosemid 20 / 40 / 80 mg). "Uredi" for anything else, "Dodaj zdravilo" for other medicines. Doses come from guidelines (`docs/medicines.md`), and only staff see the options.
 - **The dashboard shows only problems.** Green patients are hidden, and every alert says why it fired.
 - **Patronažna sestra assigned by address:** each covers a teren (občina, villages). At discharge the app suggests the right one, the bolničar confirms with one tap. No match → "Nedodeljeni" on the dashboard, nobody gets lost. "Nadomeščanje" covers leave.
 - **Built for the patronažna sestra with many patients:** on her phone she searches and filters by "Moji pacienti", status, občina, template, missed check-in and medicines not picked up.

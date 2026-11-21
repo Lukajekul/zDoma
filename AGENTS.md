@@ -93,7 +93,7 @@ Background and sources: `docs/research.md`. Six templates, heart failure is the 
 | `mozganska-kap` | Možganska kap |
 | `rak-sistemsko` | Rak na sistemskem zdravljenju |
 
-- **A template is data, not code**: check-in questions, red-flag rules (with a Slovenian reason text), default medicines, exercises, default rehabilitacija length in days. One file per template in `src/lib/templates/`.
+- **A template is data, not code**: check-in questions, red-flag rules (with a Slovenian reason text), recommended medicines (each with its usual dose options, times of day and a plain-language "what it's for", sourced from `docs/medicines.md`), exercises, default rehabilitacija length in days. One file per template in `src/lib/templates/`.
 - **No condition-specific code anywhere else.** Screens render whatever the template lists. `src/lib/triage/` evaluates whatever rules the template lists. Adding a template must never need a new screen.
 - **Every alert has a reason** a nurse can read, e.g. "Teža +2,5 kg v 3 dneh".
 - **Emergency answers go to 112 first.** Chest pain, sudden severe breathlessness, fainting or stroke signs show a full-screen "Pokličite 112" before anything is saved or sent. For cancer, fever ≥38 °C shows the ward's phone number. zDoma is never presented as an emergency service.
@@ -119,6 +119,7 @@ Background and sources: `docs/research.md`. Six templates, heart failure is the 
 - Days left = pack size from the pick-up ÷ daily dose. A few days before they run out, the patient sees "Zdravila vam bodo zmanjkala čez 5 dni. Pokličite osebnega zdravnika za nov recept." It never suggests changing a dose.
 
 ### Keep the bolničar's work minimal
+- **Medicines in a few taps.** At discharge the template's recommended medicines are listed, pre-filled with what the patient already takes (eRecept). The bolničar ticks a medicine and taps one of its usual doses (e.g. Furosemid 20 / 40 / 80 mg, zjutraj). "Uredi" changes dose, times or duration, "Dodaj zdravilo" adds any other medicine. These are suggestions for staff only; the patient never sees dose options. Usual doses come from `docs/medicines.md`, never invented.
 - Opening a rehabilitacija takes about a minute: template + davčna številka + changes. Everything else is pre-filled from the template.
 - The dashboard shows only patients who need action. Green patients are hidden by default.
 - **Patronažne sestre are assigned by address, not by hand.** Each one covers tereni (občina, optionally naselja). At discharge the app suggests the nurse whose teren covers the patient's address; the bolničar confirms with one tap. No match → "Nedodeljeni", which any nurse can take with "Prevzemi". "Nadomeščanje" hands her patients to a colleague until a date. The hospital nurse who opens the rehabilitacija is not the default.

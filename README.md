@@ -38,7 +38,7 @@ Za vse skupine velja: opomniki za zdravila, ker so težave z zdravili najpogoste
 
 ### Predloge
 
-Vsaka skupina je ena **predloga**: podatkovna datoteka z vprašanji, pravili za opozorila, privzetimi zdravili, vajami in privzeto dolžino rehabilitacije. Koda je splošna: en zaslon za pregled stanja prikaže vprašanja iz predloge, ena funkcija preveri odgovore po pravilih predloge in vrne status in razlog. Nova skupina pomeni samo novo datoteko, brez novih zaslonov. Predloge napišemo sami po smernicah. Kasneje jih bodo urejali zdravniki. Brez umetne inteligence.
+Vsaka skupina je ena **predloga**: podatkovna datoteka z vprašanji, pravili za opozorila, priporočenimi zdravili z običajnimi odmerki, vajami in privzeto dolžino rehabilitacije. Koda je splošna: en zaslon za pregled stanja prikaže vprašanja iz predloge, ena funkcija preveri odgovore po pravilih predloge in vrne status in razlog. Nova skupina pomeni samo novo datoteko, brez novih zaslonov. Predloge napišemo sami po smernicah. Kasneje jih bodo urejali zdravniki. Brez umetne inteligence.
 
 ## Tipi uporabnikov
 
@@ -92,6 +92,7 @@ Ob vsakem zdravilu in vaji označi, da je opravljeno. Sam odobri ali zavrne pro�
 Cilj: **čim manj dela za osebje.**
 
 - **Odpust v približno 1 minuti:** izbere predlogo, vpiše davčno številko pacienta, prilagodi zdravila in datum konca. Vse drugo pride iz predloge.
+- **Zdravila z nekaj dotiki:** predloga priporoči zdravila, ki se pri tej bolezni običajno predpišejo, skupaj z zdravili, ki jih pacient že jemlje (eRecept). Bolničar zdravilo obkljuka in tapne enega od običajnih odmerkov (npr. Furosemid 20 / 40 / 80 mg, zjutraj). Z »Uredi« nastavi drugačen odmerek, čas ali trajanje, z »Dodaj zdravilo« doda katero koli drugo zdravilo. Odmerki so iz smernic, ne izmišljeni, in jih vidi samo osebje.
 - **Rehabilitacija traja do datuma, ki ga določi bolničar.** Lahko jo podaljša (»Podaljšaj«) ali na novo odpre kmalu po koncu.
 - **Nadzorna plošča prikaže samo težave.** Zeleni bolniki so privzeto skriti. Vsako opozorilo pove, zakaj se je sprožilo.
 - **Patronažna sestra se dodeli po naslovu:** vsaka pokriva svoj teren (občina, naselja). Ob odpustu aplikacija predlaga pravo sestro, bolničar potrdi z enim dotikom. Brez ujemanja gre pacient med »Nedodeljene«, kjer ga lahko katera koli sestra prevzame (»Prevzemi«). Med dopustom »Nadomeščanje« preda paciente sodelavki do določenega datuma.
