@@ -1,0 +1,17 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "zdoma",
+	"main": ".open-next/worker.js",
+	"compatibility_date": "2026-11-01",
+	"compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+	"assets": {
+		"directory": ".open-next/assets",
+		"binding": "ASSETS"
+	},
+	"observability": {
+		"enabled": true
+	}
+	// NEXT_PUBLIC_* values are inlined at build time from .env.local.
+	// Server-only secrets are Worker secrets, never in this file:
+	//   npx wrangler secret put SUPABASE_SERVICE_ROLE_KEY
+}
