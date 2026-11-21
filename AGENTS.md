@@ -122,7 +122,7 @@ Background and sources: `docs/research.md`. Six templates, heart failure is the 
 
 ### Check-in: simple and specific to the patient
 - **One tap per answer.** Big buttons only: no typing, no sliders, no free text. Weight is a row of buttons around the patient's last weight, with "Drugo" for a number field.
-- **Short.** At most 5 questions a day, one per screen.
+- **Short.** At most 6 questions a day, one per screen.
 - **"Enako kot včeraj".** When yesterday was green, one tap answers everything the same as yesterday, except questions the template marks `vednoVprasaj` (e.g. weight for heart failure).
 - **Specific to this patient, not general.** The template lists the possible questions. At discharge they come pre-ticked and the bolničar can untick any; questions use the patient's own values (dry weight, their medicine names), e.g. "Ali tehtate več kot 72 kg?" instead of "Kakšna je vaša teža?".
 

@@ -70,7 +70,7 @@ Earlier trials failed when patients stopped using the system. So:
 4. **Something back every day:** own numbers ("72,4 kg – blizu vaše ciljne teže ✓", "Dan 6 od 30"), and the nurse's name when she acts ("Sestra Mojca vas bo poklicala danes do 12:00").
 
 ### Patient app
-- **Daily check-in (about 30 s):** at most 5 questions, one per screen, **one tap per answer**. The template's questions come pre-ticked (the bolničar can untick any) and use this patient's own values ("Ali tehtate več kot 72 kg?"), not a generic form.
+- **Daily check-in (about 30 s):** at most 6 questions, one per screen, **one tap per answer**. The template's questions come pre-ticked (the bolničar can untick any) and use this patient's own values ("Ali tehtate več kot 72 kg?"), not a generic form.
 - **Pill reminders** with a "Vzeto" button. Missed doses feed into triage.
 - **Pharmacy pick-up (eRecept, mocked):** each medicine shows whether it was collected. Not collected after discharge → reminder to the patient, then the family, then an alert for staff ("Furosemid ni prevzet 3 dni po odpustu"). In production from eRecept via CEZIH.
 - **Before medicines run out:** days left = pack size from the pick-up ÷ daily dose. "Zdravila vam bodo zmanjkala čez 5 dni. Pokličite osebnega zdravnika za nov recept."

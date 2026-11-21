@@ -16,7 +16,7 @@ Each question below names the guideline sentence it rests on. So the honest line
 - ✅ **Quoted**: read in the original source, quoted word for word.
 - ⚠️ **To confirm**: from a secondary source, or the guideline text couldn't be opened. Check it before you quote it on stage, or ask someone with medical knowledge.
 
-**Rules from `AGENTS.md` §5a still apply.** At most 5 questions a day, one tap per answer, the patient's own values in `{braces}`, and emergency answers go to "Pokličite 112" first. The guidelines say *what* to watch. Most don't set a yellow/red colour, so the "Alert" column means *a nurse looks at it*, and T-04 decides the colour.
+**Rules from `AGENTS.md` §5a still apply.** At most 6 questions a day, one tap per answer, the patient's own values in `{braces}`, and emergency answers go to "Pokličite 112" first. The guidelines say *what* to watch. Most don't set a yellow/red colour, so the "Alert" column means *a nurse looks at it*, and T-04 decides the colour.
 
 **Blood pressure question (shared rule).** Srčno popuščanje, Po infarktu and Možganska kap always ask "Izmerite krvni tlak. Kakšen je?" whether or not the patient has a monitor. Answers: **Pod {ciljniTlak} · {ciljniTlak} ali več · Nimam ga**. "Nimam ga" saves no reading and **counts as not completed**: a red part of that day's slice in the progress ring (§5a), and the nurse sees "Brez merilnika tlaka". The target `{ciljniTlak}` is set per patient at discharge (default 130/80). No guideline gives a red-flag number for a single home reading, so a reading above target is only a trend for the nurse: alert after several days in a row (number of days to confirm, T-42).
 
@@ -126,7 +126,7 @@ GOLD 2023 defines a flare-up as *an event with dyspnoea and/or cough and sputum 
 | 5 | Ali vas zelo duši, vas boli v prsih ali krvavite in krvavitev ne preneha? | Ne · Da | Da → **Pokličite 112** | UKONS: shortness of breath at rest, chest pain and uncontrolled bleeding → *"Advise 999"* (112 in the EU) | ✅ |
 
 - **UKONS triage logic, worth copying into T-04**: *"All Green = self care advice · 1 Amber = review within 24 hours · 2 or more amber = escalate to red · Red = … face to face assessment as soon as possible."* ✅
-- ESMO reportedly suggests keeping questionnaires to about 10–20 items. We use 5 a day. ⚠️
+- ESMO reportedly suggests keeping questionnaires to about 10–20 items. We use at most 6 a day. ⚠️
 
 ### ⚠️ Open question: fever threshold for cancer
 `AGENTS.md` §5a says **≥ 38 °C** → ward phone. UKONS, the triage tool actually used on oncology phone lines, already escalates at **37,5 °C or below 36,0 °C**. ESMO's definition of neutropenic fever is >38,0 °C twice or >38,3 °C once. Someone with oncology knowledge needs to choose, and then update `AGENTS.md`. Until then, the buttons above can follow either rule.
@@ -134,8 +134,8 @@ GOLD 2023 defines a flare-up as *an event with dyspnoea and/or cough and sputum 
 ---
 
 ## Still to confirm before the pitch
-- [ ] **Over the 5-question limit:** with blood pressure added, Srčno popuščanje has 6 questions, and Po infarktu after surgery has 6. Either the bolničar unticks one at discharge (never the 112 question), or `AGENTS.md` §5a allows 6. Needs a team decision.
-- [ ] "Nimam ga" turns part of every day red for a patient without a monitor, and red never turns green. Is that the intended nudge to get one, or should the bolničar untick the question when the patient has no monitor?
+- [x] **Question limit:** raised to 6 a day in `AGENTS.md` §5a so blood pressure fits (team decision, 21. 11. 2026).
+- [x] **"Nimam ga" stays red:** decided. It's the intended nudge to get a monitor, so the question stays ticked even for patients without one.
 - [ ] HF: heartfailurematters "Chest pain" page as the 112 source.
 - [ ] After MI: the ESC ACS 2023 wording on chest pain and when to call emergency services, and on DAPT adherence.
 - [ ] Hip/knee: ESA VTE guideline citations and clot warning signs; any European source for "pain rising over days".

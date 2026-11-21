@@ -81,7 +81,7 @@ Zgodnje raziskave so propadle, ker so pacienti nehali sodelovati. Zato:
 
 ### Pregled stanja in zdravila
 
-- **Pregled stanja je kratek in ves z enim dotikom:** največ 5 vprašanj, eno na zaslon, odgovori so veliki gumbi (brez tipkanja). Teža je vrsta gumbov okoli zadnje teže. Če je bil včeraj zelen, gumb »Enako kot včeraj« z enim dotikom odgovori na vse razen ključnih vprašanj (npr. teža).
+- **Pregled stanja je kratek in ves z enim dotikom:** največ 6 vprašanj, eno na zaslon, odgovori so veliki gumbi (brez tipkanja). Teža je vrsta gumbov okoli zadnje teže. Če je bil včeraj zelen, gumb »Enako kot včeraj« z enim dotikom odgovori na vse razen ključnih vprašanj (npr. teža).
 - **Vprašanja so prilagojena pacientu:** vprašanja iz predloge so že obkljukana (bolničar lahko katero odstrani), bolničar vpiše le pacientove vrednosti. Pacient ne vidi splošnega obrazca, ampak npr. »Ali tehtate več kot 72 kg?«.
 - **Prevzem zdravil (eRecept):** pri vsakem zdravilu je vidno, ali ga je pacient prevzel v lekarni. Če ga ne prevzame, aplikacija najprej opomni pacienta, nato obvesti zadolženca in šele nato bolničarja (»Furosemid ni prevzet 3 dni po odpustu«). Na hekatonu podatke simuliramo, v praksi bi prišli iz eRecepta prek CEZIH.
 - **Opomnik, preden zdravila zmanjka:** iz velikosti prevzetega pakiranja in dnevnega odmerka aplikacija izračuna, koliko dni še zadošča, in pacientu pravočasno napiše: »Zdravila vam bodo zmanjkala čez 5 dni. Pokličite osebnega zdravnika za nov recept.« Odmerkov nikoli ne spreminja.
