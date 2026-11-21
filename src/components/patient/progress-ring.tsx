@@ -50,8 +50,8 @@ export function ProgressRing({ data, extendedUntil }: { data: RingData; extended
           })}
         </svg>
         <p className="absolute flex flex-col items-center">
-          <span className="text-5xl leading-none font-extrabold tracking-tight">{percent.format(data.answeredShare)}</span>
-          <span className="mt-1 text-base text-muted-foreground">odgovorjeno</span>
+          <span className="text-5xl leading-none font-extrabold tracking-tight">{percent.format(data.overallShare)}</span>
+          <span className="mt-1 text-base text-muted-foreground">opravljeno</span>
         </p>
       </div>
       <figcaption className="text-lg text-muted-foreground">

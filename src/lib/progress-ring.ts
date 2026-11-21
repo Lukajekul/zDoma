@@ -10,8 +10,10 @@ export type RingDay = { date: IsoDate; parts: RingPart[] };
 
 export type RingData = {
   days: RingDay[];
-  /** Answered questions ÷ questions due so far (past days + today once done), 0–1. */
+  /** Answered questions ÷ questions due so far (past days + today once done), 0–1. Nurse "Sodelovanje". */
   answeredShare: number;
+  /** Answered questions ÷ all questions of the whole rehabilitacija, 0–1: the green part of the ring. */
+  overallShare: number;
   doneDays: number;
   missedDays: number;
   /** Days still to come, today included while today's check-in isn't done. */
@@ -72,5 +74,6 @@ export function progressRing(input: {
       leftDays++;
     }
   }
-  return { days, answeredShare: due ? answered / due : 0, doneDays, missedDays, leftDays };
+  const all = days.length * perDay;
+  return { days, answeredShare: due ? answered / due : 0, overallShare: all ? answered / all : 0, doneDays, missedDays, leftDays };
 }
