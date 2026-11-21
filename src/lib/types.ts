@@ -143,6 +143,10 @@ export interface Medication {
   photo_url: string | null;
   start_date: IsoDate;
   end_date: IsoDate | null;
+  /** Pharmacy pick-up date from eRecept (mock, T-31); null = "ni prevzeto". */
+  picked_up_at: IsoDate | null;
+  /** Pills in the pack picked up, for days left (T-32). */
+  pickup_pack_size: number | null;
   created_at: IsoDateTime;
 }
 
@@ -209,6 +213,8 @@ export interface Alert {
   id: Uuid;
   rehab_id: Uuid;
   checkin_id: Uuid | null;
+  /** Set for alerts about one medicine (not picked up, T-31). */
+  medication_id: Uuid | null;
   status: Exclude<TriageStatus, "zeleno">;
   /** Nurse-readable Slovenian reason, always present. */
   reason: string;
