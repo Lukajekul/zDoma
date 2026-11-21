@@ -14,16 +14,762 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      alerts: {
+        Row: {
+          action: string | null
+          checkin_id: string | null
+          created_at: string
+          id: string
+          reason: string
+          rehab_id: string
+          resolved_at: string | null
+          resolved_by: string | null
+          source: Database["public"]["Enums"]["alert_source"]
+          state: Database["public"]["Enums"]["alert_state"]
+          status: Database["public"]["Enums"]["triage_status"]
+        }
+        Insert: {
+          action?: string | null
+          checkin_id?: string | null
+          created_at?: string
+          id?: string
+          reason: string
+          rehab_id: string
+          resolved_at?: string | null
+          resolved_by?: string | null
+          source?: Database["public"]["Enums"]["alert_source"]
+          state?: Database["public"]["Enums"]["alert_state"]
+          status: Database["public"]["Enums"]["triage_status"]
+        }
+        Update: {
+          action?: string | null
+          checkin_id?: string | null
+          created_at?: string
+          id?: string
+          reason?: string
+          rehab_id?: string
+          resolved_at?: string | null
+          resolved_by?: string | null
+          source?: Database["public"]["Enums"]["alert_source"]
+          state?: Database["public"]["Enums"]["alert_state"]
+          status?: Database["public"]["Enums"]["triage_status"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "alerts_checkin_id_fkey"
+            columns: ["checkin_id"]
+            isOneToOne: false
+            referencedRelation: "checkins"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "alerts_rehab_id_fkey"
+            columns: ["rehab_id"]
+            isOneToOne: false
+            referencedRelation: "rehabilitacije"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "alerts_resolved_by_fkey"
+            columns: ["resolved_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "alerts_resolved_by_fkey"
+            columns: ["resolved_by"]
+            isOneToOne: false
+            referencedRelation: "staff_directory"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      audit_log: {
+        Row: {
+          action: string
+          actor_id: string | null
+          created_at: string
+          details: Json
+          entity: string
+          entity_id: string | null
+          id: number
+        }
+        Insert: {
+          action: string
+          actor_id?: string | null
+          created_at?: string
+          details?: Json
+          entity: string
+          entity_id?: string | null
+          id?: never
+        }
+        Update: {
+          action?: string
+          actor_id?: string | null
+          created_at?: string
+          details?: Json
+          entity?: string
+          entity_id?: string | null
+          id?: never
+        }
+        Relationships: [
+          {
+            foreignKeyName: "audit_log_actor_id_fkey"
+            columns: ["actor_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "audit_log_actor_id_fkey"
+            columns: ["actor_id"]
+            isOneToOne: false
+            referencedRelation: "staff_directory"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      checkins: {
+        Row: {
+          answers: Json
+          checkin_date: string
+          created_at: string
+          entered_by: string
+          id: string
+          photo_path: string | null
+          reasons: string[]
+          rehab_id: string
+          same_as_yesterday: boolean
+          triage_status: Database["public"]["Enums"]["triage_status"]
+        }
+        Insert: {
+          answers?: Json
+          checkin_date?: string
+          created_at?: string
+          entered_by?: string
+          id?: string
+          photo_path?: string | null
+          reasons?: string[]
+          rehab_id: string
+          same_as_yesterday?: boolean
+          triage_status?: Database["public"]["Enums"]["triage_status"]
+        }
+        Update: {
+          answers?: Json
+          checkin_date?: string
+          created_at?: string
+          entered_by?: string
+          id?: string
+          photo_path?: string | null
+          reasons?: string[]
+          rehab_id?: string
+          same_as_yesterday?: boolean
+          triage_status?: Database["public"]["Enums"]["triage_status"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "checkins_entered_by_fkey"
+            columns: ["entered_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "checkins_entered_by_fkey"
+            columns: ["entered_by"]
+            isOneToOne: false
+            referencedRelation: "staff_directory"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "checkins_rehab_id_fkey"
+            columns: ["rehab_id"]
+            isOneToOne: false
+            referencedRelation: "rehabilitacije"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      dose_logs: {
+        Row: {
+          created_at: string
+          entered_by: string
+          id: string
+          medication_id: string
+          rehab_id: string
+          scheduled_date: string
+          status: Database["public"]["Enums"]["dose_status"]
+          time_of_day: Database["public"]["Enums"]["time_of_day"]
+        }
+        Insert: {
+          created_at?: string
+          entered_by?: string
+          id?: string
+          medication_id: string
+          rehab_id: string
+          scheduled_date?: string
+          status: Database["public"]["Enums"]["dose_status"]
+          time_of_day: Database["public"]["Enums"]["time_of_day"]
+        }
+        Update: {
+          created_at?: string
+          entered_by?: string
+          id?: string
+          medication_id?: string
+          rehab_id?: string
+          scheduled_date?: string
+          status?: Database["public"]["Enums"]["dose_status"]
+          time_of_day?: Database["public"]["Enums"]["time_of_day"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "dose_logs_entered_by_fkey"
+            columns: ["entered_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "dose_logs_entered_by_fkey"
+            columns: ["entered_by"]
+            isOneToOne: false
+            referencedRelation: "staff_directory"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "dose_logs_medication_id_fkey"
+            columns: ["medication_id"]
+            isOneToOne: false
+            referencedRelation: "medications"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "dose_logs_rehab_id_fkey"
+            columns: ["rehab_id"]
+            isOneToOne: false
+            referencedRelation: "rehabilitacije"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      family_access: {
+        Row: {
+          created_at: string
+          decided_at: string | null
+          id: string
+          patient_id: string
+          relation: string | null
+          requester_id: string
+          status: Database["public"]["Enums"]["access_status"]
+        }
+        Insert: {
+          created_at?: string
+          decided_at?: string | null
+          id?: string
+          patient_id: string
+          relation?: string | null
+          requester_id: string
+          status?: Database["public"]["Enums"]["access_status"]
+        }
+        Update: {
+          created_at?: string
+          decided_at?: string | null
+          id?: string
+          patient_id?: string
+          relation?: string | null
+          requester_id?: string
+          status?: Database["public"]["Enums"]["access_status"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "family_access_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "family_access_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "staff_directory"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "family_access_requester_id_fkey"
+            columns: ["requester_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "family_access_requester_id_fkey"
+            columns: ["requester_id"]
+            isOneToOne: false
+            referencedRelation: "staff_directory"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      medications: {
+        Row: {
+          active_substance: string | null
+          change: Database["public"]["Enums"]["medication_change"]
+          created_at: string
+          dose: string
+          end_date: string | null
+          id: string
+          name: string
+          photo_url: string | null
+          previous_dose: string | null
+          purpose: string | null
+          rehab_id: string
+          start_date: string
+          times: Database["public"]["Enums"]["time_of_day"][]
+        }
+        Insert: {
+          active_substance?: string | null
+          change?: Database["public"]["Enums"]["medication_change"]
+          created_at?: string
+          dose: string
+          end_date?: string | null
+          id?: string
+          name: string
+          photo_url?: string | null
+          previous_dose?: string | null
+          purpose?: string | null
+          rehab_id: string
+          start_date?: string
+          times?: Database["public"]["Enums"]["time_of_day"][]
+        }
+        Update: {
+          active_substance?: string | null
+          change?: Database["public"]["Enums"]["medication_change"]
+          created_at?: string
+          dose?: string
+          end_date?: string | null
+          id?: string
+          name?: string
+          photo_url?: string | null
+          previous_dose?: string | null
+          purpose?: string | null
+          rehab_id?: string
+          start_date?: string
+          times?: Database["public"]["Enums"]["time_of_day"][]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "medications_rehab_id_fkey"
+            columns: ["rehab_id"]
+            isOneToOne: false
+            referencedRelation: "rehabilitacije"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      nadomescanje: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          id: string
+          nurse_id: string
+          substitute_id: string
+          until_date: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          nurse_id: string
+          substitute_id: string
+          until_date: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          nurse_id?: string
+          substitute_id?: string
+          until_date?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "nadomescanje_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "nadomescanje_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "staff_directory"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "nadomescanje_nurse_id_fkey"
+            columns: ["nurse_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "nadomescanje_nurse_id_fkey"
+            columns: ["nurse_id"]
+            isOneToOne: false
+            referencedRelation: "staff_directory"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "nadomescanje_substitute_id_fkey"
+            columns: ["substitute_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "nadomescanje_substitute_id_fkey"
+            columns: ["substitute_id"]
+            isOneToOne: false
+            referencedRelation: "staff_directory"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          address: string | null
+          checkin_time: string
+          created_at: string
+          davcna: string
+          first_name: string
+          id: string
+          is_staff: boolean
+          last_name: string
+          naselje: string | null
+          obcina: string | null
+          phone: string | null
+          photo_url: string | null
+        }
+        Insert: {
+          address?: string | null
+          checkin_time?: string
+          created_at?: string
+          davcna: string
+          first_name?: string
+          id: string
+          is_staff?: boolean
+          last_name?: string
+          naselje?: string | null
+          obcina?: string | null
+          phone?: string | null
+          photo_url?: string | null
+        }
+        Update: {
+          address?: string | null
+          checkin_time?: string
+          created_at?: string
+          davcna?: string
+          first_name?: string
+          id?: string
+          is_staff?: boolean
+          last_name?: string
+          naselje?: string | null
+          obcina?: string | null
+          phone?: string | null
+          photo_url?: string | null
+        }
+        Relationships: []
+      }
+      rehab_exercises: {
+        Row: {
+          active: boolean
+          created_at: string
+          exercise_id: string
+          id: string
+          rehab_id: string
+          repetitions: string | null
+          times_per_day: number
+          title: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          exercise_id: string
+          id?: string
+          rehab_id: string
+          repetitions?: string | null
+          times_per_day?: number
+          title: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          exercise_id?: string
+          id?: string
+          rehab_id?: string
+          repetitions?: string | null
+          times_per_day?: number
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rehab_exercises_rehab_id_fkey"
+            columns: ["rehab_id"]
+            isOneToOne: false
+            referencedRelation: "rehabilitacije"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      rehab_logs: {
+        Row: {
+          created_at: string
+          done: boolean
+          entered_by: string
+          id: string
+          log_date: string
+          pain: number | null
+          rehab_exercise_id: string
+          rehab_id: string
+        }
+        Insert: {
+          created_at?: string
+          done: boolean
+          entered_by?: string
+          id?: string
+          log_date?: string
+          pain?: number | null
+          rehab_exercise_id: string
+          rehab_id: string
+        }
+        Update: {
+          created_at?: string
+          done?: boolean
+          entered_by?: string
+          id?: string
+          log_date?: string
+          pain?: number | null
+          rehab_exercise_id?: string
+          rehab_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rehab_logs_entered_by_fkey"
+            columns: ["entered_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "rehab_logs_entered_by_fkey"
+            columns: ["entered_by"]
+            isOneToOne: false
+            referencedRelation: "staff_directory"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "rehab_logs_rehab_exercise_id_fkey"
+            columns: ["rehab_exercise_id"]
+            isOneToOne: false
+            referencedRelation: "rehab_exercises"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "rehab_logs_rehab_id_fkey"
+            columns: ["rehab_id"]
+            isOneToOne: false
+            referencedRelation: "rehabilitacije"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      rehabilitacije: {
+        Row: {
+          assigned_nurse_id: string | null
+          created_at: string
+          created_by: string | null
+          current_status: Database["public"]["Enums"]["triage_status"]
+          diagnosis: string | null
+          end_date: string
+          id: string
+          installed_at: string | null
+          lace: Json | null
+          patient_id: string
+          patient_values: Json
+          questions: string[]
+          start_date: string
+          status: Database["public"]["Enums"]["rehab_status"]
+          template_id: string
+          updated_at: string
+        }
+        Insert: {
+          assigned_nurse_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          current_status?: Database["public"]["Enums"]["triage_status"]
+          diagnosis?: string | null
+          end_date: string
+          id?: string
+          installed_at?: string | null
+          lace?: Json | null
+          patient_id: string
+          patient_values?: Json
+          questions?: string[]
+          start_date?: string
+          status?: Database["public"]["Enums"]["rehab_status"]
+          template_id: string
+          updated_at?: string
+        }
+        Update: {
+          assigned_nurse_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          current_status?: Database["public"]["Enums"]["triage_status"]
+          diagnosis?: string | null
+          end_date?: string
+          id?: string
+          installed_at?: string | null
+          lace?: Json | null
+          patient_id?: string
+          patient_values?: Json
+          questions?: string[]
+          start_date?: string
+          status?: Database["public"]["Enums"]["rehab_status"]
+          template_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rehabilitacije_assigned_nurse_id_fkey"
+            columns: ["assigned_nurse_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "rehabilitacije_assigned_nurse_id_fkey"
+            columns: ["assigned_nurse_id"]
+            isOneToOne: false
+            referencedRelation: "staff_directory"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "rehabilitacije_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "rehabilitacije_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "staff_directory"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "rehabilitacije_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "rehabilitacije_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "staff_directory"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tereni: {
+        Row: {
+          id: string
+          naselja: string[] | null
+          nurse_id: string
+          obcina: string
+          postcodes: string[] | null
+        }
+        Insert: {
+          id?: string
+          naselja?: string[] | null
+          nurse_id: string
+          obcina: string
+          postcodes?: string[] | null
+        }
+        Update: {
+          id?: string
+          naselja?: string[] | null
+          nurse_id?: string
+          obcina?: string
+          postcodes?: string[] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tereni_nurse_id_fkey"
+            columns: ["nurse_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tereni_nurse_id_fkey"
+            columns: ["nurse_id"]
+            isOneToOne: false
+            referencedRelation: "staff_directory"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
-      [_ in never]: never
+      staff_directory: {
+        Row: {
+          first_name: string | null
+          id: string | null
+          last_name: string | null
+          photo_url: string | null
+        }
+        Insert: {
+          first_name?: string | null
+          id?: string | null
+          last_name?: string | null
+          photo_url?: string | null
+        }
+        Update: {
+          first_name?: string | null
+          id?: string | null
+          last_name?: string | null
+          photo_url?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
-      [_ in never]: never
+      can_log_rehab: { Args: { p_rehab: string }; Returns: boolean }
+      can_read_rehab: { Args: { p_rehab: string }; Returns: boolean }
+      is_carer_of: { Args: { p_patient: string }; Returns: boolean }
+      is_staff: { Args: never; Returns: boolean }
+      request_family_access: {
+        Args: { p_davcna: string; p_relation?: string }
+        Returns: undefined
+      }
+      today_lj: { Args: never; Returns: string }
+      valid_davcna: { Args: { d: string }; Returns: boolean }
     }
     Enums: {
-      [_ in never]: never
+      access_status: "pending" | "approved" | "rejected"
+      alert_source: "checkin" | "zdravila" | "brez_pregleda" | "drugo"
+      alert_state: "odprto" | "zaprto"
+      dose_status: "vzeto" | "izpusceno"
+      medication_change: "novo" | "spremenjeno" | "nespremenjeno" | "ukinjeno"
+      rehab_status: "aktivna" | "zakljucena"
+      time_of_day: "zjutraj" | "opoldne" | "zvecer" | "ponoci"
+      triage_status: "zeleno" | "rumeno" | "rdece"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +896,15 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      access_status: ["pending", "approved", "rejected"],
+      alert_source: ["checkin", "zdravila", "brez_pregleda", "drugo"],
+      alert_state: ["odprto", "zaprto"],
+      dose_status: ["vzeto", "izpusceno"],
+      medication_change: ["novo", "spremenjeno", "nespremenjeno", "ukinjeno"],
+      rehab_status: ["aktivna", "zakljucena"],
+      time_of_day: ["zjutraj", "opoldne", "zvecer", "ponoci"],
+      triage_status: ["zeleno", "rumeno", "rdece"],
+    },
   },
 } as const
