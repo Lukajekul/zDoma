@@ -133,7 +133,7 @@ The user types are defined in `README.md` (*Tipi uporabnikov*). Use exactly thes
 | UI (Slovenian) | Code / DB role | Who |
 |---|---|---|
 | Odpuščenec | `odpuscenec` | the discharged patient, owner of their rehabilitacije |
-| Zadolženec | `zadolzenec` | a family member the patient approved to follow along (read-only) |
+| Zadolženec | `zadolzenec` | a family member the patient approved to follow along and help (can mark tasks done with the patient, can't change the plan) |
 | Bolničar | `bolnicar` | a doctor or nurse (staff account) |
 
 Odpuščenec and zadolženec aren't account types. They describe a person's relation to a patient, so one person can be both.
@@ -166,7 +166,9 @@ Odpuščenec and zadolženec aren't account types. They describe a person's rela
 - To get access, they enter the patient's davčna številka under "Zaprosi za dostop". The patient sees "Janez Novak želi spremljati vaše okrevanje" with **Dovoli** / **Zavrni**. Access only starts after the patient approves.
 - Always reply "Prošnja poslana" after a request, whether the number exists or not, so nobody can find out who uses zDoma.
 - Access covers all of that patient's rehabilitacije. The patient can see who has access and remove anyone at any time.
-- The zadolženec gets their own tab, **"Skrbim za"**: a **read-only** view of whether the patient is following the plan (pills taken or missed, exercises done or skipped, check-ins done, current status). They can't change the plan or log anything for the patient.
+- The zadolženec gets their own tab, **"Skrbim za"**: whether the patient is following the plan (pills taken or missed, exercises done or skipped, check-ins done, current status).
+- **When they do a task together with the patient, the zadolženec can mark it**: "Vzeto" for pills, "Opravljeno" for exercises, and the check-in answered with the patient. Every entry stores who entered it (`entered_by`) and shows it to the patient and staff, e.g. "Označila: Ana (hčerka)". The "Pokličite 112" screen works the same on their phone.
+- They **can't** change the plan, medicines or end date, approve other family members, or undo the patient's own entries.
 - **Notifications for the zadolženec (opt-in, part of the later notifications work).** In "Skrbim za", each patient has a "Prejemaj obvestila" switch, off by default. When it's on, the zadolženec gets the same reminders as the patient (pills, exercises, check-in), plus a message when the patient misses one or their status turns yellow or red. They choose email, SMS or both. The patient can see which family members get notifications. Messages that leave the app (email, SMS) never include the diagnosis or medicine names, only "Janez ni vzel jutranjih zdravil. Odprite zDoma."
 - The same person can be an odpuščenec in their own rehabilitacija and a zadolženec for someone else. The "Skrbim za" tab only appears when they have approved access to someone.
 
@@ -189,7 +191,7 @@ src/
   app/
     prijava/        login, first-login password change, family registration
     patient/        odpuščenec: my rehabilitacije, check-in, pills, rehab, family access
-    carer/          zadolženec: "Skrbim za" tab, read-only
+    carer/          zadolženec: "Skrbim za" tab, marking tasks with the patient
     nurse/          bolničar: dashboard, patient detail, care plan
     demo/           QR entry for the live judge demo
     api/            route handlers
@@ -242,7 +244,7 @@ Each task owns its own folder or files. Stay out of folders that another `[~]` t
   2. **Ask the human for approval**, then apply it: `supabase link --project-ref iumofikuduqxpsyhcoic` (once), then `supabase db push`.
   3. Regenerate the types: `supabase gen types typescript --project-id iumofikuduqxpsyhcoic > src/lib/database.types.ts`, and commit them.
   4. Never edit a migration that's already applied. Write a new one. Never run `supabase db reset` or drop tables on the shared project.
-- Every table has row-level security switched on, with policies matching §6: a patient sees their own data, an approved zadolženec can only read, staff see everything.
+- Every table has row-level security switched on, with policies matching §6: a patient sees their own data, an approved zadolženec can read and add task logs and check-ins for that patient (with `entered_by`) but change nothing else, staff see everything.
 - Don't deploy to production unless your task is the deploy task.
 - All patient data is synthetic. Never use real patient data.
 

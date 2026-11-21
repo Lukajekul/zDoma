@@ -23,7 +23,7 @@ Vsaka funkcija mora podpirati to zanko. Če funkcija ne prinaša podatkov za raz
 
 ## Skupine bolnikov
 
-Aplikacija je splošna, a jo gradimo za šest skupin s hudimi boleznimi, pri katerih se zapleti po odpustu pogosto spregledajo in za katere raziskave kažejo, da spremljanje doma pomaga. Glavna skupina, na kateri temelji demo, je **srčno popuščanje**.
+Aplikacija je splošna, a jo gradimo za šest skupin s hudimi boleznimi, pri katerih se zapleti po odpustu pogosto spregledajo in za katere raziskave kažejo, da spremljanje doma pomaga. Glavna skupina, na kateri temelji predstavitev, je **srčno popuščanje**.
 
 | Skupina | Kaj pacient poroča | Opozorilni znaki | Ključna raziskava |
 |---|---|---|---|
@@ -31,21 +31,21 @@ Aplikacija je splošna, a jo gradimo za šest skupin s hudimi boleznimi, pri kat
 | **Po infarktu ali operaciji srca** | bolečina v prsih, dihanje, rana, zdravila | bolečina v prsih → 112, izpuščena zdravila za redčenje krvi, rana, vročina | Cochrane 2023: rehabilitacija doma je enako učinkovita kot v centru |
 | **Nov kolk ali koleno** | bolečina, temperatura, fotografija rane, otekel meč | vročina nad 38 °C, rdeča ali izcejajoča rana, en otekel meč (možen strdek) | Okužbe in zapleti s protezo povzročijo 59 % stroškov ponovnih sprejemov |
 | **KOPB** | dihanje, kašelj in barva izmečka, vročina | precej težje dihanje, zelen ali rumen izmeček, vročina | Evropska revizija KOPB: 35 % ponovno sprejetih v 90 dneh; spremljanje doma −26 % sprejemov zaradi poslabšanja |
-| **Možganska kap** | krvni tlak, nova šibkost ali težave z govorom, padci | znaki GROM → 112, visok tlak, padec | Cochrane 2017: nadaljevanje oskrbe doma zmanjša smrt ali odvisnost (OR 0,80) |
+| **Možganska kap** | krvni tlak, nova šibkost ali težave z govorom, padci | znaki GROM → 112, visok tlak, padec | Cochrane 2017: nadaljevanje oskrbe doma zmanjša smrt ali odvisnost (razmerje obetov 0,80) |
 | **Rak na sistemskem zdravljenju** | temperatura, slabost, driska, bolečina, počutje | vročina ≥ 38 °C → takoj klic na onkološki oddelek | Basch (JAMA 2017): poročanje simptomov od doma, preživetje 31,2 proti 26,0 meseca |
 
 Za vse skupine velja: opomniki za zdravila, ker so težave z zdravili najpogostejša škoda po odpustu.
 
 ### Predloge
 
-Vsaka skupina je ena **predloga**: podatkovna datoteka z vprašanji, pravili za opozorila, privzetimi zdravili, vajami in privzeto dolžino rehabilitacije. Koda je splošna: en zaslon za pregled stanja prikaže vprašanja iz predloge, ena funkcija preveri odgovore po pravilih predloge in vrne status in razlog. Nova skupina pomeni samo novo datoteko, brez novih zaslonov. Predloge napišemo sami po smernicah. Kasneje jih bodo urejali zdravniki. Brez AI.
+Vsaka skupina je ena **predloga**: podatkovna datoteka z vprašanji, pravili za opozorila, privzetimi zdravili, vajami in privzeto dolžino rehabilitacije. Koda je splošna: en zaslon za pregled stanja prikaže vprašanja iz predloge, ena funkcija preveri odgovore po pravilih predloge in vrne status in razlog. Nova skupina pomeni samo novo datoteko, brez novih zaslonov. Predloge napišemo sami po smernicah. Kasneje jih bodo urejali zdravniki. Brez umetne inteligence.
 
 ## Tipi uporabnikov
 
 | Tip | Kdo je | Glavni namen |
 |-----|--------|--------------|
 | Odpuščenec | Pacient, odpuščen iz bolnišnice | Izvaja svoj načrt okrevanja in poroča o stanju |
-| Zadolženec | Svojec ali skrbnik, ki ga je pacient odobril | Spremlja, ali se pacient drži načrta (samo branje) |
+| Zadolženec | Svojec ali skrbnik, ki ga je pacient odobril | Spremlja, ali se pacient drži načrta, in označi opravljene naloge, ko jih dela skupaj s pacientom |
 | Bolničar | Zdravnik ali medicinska sestra | Odpre rehabilitacijo in ukrepa, ko je treba |
 
 Odpuščenec in zadolženec nista vrsti računa, ampak odnos do pacienta. Ista oseba je lahko odpuščenec v svoji rehabilitaciji in zadolženec za svojo mamo.
@@ -76,14 +76,15 @@ Ob vsakem zdravilu in vaji označi, da je opravljeno. Sam odobri ali zavrne pro�
 
 - **Pregled stanja je kratek in ves z enim dotikom:** največ 5 vprašanj, eno na zaslon, odgovori so veliki gumbi (brez tipkanja). Teža je vrsta gumbov okoli zadnje teže. Če je bil včeraj zelen, gumb »Enako kot včeraj« z enim dotikom odgovori na vse razen ključnih vprašanj (npr. teža).
 - **Vprašanja so prilagojena pacientu:** bolničar ob odpustu izbere, katera vprašanja iz predloge dobi, in vpiše njegove vrednosti. Pacient ne vidi splošnega obrazca, ampak npr. »Ali tehtate več kot 72 kg?«.
-- **Prevzem zdravil (eRecept):** pri vsakem zdravilu je vidno, ali ga je pacient prevzel v lekarni. Če ga ne prevzame, aplikacija najprej opomni pacienta, nato obvesti zadolženca in šele nato bolničarja (»Furosemid ni prevzet 3 dni po odpustu«). Na hackathonu podatke simuliramo, v praksi bi prišli iz eRecepta prek CEZIH.
+- **Prevzem zdravil (eRecept):** pri vsakem zdravilu je vidno, ali ga je pacient prevzel v lekarni. Če ga ne prevzame, aplikacija najprej opomni pacienta, nato obvesti zadolženca in šele nato bolničarja (»Furosemid ni prevzet 3 dni po odpustu«). Na hekatonu podatke simuliramo, v praksi bi prišli iz eRecepta prek CEZIH.
 - **Opomnik, preden zdravila zmanjka:** iz velikosti prevzetega pakiranja in dnevnega odmerka aplikacija izračuna, koliko dni še zadošča, in pacientu pravočasno napiše: »Zdravila vam bodo zmanjkala čez 5 dni. Pokličite osebnega zdravnika za nov recept.« Odmerkov nikoli ne spreminja.
 
 ### Zadolženec
 
 - **Prijava:** se registrira sam, s svojo davčno številko in geslom, v svoj račun (nikoli v pacientovega).
 - **Dostop:** pod »Zaprosi za dostop« vpiše davčno številko pacienta. Aplikacija vedno odgovori »Prošnja poslana«, da nihče ne more ugotoviti, kdo uporablja zDoma. Dostop začne veljati, ko ga pacient odobri.
-- **Zavihek »Skrbim za«:** samo za branje. Na vrhu vidi opozorilo, če pacient zdravil še ni prevzel v lekarni. Vidi, katera zdravila so bila vzeta ali izpuščena, katere vaje opravljene ali izpuščene, ali je bil opravljen pregled stanja in kakšen je trenutni status.
+- **Zavihek »Skrbim za«:** na vrhu vidi opozorilo, če pacient zdravil še ni prevzel v lekarni. Vidi, katera zdravila so bila vzeta ali izpuščena, katere vaje opravljene ali izpuščene, ali je bil opravljen pregled stanja in kakšen je trenutni status.
+- **Označevanje skupaj s pacientom:** ko je zadolženec pri pacientu, lahko označi »Vzeto« pri zdravilih, »Opravljeno« pri vajah in z njim izpolni pregled stanja. Pri vsakem vnosu piše, kdo ga je vnesel (»Označila: Ana (hčerka)«). Načrta, zdravil in datuma konca ne more spreminjati.
 - **Obvestila (kasneje):** za vsakega pacienta lahko vklopi »Prejemaj obvestila« (privzeto izklopljeno) in izbere e-pošto, SMS ali oboje. Prejema iste opomnike kot pacient ter sporočilo, ko pacient kaj izpusti ali njegov status postane rumen ali rdeč. Sporočila ne vsebujejo diagnoze ali imen zdravil.
 
 ### Bolničar
@@ -106,7 +107,7 @@ Računi bolničarjev se ne registrirajo sami. Ustvari jih skrbnik.
 | Dejanje | Odpuščenec | Zadolženec | Bolničar |
 |---------|:----------:|:----------:|:--------:|
 | Ogled načrta in podatkov | ✓ | ✓ (za odobrenega pacienta) | ✓ |
-| Pregled stanja, označevanje opravljenih nalog | ✓ | | |
+| Pregled stanja, označevanje opravljenih nalog | ✓ | ✓ (skupaj s pacientom, z oznako, kdo je vnesel) | |
 | Spremljanje upoštevanja načrta | ✓ | ✓ | ✓ |
 | Odobritev dostopa svojcem | ✓ | | |
 | Prejemanje opomnikov (e-pošta/SMS, kasneje) | ✓ | ✓ (če vklopi) | |
@@ -126,8 +127,8 @@ Davčna številka ni skrivnost, zato se brez gesla nikoli ni mogoče prijaviti.
 ## Varnost
 
 - **zDoma ni služba za nujno pomoč.** Pri bolečini v prsih, nenadnem hudem težkem dihanju, omedlevici ali znakih kapi aplikacija najprej prikaže celozaslonsko »Pokličite 112«, šele nato obvesti osebje.
-- **Podpora odločanju, ne diagnoza.** Sistem razvršča paciente, odločitve sprejema osebje. Brez AI diagnoz in brez AI analize ran.
-- **Samo izmišljeni podatki** v razvoju in demu. Izmišljene davčne številke, ki prestanejo preverjanje kontrolne števke.
+- **Podpora odločanju, ne diagnoza.** Sistem razvršča paciente, odločitve sprejema osebje. Brez diagnoz in analize ran z umetno inteligenco.
+- **Samo izmišljeni podatki** pri razvoju in predstavitvi. Izmišljene davčne številke, ki prestanejo preverjanje kontrolne števke.
 
 ## Uporabniški vmesnik
 
@@ -141,23 +142,23 @@ Uporabljajo ga tudi starejši, zato:
 
 ## Tehnične podrobnosti
 
-- **Tehnološki sklad:** Next.js (App Router) + TypeScript, Tailwind CSS + shadcn/ui, Supabase (Postgres, Realtime, Storage, Auth), gostovanje na Cloudflare Workers. Brez LLM.
-- **Ocena tveganja:** LACE indeks ob odpustu in pravila iz predloge. Tedenski povzetek je sestavljen po predlogi iz podatkov (brez AI).
-- **Sintetični pacienti** (na primer iz orodja Synthea, format FHIR, ki ga uporabljajo bolnišnice).
+- **Tehnologije:** Next.js in TypeScript, Tailwind CSS in shadcn/ui za videz, Supabase (podatkovna baza Postgres, sprotne posodobitve, shramba fotografij in prijava), gostovanje na Cloudflare Workers. Brez velikih jezikovnih modelov.
+- **Ocena tveganja:** LACE indeks ob odpustu in pravila iz predloge. Tedenski povzetek je sestavljen po predlogi iz podatkov (brez umetne inteligence).
+- **Izmišljeni pacienti** (na primer iz orodja Synthea, v zapisu FHIR, ki ga uporabljajo bolnišnice).
 - **Obvestila:** e-pošta in SMS, kasneje.
 
-Pravila za razvijalce in agente: [AGENTS.md](AGENTS.md). Naloge: [TASKS.md](TASKS.md). Raziskave: [docs/research.md](docs/research.md).
+Pravila za razvijalce in agente umetne inteligence: [AGENTS.md](AGENTS.md). Naloge: [TASKS.md](TASKS.md). Raziskave: [docs/research.md](docs/research.md).
 
 ## Obseg za 24 ur
 
-**Mora delovati v demu**
+**Mora delovati na predstavitvi**
 - prijava z začasnim geslom in nastavitev svojega gesla,
 - bolničar odpre rehabilitacijo po predlogi,
 - dnevni pregled stanja po predlogi, z zaslonom »Pokličite 112«,
 - nadzorna plošča s semaforjem in pojasnjenimi opozorili,
 - opomniki za zdravila in vaje z beleženjem,
 - zavihek »Skrbim za« za svojce,
-- demo v živo s kodo QR.
+- predstavitev v živo s kodo QR.
 
 **Samo klikljivi prototipi**
 - poročanje prek telefona/SMS.
@@ -165,7 +166,7 @@ Pravila za razvijalce in agente: [AGENTS.md](AGENTS.md). Naloge: [TASKS.md](TASK
 **Kasneje**
 - opomniki po e-pošti in SMS, tudi za svojce,
 - urejanje predlog za zdravnike,
-- podatki o korakih iz Google Fit / Apple Health.
+- podatki o korakih iz aplikacij Google Fit in Apple Health.
 
 **Izpuščeno**
 - naročanje na preglede (to že pokrivata zVEM in eNaročanje),
@@ -173,13 +174,13 @@ Pravila za razvijalce in agente: [AGENTS.md](AGENTS.md). Naloge: [TASKS.md](TASK
 - snemanje lastnih videov vaj (vgradimo obstoječe videe fizioterapevtov),
 - ločen pogled »Moje okrevanje« in zaslon za čustveno podporo (preveč splošno; lasten trend je na koncu pregleda stanja).
 
-## Demo
+## Predstavitev
 
 1. Član žirije skenira kodo QR in na svojem telefonu opravi pregled stanja.
 2. Vpiše večjo težo in otekle gležnje.
 3. Na nadzorni plošči (na projektorju) njegova kartica postane rdeča, skupaj z razlogom.
 
-**Zgodba pacienta:** 78-letni gospod s srčnim popuščanjem, suha teža 72 kg. Od 3. do 5. dne po odpustu se mu teža dvigne na 74,5 kg, gležnji otečejo in enkrat izpusti diuretik. Hčerka, ki ima dostop kot zadolženka, vidi izpuščeno zdravilo. Status postane rdeč z navedenimi razlogi, medicinska sestra ga pokliče in po telefonu prilagodi odmerek diuretika. Ponoven sprejem v bolnišnico je preprečen.
+**Zgodba pacienta:** 78-letni gospod s srčnim popuščanjem, suha teža 72 kg. Od 3. do 5. dne po odpustu se mu teža dvigne na 74,5 kg, gležnji otečejo in enkrat izpusti diuretik. Hčerka, ki ima dostop kot zadolženka, vidi izpuščeno zdravilo. Ko ga obišče, z njim opravi pregled stanja in označi, da je vzel večerne tablete. Status postane rdeč z navedenimi razlogi, medicinska sestra ga pokliče in po telefonu prilagodi odmerek diuretika. Ponoven sprejem v bolnišnico je preprečen.
 
 ## Odprta vprašanja
 

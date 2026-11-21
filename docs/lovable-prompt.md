@@ -62,8 +62,8 @@ PATIENT (Pacient: Janez Novak, 78, heart failure)
 
 FAMILY (Svojec: Ana Novak, the daughter)
 
-9. Skrbim za (read-only)
-- Card for "Janez Novak" with status badge and today: which pills were taken or missed, check-in done or not, exercises done or skipped. Clearly marked "Samo za ogled".
+9. Skrbim za
+- Card for "Janez Novak" with status badge and today: which pills were taken or missed, check-in done or not, exercises done or skipped. Buttons "Vzeto" and "Opravljeno" and "Pregled stanja skupaj z Janezom" for when she does it with him; entries show "Označila: Ana (hčerka)". Small note "Načrta ne morete spreminjati".
 - Button "Zaprosi za dostop" opens a field "Davčna številka bolnika" and always replies "Prošnja poslana".
 - Switch "Prejemaj obvestila" (off by default) with options "E-pošta" / "SMS" (prototype only).
 

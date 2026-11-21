@@ -45,7 +45,7 @@ Each group is one **template**: a hand-written data file with check-in questions
 | Role | Who | Main job |
 |---|---|---|
 | Odpuščenec | the discharged patient | follows the plan, does check-ins |
-| Zadolženec | a family member the patient approved | follows along, read-only |
+| Zadolženec | a family member the patient approved | follows along, marks tasks done when doing them with the patient |
 | Bolničar | a doctor or nurse | opens the rehabilitacija, acts when needed |
 
 Odpuščenec and zadolženec describe a relationship to a patient, not an account type. One person can be both.
@@ -73,7 +73,8 @@ Odpuščenec and zadolženec describe a relationship to a patient, not an accoun
 ### Family (zadolženec)
 - Registers with their own davčna številka and password, never using the patient's account.
 - Requests access with the patient's davčna številka. The app always answers "Prošnja poslana", so nobody can find out who uses zDoma.
-- Gets a read-only **"Skrbim za"** tab: medicines not picked up at the pharmacy (shown as a warning), pills taken or missed, exercises done or skipped, check-ins, current status.
+- Gets a **"Skrbim za"** tab: medicines not picked up at the pharmacy (shown as a warning), pills taken or missed, exercises done or skipped, check-ins, current status.
+- **Can mark tasks done when doing them with the patient** (pills, exercises, check-in). Each entry shows who marked it ("Označila: Ana (hčerka)"). Can't change the plan.
 - Later: opt-in email/SMS notifications for that patient, with no diagnosis or medicine names in the messages.
 
 ### Staff (bolničar): as little work as possible
@@ -116,7 +117,7 @@ Next.js + TypeScript, Tailwind + shadcn/ui, Supabase (Postgres, Realtime, Storag
 2. They enter a higher weight and swollen ankles.
 3. On the dashboard on the projector, their card turns red, together with the reason.
 
-**Patient story:** A 78-year-old man with heart failure, dry weight 72 kg. On days 3–5 after discharge his weight rises to 74.5 kg, his ankles swell and he skips one diuretic. His daughter, approved as his zadolženka, sees the missed pill. His status turns red with the reasons shown, the nurse calls and adjusts the diuretic dose by phone, and a readmission is avoided.
+**Patient story:** A 78-year-old man with heart failure, dry weight 72 kg. On days 3–5 after discharge his weight rises to 74.5 kg, his ankles swell and he skips one diuretic. His daughter, approved as his zadolženka, sees the missed pill. When she visits, she does the check-in with him and marks his evening tablets as taken. His status turns red with the reasons shown, the nurse calls and adjusts the diuretic dose by phone, and a readmission is avoided.
 
 ## Scope for 24h
 
