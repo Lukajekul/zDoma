@@ -1,7 +1,8 @@
 import { Suspense } from "react";
 import { LogoutButton } from "@/components/auth/logout-button";
 import { NurseDashboard } from "@/components/nurse/nurse-dashboard";
-import { AppShell } from "@/components/shell";
+import { Plus } from "lucide-react";
+import { AppShell, BigButton } from "@/components/shell";
 import { requireStaff } from "@/lib/auth";
 import { seznamPredlog } from "@/lib/templates";
 import { todayLjubljana } from "@/lib/format";
@@ -25,6 +26,9 @@ async function Dashboard() {
 
   return (
     <>
+      <div className="mb-4 sm:max-w-sm">
+        <BigButton href="/nurse/odpust" icon={<Plus />}>Nova rehabilitacija</BigButton>
+      </div>
       {rows ? (
         <NurseDashboard rows={rows} nurseId={staff.id} templates={seznamPredlog.map(({ id, ime }) => ({ id, label: ime }))} />
       ) : (
