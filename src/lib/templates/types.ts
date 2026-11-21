@@ -1,7 +1,7 @@
 // Template format (AGENTS.md §5a). A template is data, not code: screens and
 // the triage engine read whatever a template lists. UI text is Slovenian.
 
-import type { TemplateId } from "@/lib/types";
+import type { TemplateId, TimeOfDay } from "@/lib/types";
 
 /** Template ids are defined once in the shared data model (`TEMPLATE_IDS`). */
 export type PredlogaId = TemplateId;
@@ -10,6 +10,8 @@ export type PredlogaId = TemplateId;
 export interface Vir {
   opis: string;
   potrjeno: boolean;
+  /** Link to the guideline, SmPC or leaflet, when the source doc gives one. */
+  url?: string;
 }
 
 /**
@@ -118,17 +120,31 @@ export type Pravilo =
   | PraviloZaporedno
   | PraviloNarasca;
 
-export type CasDneva = "zjutraj" | "opoldne" | "zvecer" | "pred spanjem";
+/** Same values as `medications.times` (`TimeOfDay` in the data model). */
+export type CasDneva = TimeOfDay;
 
-/** Recommended medicine, staff-only suggestion (T-21). Content from docs/medicines.md (T-37). */
+/**
+ * Recommended medicine: a suggestion for staff only (T-21); the patient never
+ * sees dose options. Content from docs/medicines.md (T-37).
+ */
 export interface Zdravilo {
+  /** Brand name as in docs/medicines.md, e.g. "Lasix". */
   ime: string;
   ucinkovina: string;
-  /** 2–4 usual dose options, e.g. ["20 mg", "40 mg", "80 mg"]. */
+  /** 1–4 usual dose options per intake, e.g. ["40 mg", "80 mg"]. A fixed dose has one. */
   odmerki: string[];
+  /** Route, e.g. "skozi usta", "pod kožo". */
+  nacin: string;
+  /** Suggested times of day for the pill schedule. Empty only when `poPotrebi`. */
   casi: CasDneva[];
-  /** Plain-language "what it's for", e.g. "odvaja odvečno vodo". */
+  /** Schedule as written in the source, e.g. "Zjutraj, na tešče". */
+  urnik: string;
+  /** Taken as needed, not on a schedule (the prescription sets the limit). */
+  poPotrebi?: boolean;
+  /** Plain-language "what it's for", e.g. "Odvaja odvečno vodo in zmanjša otekanje." */
   zaKaj: string;
+  /** "Kdaj pride v poštev": when it applies and its limits. Staff only. */
+  kdaj: string;
   vir: Vir;
 }
 
@@ -138,7 +154,10 @@ export interface Vaja {
   naslov: string;
   koraki: string[];
   ponovitve: string;
+  /** Public path, e.g. "/vaje/hoja.svg" (files in public/vaje/). */
   slika?: string;
+  /** Alt text for the picture. */
+  slikaOpis?: string;
   video?: string;
   vir: Vir;
 }
@@ -153,7 +172,11 @@ export interface Predloga {
   vprasanja: Vprasanje[];
   pravila: Pravilo[];
   zdravila: Zdravilo[];
+  /** Staff note for the medicine step: scope and what to confirm clinically. */
+  zdravilaOpomba?: string;
   vaje: Vaja[];
+  /** Staff note for the exercise step. */
+  vajeOpomba?: string;
 }
 
 /** At most this many daily questions (AGENTS.md §5a). */

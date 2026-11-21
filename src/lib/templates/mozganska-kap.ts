@@ -1,5 +1,6 @@
 // Možganska kap. Questions and rules: docs/checkin-questions.md §5.
 import { CILJNI_TLAK, DA_NE, NE_DA, PRAVILO_BREZ_MERILNIKA, vprasanjeTlak } from "./skupno";
+import * as vsebina from "./vsebina/mozganska-kap";
 import type { Predloga, Vir } from "./types";
 
 const SAPE: Vir = { opis: "ESO + SAFE, Stroke Action Plan for Europe, laična različica 2023", potrjeno: true };
@@ -108,8 +109,8 @@ export const mozganskaKap: Predloga = {
     // The weekly mood question has no alert rule in the docs: the nurse sees the answer.
     PRAVILO_BREZ_MERILNIKA,
   ],
-  // TODO(T-37): recommended medicines from docs/medicines.md.
-  zdravila: [],
-  // TODO(T-17): mobility exercises from docs/rehab-content.md.
-  vaje: [],
+  zdravila: vsebina.zdravila,
+  zdravilaOpomba: vsebina.zdravilaOpomba,
+  vaje: vsebina.vaje,
+  vajeOpomba: vsebina.vajeOpomba,
 };

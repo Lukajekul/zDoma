@@ -9,6 +9,7 @@ import {
   vprasanjeTlak,
   vprasanjeVrocina,
 } from "./skupno";
+import * as vsebina from "./vsebina/srce-po-infarktu";
 import type { Predloga, Vir } from "./types";
 
 const ESC_PRSI: Vir = {
@@ -116,8 +117,8 @@ export const srcePoInfarktu: Predloga = {
     PRAVILO_VROCINA,
     PRAVILO_BREZ_MERILNIKA,
   ],
-  // TODO(T-37): recommended medicines from docs/medicines.md.
-  zdravila: [],
-  // TODO(T-17): home cardiac rehab (walking plan + light exercises) from docs/rehab-content.md.
-  vaje: [],
+  zdravila: vsebina.zdravila,
+  zdravilaOpomba: vsebina.zdravilaOpomba,
+  vaje: vsebina.vaje,
+  vajeOpomba: vsebina.vajeOpomba,
 };

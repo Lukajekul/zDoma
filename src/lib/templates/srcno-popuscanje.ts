@@ -1,5 +1,6 @@
 // Srčno popuščanje (main template). Questions and rules: docs/checkin-questions.md §1.
 import { AGENTS_112, CILJNI_TLAK, DA_NE, NE_DA, PRAVILO_BREZ_MERILNIKA, vprasanjeTlak } from "./skupno";
+import * as vsebina from "./vsebina/srcno-popuscanje";
 import type { Predloga, Vir } from "./types";
 
 const HFA: Vir = { opis: "HFA/ESC self-care, Jaarsma et al. Eur J Heart Fail 2021;23:157–174", potrjeno: true };
@@ -137,8 +138,8 @@ export const srcnoPopuscanje: Predloga = {
     },
     PRAVILO_BREZ_MERILNIKA,
   ],
-  // TODO(T-37): recommended medicines from docs/medicines.md.
-  zdravila: [],
-  // TODO(T-17): exercises (daily walking, minutes increasing) from docs/rehab-content.md.
-  vaje: [],
+  zdravila: vsebina.zdravila,
+  zdravilaOpomba: vsebina.zdravilaOpomba,
+  vaje: vsebina.vaje,
+  vajeOpomba: vsebina.vajeOpomba,
 };

@@ -1,6 +1,7 @@
 // Rak na sistemskem zdravljenju. Questions and rules: docs/checkin-questions.md §6.
 // Symptoms and grades follow UKONS 24-hour triage tool v3 (text not copied).
 import { NE_DA } from "./skupno";
+import * as vsebina from "./vsebina/rak-sistemsko";
 import type { Predloga, Vir } from "./types";
 
 /** Team decision 21. 11. 2026: 38,0 °C or more shows the ward's phone number. */
@@ -145,8 +146,8 @@ export const rakSistemsko: Predloga = {
       vir: UKONS,
     },
   ],
-  // TODO(T-37): recommended medicines from docs/medicines.md.
-  zdravila: [],
-  // TODO(T-17): light activity from docs/rehab-content.md.
-  vaje: [],
+  zdravila: vsebina.zdravila,
+  zdravilaOpomba: vsebina.zdravilaOpomba,
+  vaje: vsebina.vaje,
+  vajeOpomba: vsebina.vajeOpomba,
 };

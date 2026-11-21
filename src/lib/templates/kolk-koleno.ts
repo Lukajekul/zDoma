@@ -1,5 +1,6 @@
 // Nov kolk ali koleno. Questions and rules: docs/checkin-questions.md §3.
 import { AGENTS_112, NE_DA, PRAVILO_RANA, PRAVILO_VROCINA, vprasanjeRana, vprasanjeVrocina } from "./skupno";
+import * as vsebina from "./vsebina/kolk-koleno";
 import type { Predloga, Vir } from "./types";
 
 const ESA_VTE: Vir = { opis: "ESA, evropske smernice za preprečevanje VTE 2018 (+2024), ni prebrano", potrjeno: false };
@@ -81,8 +82,8 @@ export const kolkKoleno: Predloga = {
       vir: { opis: "docs/checkin-questions.md §3, ni evropskega vira", potrjeno: false },
     },
   ],
-  // TODO(T-37): recommended medicines from docs/medicines.md.
-  zdravila: [],
-  // TODO(T-17): physio exercises from docs/rehab-content.md.
-  vaje: [],
+  zdravila: vsebina.zdravila,
+  zdravilaOpomba: vsebina.zdravilaOpomba,
+  vaje: vsebina.vaje,
+  vajeOpomba: vsebina.vajeOpomba,
 };

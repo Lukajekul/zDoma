@@ -76,12 +76,21 @@ export function preveriPredlogo(p: Predloga): string[] {
   }
 
   for (const z of p.zdravila) {
-    if (z.odmerki.length < 2 || z.odmerki.length > 4) napake.push(`${z.ime}: needs 2–4 dose options`);
-    if (z.casi.length === 0) napake.push(`${z.ime}: needs a time of day`);
-    if (!z.zaKaj.trim()) napake.push(`${z.ime}: empty zaKaj`);
+    if (z.odmerki.length < 1 || z.odmerki.length > 4) napake.push(`${z.ime}: needs 1–4 dose options`);
+    if (z.casi.length === 0 && !z.poPotrebi) napake.push(`${z.ime}: needs a time of day or poPotrebi`);
+    if (podvojeni(z.casi).length) napake.push(`${z.ime}: duplicate time of day`);
+    for (const f of ["ime", "ucinkovina", "nacin", "urnik", "zaKaj", "kdaj"] as const) {
+      if (!z[f].trim()) napake.push(`${z.ime}: empty ${f}`);
+    }
   }
+  for (const id of podvojeni(p.zdravila.map((z) => z.ime))) napake.push(`duplicate medicine ${id}`);
   for (const id of podvojeni(p.vaje.map((v) => v.id))) napake.push(`duplicate exercise id ${id}`);
-  for (const v of p.vaje) if (v.koraki.length === 0) napake.push(`${v.id}: no steps`);
+  for (const v of p.vaje) {
+    if (v.koraki.length === 0) napake.push(`${v.id}: no steps`);
+    if (!v.naslov.trim() || !v.ponovitve.trim()) napake.push(`${v.id}: empty naslov or ponovitve`);
+    if (v.slika && !/^\/vaje\/[a-z0-9-]+\.svg$/.test(v.slika)) napake.push(`${v.id}: slika must be /vaje/<name>.svg`);
+    if (v.slika && !v.slikaOpis?.trim()) napake.push(`${v.id}: picture needs slikaOpis`);
+  }
 
   return napake;
 }

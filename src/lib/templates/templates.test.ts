@@ -1,3 +1,5 @@
+import { existsSync } from "node:fs";
+import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { nujnoPravilo, predloge, seznamPredlog, vstaviVrednosti } from ".";
 import { preveriPredlogo } from "./validate";
@@ -10,6 +12,14 @@ describe("templates", () => {
 
   it.each(seznamPredlog.map((p) => [p.id, p] as const))("%s is valid", (_id, p) => {
     expect(preveriPredlogo(p)).toEqual([]);
+  });
+
+  it.each(seznamPredlog.map((p) => [p.id, p] as const))("%s has medicines and exercises with existing pictures", (_id, p) => {
+    expect(p.zdravila.length).toBeGreaterThan(0);
+    expect(p.vaje.length).toBeGreaterThanOrEqual(3);
+    for (const v of p.vaje) {
+      expect(!!v.slika && existsSync(join(process.cwd(), "public", v.slika)), `${v.id} picture`).toBe(true);
+    }
   });
 
   it("catches a rule pointing at a missing answer and too many questions", () => {
