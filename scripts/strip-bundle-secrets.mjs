@@ -7,7 +7,7 @@
 import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import path from "node:path";
 
-const SECRETS = ["SUPABASE_SERVICE_ROLE_KEY", "VAPID_PRIVATE_KEY"];
+const SECRETS = ["SUPABASE_SERVICE_ROLE_KEY", "VAPID_PRIVATE_KEY", "SEED_PASSWORD"];
 const BUNDLE = ".open-next";
 const ENV_MODULE = path.join(BUNDLE, "cloudflare", "next-env.mjs");
 
