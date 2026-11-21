@@ -77,9 +77,10 @@ The deck (10 slides, speaker notes hold the caveats): https://claude.ai/artifact
 Omersa et al., ESC Heart Fail 2019 (see "Headline" above).
 - Note: heart-failure readmissions only, national data 2008–2012.
 
-### 3. Strošek (Evropa)
-**Bolnišnične obravnave so do 92 % vseh stroškov srčnega popuščanja.** ✅
-Darbà et al., ESC Heart Fail 2025 (see "Cost" above).
+### 3. Strošek (Evropa in Slovenija)
+**Največji strošek srčnega popuščanja je bolnišnica.** ✅
+- Evropa: bolnišnične obravnave so do 92 % vseh stroškov srčnega popuščanja. Darbà et al., ESC Heart Fail 2025 (see "Cost" above).
+- Slovenija 2026: ena hospitalizacija zaradi srčnega popuščanja stane ZZZS 2.849–4.666 € (F62B / F62A). See "Cost of one heart-failure stay in Slovenia" above.
 
 ### 4. Srčno popuščanje
 **Spremljanje doma: 20 % manj smrti in 29 % manj sprejemov zaradi srčnega popuščanja.** 📄
