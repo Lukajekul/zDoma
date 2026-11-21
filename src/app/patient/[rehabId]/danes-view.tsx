@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 import Link from "next/link";
 import { NextActionCard } from "@/components/patient/danes/next-action-card";
+import { NurseUpdateCard } from "@/components/patient/danes/nurse-update-card";
 import { ProgressRing } from "@/components/patient/progress-ring";
 import { rehabDay, rehabTitle } from "@/components/patient/rehab-info";
 import { AppShell, BigButton } from "@/components/shell";
@@ -14,6 +15,7 @@ import { nextAction, nowMinutesLjubljana } from "../_lib/danes";
 import { getMedsAndLogs, logMissedDoses } from "../_lib/doses";
 import { getExercisesForDay } from "../_lib/exercises";
 import { getMyNurse } from "../_lib/nurse";
+import { getLatestNurseUpdate } from "../_lib/nurse-update";
 import { getRing } from "../_lib/ring";
 import { dosesOn } from "../_lib/schedule";
 import { markSlotTaken } from "./zdravila/actions";
@@ -29,13 +31,14 @@ export async function DanesView({ ctx, profile, back }: { ctx: Ctx; profile: Pro
   const base = `/patient/${rehab.id}`;
   const supabase = await createClient();
 
-  const [{ meds, logs: loaded }, exercises, pending, { ring, extendedUntil }, nurse] = await Promise.all([
+  const [{ meds, logs: loaded }, exercises, pending, { ring, extendedUntil }, nurse, nurseUpdate] = await Promise.all([
 
     getMedsAndLogs(rehab.id),
     getExercisesForDay(rehab, today),
     countPendingRequests(supabase, profile.id),
     getRing(rehab, ctx.predloga, today),
     getMyNurse(rehab.assigned_nurse_id, today),
+    getLatestNurseUpdate(supabase, rehab.id),
   ]);
   const logs = await logMissedDoses(rehab, meds, loaded, today);
 
@@ -79,7 +82,7 @@ export async function DanesView({ ctx, profile, back }: { ctx: Ctx; profile: Pro
         </Link>
       )}
 
-      {showChanges ? (
+      {showChanges && (
         // T-35: medicine changes come before anything else until the patient taps "Razumem".
         <section className="flex flex-col gap-4 rounded-2xl border-2 border-primary p-5">
           <h2 className="text-3xl font-bold">Vaša zdravila so se spremenila</h2>
@@ -92,7 +95,11 @@ export async function DanesView({ ctx, profile, back }: { ctx: Ctx; profile: Pro
           </p>
           <BigButton href={`${base}/spremembe`}>Poglejte spremembe</BigButton>
         </section>
-      ) : (
+      )}
+
+      {nurseUpdate && <NurseUpdateCard update={nurseUpdate} />}
+
+      {!showChanges && (
         <NextActionCard
           action={action}
           base={base}
