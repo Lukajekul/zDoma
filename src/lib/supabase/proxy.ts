@@ -34,10 +34,23 @@ export async function updateSession(request: NextRequest) {
   // Don't run code between createServerClient and getClaims():
   // it validates and refreshes the session.
   const { data } = await supabase.auth.getClaims();
+  let loggedIn = Boolean(data?.claims);
 
   const path = request.nextUrl.pathname;
   const isProtected = PROTECTED.some((p) => path === p || path.startsWith(`${p}/`));
-  if (!data?.claims && isProtected) {
+
+  // getClaims() only checks the JWT signature. On protected pages also ask Auth
+  // that the session still exists, so "Nova koda QR" (which deletes every
+  // session) logs out other devices at once, not when their token expires.
+  if (loggedIn && isProtected) {
+    const { error } = await supabase.auth.getUser();
+    if (error) {
+      await supabase.auth.signOut({ scope: "local" }); // clears the stale cookies
+      loggedIn = false;
+    }
+  }
+
+  if (!loggedIn && isProtected) {
     const loginUrl = request.nextUrl.clone();
     loginUrl.pathname = "/prijava";
     loginUrl.search = "";
