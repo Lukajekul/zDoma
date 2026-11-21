@@ -50,6 +50,7 @@ Each team member owns one lane, and their agents take that lane's tasks **in the
 - [x] **T-55** Progress ring centre shows the share of the whole rehabilitacija answered (matches the green part of the ring), not only of the days so far. Deps: T-40 *Done: centre shows `overallShare`, matches the green part; nurse "Sodelovanje" unchanged.*
 - [x] **T-56** Demo patients log in with the plaintext demo password (not QR links) in `docs/demo-accounts.md`; seed gives patients `SEED_PASSWORD`. Deps: T-54 *Done: 46 seeded patients updated on the shared project (password set, QR token removed), doc rewritten, `docs/demo-qr/` removed; checked live.*
 - [x] **T-57** Patronažna sestra vs bolnišnica: staff with a teren get the patronaža menu and phone-first home (her patients, "Obisk"); hospital staff get the dashboard with "Nova rehabilitacija" and "Predloge". "Obisk pri pacientu": the patronažna sestra does the check-in, pills and exercises with the patient (same screens as the zadolženec, saved under her name). Migration: staff may log (`can_log_rehab`). Deps: T-20, T-52 *Done: staff kind from tereni, menus + phone tab bar, `/nurse/obisk/<id>` with check-in, pills, exercises under her name; migration applied with approval; checked end to end.*
+- [~] **T-59** Quiet "Odjava" for patients: small text link at the bottom of their screens, with a confirm step so an accidental tap does nothing. (Tian Istenič, `feat/T-59-patient-logout`) Deps: T-54
 
 ## Zadolženec (family)
 
