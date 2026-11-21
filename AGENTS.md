@@ -10,8 +10,20 @@ Rules for every agent (Claude, Codex, others) and human working in this repo. Re
 - When you're done, mark the task `[x]` with a one-line note, push, and stop.
 - **Work in your own copy of the repo.** Several agents run on the same machines, and two agents in one folder switch branches and overwrite files under each other. Start in a fresh git worktree (`git worktree add ../zDoma-T-05 -b feat/T-05-checkin`) or your own clone, never in a folder another agent is using. Remove the worktree when the task is done.
 - **Edit only your own lines in `TASKS.md`** (your claim, your status, new tasks at the end of a section). If a rebase conflicts there, keep both sides.
-- **Stale claims:** if a `[~]` task has had no commits for about 2 hours, ask the human before taking it over. Never silently take over someone's task.
+- **Stale claims:** if a `[~]` task has had no commits and no progress update (§1a) for about 2 hours, ask the human before taking it over. Never silently take over someone's task.
 - If you get stuck or the task turns out to be wrong, write what you found next to the task in `TASKS.md`, set it back to `[ ]`, push and stop. Don't leave a `[~]` behind.
+
+## 1a. Progress log: `progress/<task-id>.md`
+
+Every task keeps its own progress file, e.g. `progress/T-05.md`, so other agents can see what is happening without asking and nobody waits on anyone else. One file per task, never a shared one, so two agents never edit the same file.
+
+- **Create it with your claim** (same commit as `chore: claim T-05`), copying `progress/_template.md`.
+- **Update it with every commit you push**: what is done, what's next, files you touched, and anything others need to know (a new type, a changed helper, a migration waiting for approval, a blocker).
+- **Push it to `main` as you go**, even while your code is on a feature branch (`docs: update T-05 progress`). That's how agents on other branches see it.
+- **Read it before you start** on a task that depends on another one that's still `[~]`, or before you touch a shared file: the owner may already be changing it.
+- **Taking over or picking up a returned task?** Read its progress file first and continue from there instead of starting over.
+- When the task is `[x]`, finish the file with a short summary and leave it in place.
+- Keep it short: bullet points, no pasted code or logs.
 
 ## 2. Keep context small
 
@@ -219,6 +231,7 @@ supabase/
   seed.sql          demo data
 scripts/            one-off scripts (Synthea import, etc.)
 docs/               pitch, demo script, research notes
+progress/           one progress log per task (§1a)
 ```
 
 Each task owns its own folder or files. Stay out of folders that another `[~]` task owns.
