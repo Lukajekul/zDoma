@@ -16,3 +16,12 @@ export const STATUS_BESEDILO = {
   rumeno: "Rumeno – sestra bo pogledala",
   rdece: "Rdeče – potrebna pozornost",
 } as const;
+export {
+  oceniPrevzem,
+  prevzemBesediloPacient,
+  prevzemBesediloZadolzenec,
+  prevzemDosegel,
+  prevzemRazlog,
+  PREVZEM_NASTAVITVE,
+} from "./prevzem";
+export type { PrevzemNastavitve, PrevzemOcena, PrevzemStopnja, PrevzemZdravilo } from "./prevzem";

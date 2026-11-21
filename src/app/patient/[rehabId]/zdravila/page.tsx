@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import { DoseCard } from "@/components/patient/dose-card";
 import { AppShell } from "@/components/shell";
+import { PickupReminder } from "@/components/erecept/pickup-reminder";
 import { requireProfile } from "@/lib/auth";
 import { formatLongDate } from "@/lib/format";
 import { isRehabActive, todayLjubljana, type DoseLog, type Medication } from "@/lib/types";
@@ -59,6 +60,8 @@ async function Pills({ params }: Pick<PageProps<"/patient/[rehabId]/zdravila">, 
   return (
     <AppShell title="Zdravila danes" back={back}>
       <p className="text-xl">{capitalize(formatLongDate(new Date()))}</p>
+
+      <PickupReminder meds={meds} odpust={rehab.start_date} danes={today} />
 
       {all.length === 0 ? (
         <p className="rounded-xl bg-muted p-4 text-xl">Danes nimate predpisanih tablet.</p>
