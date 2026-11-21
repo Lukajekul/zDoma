@@ -35,7 +35,7 @@ User types (odpuščenec, zadolženec, bolničar) and UI rules: `AGENTS.md` §6�
 ## Demo
 
 - [ ] **T-10** Seed data: 15–20 patients across all six templates, mostly heart failure, incl. the demo story patient (heart failure, dry weight 72 kg → 74.5 kg, swollen ankles, one missed diuretic), one patient with two rehabilitacije (one finished), approved zadolženci, and one bolničar, all with made-up valid davčne številke. Deps: T-03, T-04, T-29
-- [ ] **T-11** QR demo entry (`/demo`): creates a fresh patient with an active rehabilitacija for the judge and logs them in, then opens their check-in. Deps: T-05
+- [ ] **T-11** QR demo entry (`/demo`): creates a fresh heart-failure patient with an active rehabilitacija for the judge and logs them in (skipping the temporary-password step), then opens their check-in. Deps: T-05
 - [ ] **T-12** Deploy to Cloudflare Workers with `@opennextjs/cloudflare`. Deps: T-02
 
 ## Mock-ups (clickable, no real logic)

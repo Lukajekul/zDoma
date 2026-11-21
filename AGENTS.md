@@ -8,6 +8,10 @@ Rules for every agent (Claude, Codex, others) and human working in this repo. Re
 - **Claim it before you write code.** Change `[ ]` to `[~]` and add your name and branch, then commit and push that change alone (`chore: claim T-05`). If the push is rejected, run `git pull --rebase` and check that nobody else claimed it first. If someone did, pick another task.
 - Do only that task. Put any other work you find in `TASKS.md` as a new `[ ]` task, without doing it.
 - When you're done, mark the task `[x]` with a one-line note, push, and stop.
+- **Work in your own copy of the repo.** Several agents run on the same machines, and two agents in one folder switch branches and overwrite files under each other. Start in a fresh git worktree (`git worktree add ../zDoma-T-05 -b feat/T-05-checkin`) or your own clone, never in a folder another agent is using. Remove the worktree when the task is done.
+- **Edit only your own lines in `TASKS.md`** (your claim, your status, new tasks at the end of a section). If a rebase conflicts there, keep both sides.
+- **Stale claims:** if a `[~]` task has had no commits for about 2 hours, ask the human before taking it over. Never silently take over someone's task.
+- If you get stuck or the task turns out to be wrong, write what you found next to the task in `TASKS.md`, set it back to `[ ]`, push and stop. Don't leave a `[~]` behind.
 
 ## 2. Keep context small
 
@@ -59,12 +63,40 @@ Merge a feature branch by rebasing on `main`, checking that `npm run lint` and `
 | Auth | Supabase Auth, davčna številka + password (see §6) |
 | Notifications | Later: email and SMS reminders (not in the first build) |
 | Data | Supabase: Postgres, Realtime (live nurse dashboard), Storage (wound photos) |
-| Triage | Pure TypeScript in `src/lib/triage/`: LACE score, red-flag rules, alert reasons, template summaries |
-| Seed data | Synthea-generated or hand-written hip-replacement patients |
+| Templates | One data file per patient group in `src/lib/templates/` (see §5a) |
+| Triage | Pure TypeScript in `src/lib/triage/`: LACE score, evaluates a template's rules, alert reasons, template summaries |
+| Seed data | Hand-written (or Synthea-based) patients across all six templates, mostly heart failure |
+| Package manager | **npm only.** Never use yarn, pnpm or bun: a second lockfile breaks everyone's install. |
 | Deploy | Cloudflare Workers via `@opennextjs/cloudflare` + `wrangler` |
 | LLM | **None.** Summaries and plain-language letters come from templates and seed data. |
 
 Don't add new dependencies or swap a stack choice without a task that says so.
+
+## 5a. Patient groups, templates and triage
+
+Background and sources: `docs/research.md`. Six templates, heart failure is the main one and the demo story:
+
+| Template id | Slovenian name |
+|---|---|
+| `srcno-popuscanje` | Srčno popuščanje (main) |
+| `srce-po-infarktu` | Po infarktu ali operaciji srca |
+| `kolk-koleno` | Nov kolk ali koleno |
+| `kopb` | KOPB |
+| `mozganska-kap` | Možganska kap |
+| `rak-sistemsko` | Rak na sistemskem zdravljenju |
+
+- **A template is data, not code**: check-in questions, red-flag rules (with a Slovenian reason text), default medicines, exercises, default rehabilitacija length in days. One file per template in `src/lib/templates/`.
+- **No condition-specific code anywhere else.** Screens render whatever the template lists. `src/lib/triage/` evaluates whatever rules the template lists. Adding a template must never need a new screen.
+- **Every alert has a reason** a nurse can read, e.g. "Teža +2,5 kg v 3 dneh".
+- **Emergency answers go to 112 first.** Chest pain, sudden severe breathlessness, fainting or stroke signs show a full-screen "Pokličite 112" before anything is saved or sent. For cancer, fever ≥38 °C shows the ward's phone number. zDoma is never presented as an emergency service.
+- **Decision support, not diagnosis.** The app never tells a patient what they have or to change a dose. It tells them to call, and it tells staff who to look at.
+- Thresholds come from `docs/research.md`. Don't invent medical rules. If one is missing, add a task to check it.
+
+### Keep the bolničar's work minimal
+- Opening a rehabilitacija takes about a minute: template + davčna številka + changes. Everything else is pre-filled from the template.
+- The dashboard shows only patients who need action. Green patients are hidden by default.
+- The app chases the patient, not the nurse: a missed check-in reminds the patient, then the zadolženec, and only then reaches staff.
+- Actions are one tap ("Poklicano – vse v redu", "Naročen pregled", "Obveščen osebni zdravnik") and write the audit log automatically.
 
 ## 6. Users and login
 
@@ -120,6 +152,7 @@ Many users are elderly. Every screen must be usable by someone who is 80, has po
 - **Large and readable.** Body text at least 18 px, buttons at least 48 px high, high contrast. Never use colour alone to carry meaning: green/yellow/red always comes with a word, for example "Rdeče – potrebna pozornost".
 - **Forgiving.** Show big, obvious confirmation of what just happened ("Shranjeno ✓"). Make mistakes easy to undo. Write error messages that tell the user what to do next.
 - **Icons always have a text label.**
+- **Slovenian formats.** Dates as `21. 11. 2026`, times as `8:00`, decimal comma (`74,5 kg`), via `Intl` with the `sl-SI` locale. All "today" and reminder times use the `Europe/Ljubljana` time zone, never the server's or UTC.
 
 ## 8. Directory layout
 
@@ -138,9 +171,11 @@ src/
     carer/          zadolženec-only components
     nurse/          bolničar-only components
   lib/
+    templates/      one data file per patient group (§5a)
     triage/         pure functions, no I/O
     supabase/       browser + server clients
-    types.ts        shared domain types (shared file, use a branch)
+    types.ts        shared domain types, the source of truth for the data model (shared file, use a branch)
+    database.types.ts  generated from the database, never hand-edited
 supabase/
   migrations/       SQL migrations, one per schema change
   seed.sql          demo data
@@ -174,7 +209,12 @@ Each task owns its own folder or files. Stay out of folders that another `[~]` t
 
 ### Other rules
 - Never commit secrets of any kind.
-- Write database migrations as files. Apply them to the shared Supabase project only if your task explicitly says so.
+- **Database migrations** go in `supabase/migrations/` as files, on a feature branch. Everyone shares one database, so:
+  1. Merge the branch to `main` first.
+  2. **Ask the human for approval**, then apply it: `supabase link --project-ref iumofikuduqxpsyhcoic` (once), then `supabase db push`.
+  3. Regenerate the types: `supabase gen types typescript --project-id iumofikuduqxpsyhcoic > src/lib/database.types.ts`, and commit them.
+  4. Never edit a migration that's already applied. Write a new one. Never run `supabase db reset` or drop tables on the shared project.
+- Every table has row-level security switched on, with policies matching §6: a patient sees their own data, an approved zadolženec can only read, staff see everything.
 - Don't deploy to production unless your task is the deploy task.
 - All patient data is synthetic. Never use real patient data.
 
