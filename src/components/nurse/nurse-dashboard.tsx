@@ -139,9 +139,10 @@ export function NurseDashboard({ rows, nurseId, covering = [], templates }: {
             <ul className="grid gap-3 @lg:grid-cols-2">
               {filtered.map((row) => (
                 <li key={row.id} className="flex">
-                  <article className="grid flex-1 content-start gap-3 rounded-2xl border bg-background p-4 sm:grid-cols-[minmax(0,1fr)_auto]">
+                  <article className="flex flex-1 flex-col gap-3 rounded-2xl border bg-background p-4">
                     <div className="min-w-0 space-y-1 wrap-break-word">
-                      <h3 className="text-xl leading-snug font-bold">
+                      <div className="flex items-start justify-between gap-3">
+                      <h3 className="min-w-0 text-xl leading-snug font-bold">
                         <Link
                           className="inline-flex min-h-12 items-center text-primary underline underline-offset-4"
                           prefetch={false}
@@ -150,13 +151,14 @@ export function NurseDashboard({ rows, nurseId, covering = [], templates }: {
                           {row.name}
                         </Link>
                       </h3>
+                      <StatusBadge className="shrink-0" short status={row.status} />
+                      </div>
                       <p>{[row.place, row.municipality === row.place ? null : row.municipality].filter(Boolean).join(", ") || "Kraj ni vpisan"}</p>
                       <p className="text-muted-foreground">{row.templateLabel} · Od odpusta {dniBesedilo(row.daysSinceDischarge)}</p>
                     </div>
-                    <StatusBadge className="self-start sm:justify-self-end" short status={row.status} />
-                    {row.reason && <p className="font-semibold wrap-break-word sm:col-span-2">{row.reason}</p>}
+                    {row.reason && <p className="font-semibold wrap-break-word">{row.reason}</p>}
                     {row.nurseId === null && (
-                      <div className="flex flex-wrap items-center gap-3 sm:col-span-2">
+                      <div className="flex flex-wrap items-center gap-3">
                         <button
                           aria-label={`Prevzemi: ${row.name}`}
                           className="min-h-12 rounded-xl bg-primary px-4 py-2 font-semibold text-primary-foreground disabled:opacity-60"
