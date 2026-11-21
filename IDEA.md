@@ -56,7 +56,7 @@ Odpuščenec and zadolženec describe a relationship to a patient, not an accoun
 
 1. **"Danes", not menus:** the app opens on today's next action and ends with "Končano za danes ✓". A normal day is 3–4 taps.
 2. **"Enako kot včeraj":** if nothing changed, one tap. The app asks more only when something is different.
-3. **A progress bar for the whole recovery:** every answered question fills it a little (questions × days of the rehabilitacija), "Vaše okrevanje: 42 % ✓". It never goes backwards. The family sees the same bar.
+3. **A progress ring for the whole recovery:** a circle filling counter-clockwise, one slice per day: green when the check-in was done, red when it was missed, grey for days to come, with the percentage in the middle and "Opravljeno 18 dni · Izpuščeno 2 dni · Še 10 dni" under it. The family sees the same ring.
 4. **Something back every day:** own numbers ("72,4 kg – blizu vaše ciljne teže ✓", "Dan 6 od 30"), and the nurse's name when she acts ("Sestra Mojca vas bo poklicala danes do 12:00").
 5. **Medicines, end to end:** what changed at discharge (Novo / Spremenjeno / Ukinjeno, with a photo of each box), whether it was picked up (eRecept), and a reminder before it runs out.
 6. **Set up at the first patronaža visit:** the patronažna sestra installs it on the patient's phone and does the first check-in with them, so nobody aged 80 has to set up an app alone.
