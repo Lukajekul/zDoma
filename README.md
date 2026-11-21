@@ -4,147 +4,171 @@ ADAHack 2026, izziv 1 (ekipa Ixtlan): *Spremljanje pacientov na domu po odpustu 
 
 ## Na kratko
 
-Pacient po odpustu iz bolnišnice doma vsak dan opravi kratek pregled stanja, jemlje zdravila in dela vaje po navodilih. Sistem opazi zgodnje opozorilne znake in o njih obvesti osebje, preden zaplet pripelje do ponovnega sprejema v bolnišnico.
+Pacient po odpustu iz bolnišnice doma vsak dan opravi kratek pregled stanja, jemlje zdravila in dela vaje po navodilih. Sistem opazi zgodnje opozorilne znake in o njih obvesti osebje, preden zaplet pripelje do ponovnega sprejema v bolnišnico. Osebje vidi samo bolnike, ki potrebujejo pozornost.
 
-## Osnovni podatki o aplikaciji
+## Problem
 
-### Problem
+Po odpustu gre pacient domov skoraj brez zdravniškega nadzora. Zapleti, kot so poslabšanje srčnega popuščanja, okužbe ali napake pri jemanju zdravil, pogosto ostanejo neopaženi, dokler se pacient ne vrne na urgenco. Medicinske sestre ne morejo vsak dan poklicati vseh pacientov, zato potrebujejo pregled, kdo potrebuje pozornost.
 
-Po odpustu gre pacient domov skoraj brez zdravniškega nadzora. Zapleti, kot so okužbe, poslabšanje srčnega popuščanja ali napake pri jemanju zdravil, pogosto ostanejo neopaženi, dokler se pacient ne vrne na urgenco. Medicinske sestre ne morejo vsak dan poklicati vseh pacientov, zato potrebujejo pregled, kdo potrebuje pozornost.
+- Skoraj polovica bolnikov, sprejetih zaradi akutnega srčnega popuščanja, je v Evropi v enem letu ponovno sprejetih.
+- 19 % bolnikov ima v nekaj tednih po odpustu neželen dogodek, 66 % teh je povezanih z zdravili.
 
-### Osnovna zanka
+Viri in podrobnosti: [docs/research.md](docs/research.md).
+
+## Osnovna zanka
 
 **Pacient poroča → sistem označi → osebje ukrepa**
 
 Vsaka funkcija mora podpirati to zanko. Če funkcija ne prinaša podatkov za razvrščanje pacientov ali ne pomaga osebju ukrepati, je dodatek.
 
-## Tipi uporabnikov
+## Skupine bolnikov
 
-Uporabniki se delijo na tri tipe: **odpuščenec**, **zadolženec** in **bolničar**.
+Aplikacija je splošna, a jo gradimo za šest skupin s hudimi boleznimi, pri katerih se zapleti po odpustu pogosto spregledajo in za katere raziskave kažejo, da spremljanje doma pomaga. Glavna skupina, na kateri temelji demo, je **srčno popuščanje**.
+
+| Skupina | Kaj pacient poroča | Opozorilni znaki | Ključna raziskava |
+|---|---|---|---|
+| **Srčno popuščanje** (glavna) | teža, otekline, težko dihanje | teža +2 kg v 3 dneh, težje dihanje, izpuščen diuretik | Cochrane 2015: spremljanje doma, −20 % smrti, −29 % sprejemov zaradi srčnega popuščanja |
+| **Po infarktu ali operaciji srca** | bolečina v prsih, dihanje, rana, zdravila | bolečina v prsih → 112, izpuščena zdravila za redčenje krvi, rana, vročina | Cochrane 2023: rehabilitacija doma je enako učinkovita kot v centru |
+| **Nov kolk ali koleno** | bolečina, temperatura, fotografija rane, otekel meč | vročina nad 38 °C, rdeča ali izcejajoča rana, en otekel meč (možen strdek) | Okužbe in zapleti s protezo povzročijo 59 % stroškov ponovnih sprejemov |
+| **KOPB** | dihanje, kašelj in barva izmečka, vročina | precej težje dihanje, zelen ali rumen izmeček, vročina | Evropska revizija KOPB: 35 % ponovno sprejetih v 90 dneh; spremljanje doma −26 % sprejemov zaradi poslabšanja |
+| **Možganska kap** | krvni tlak, nova šibkost ali težave z govorom, padci | znaki GROM → 112, visok tlak, padec | Cochrane 2017: nadaljevanje oskrbe doma zmanjša smrt ali odvisnost (OR 0,80) |
+| **Rak na sistemskem zdravljenju** | temperatura, slabost, driska, bolečina, počutje | vročina ≥ 38 °C → takoj klic na onkološki oddelek | Basch (JAMA 2017): poročanje simptomov od doma, preživetje 31,2 proti 26,0 meseca |
+
+Za vse skupine velja: opomniki za zdravila, ker so težave z zdravili najpogostejša škoda po odpustu.
+
+### Predloge
+
+Vsaka skupina je ena **predloga**: podatkovna datoteka z vprašanji, pravili za opozorila, privzetimi zdravili, vajami in privzeto dolžino rehabilitacije. Koda je splošna: en zaslon za pregled stanja prikaže vprašanja iz predloge, ena funkcija preveri odgovore po pravilih predloge in vrne status in razlog. Nova skupina pomeni samo novo datoteko, brez novih zaslonov. Predloge napišemo sami po smernicah. Kasneje jih bodo urejali zdravniki. Brez AI.
+
+## Tipi uporabnikov
 
 | Tip | Kdo je | Glavni namen |
 |-----|--------|--------------|
-| Odpuščenec | Pacient, odpuščen iz bolnišnice | Vidi in izvaja svoj načrt okrevanja |
-| Zadolženec | Svojec ali skrbnik, ki doma skrbi za pacienta | Spremlja, ali se pacient drži načrta |
-| Bolničar | Zdravnik ali medicinska sestra | Pripravi in ureja načrt okrevanja |
+| Odpuščenec | Pacient, odpuščen iz bolnišnice | Izvaja svoj načrt okrevanja in poroča o stanju |
+| Zadolženec | Svojec ali skrbnik, ki ga je pacient odobril | Spremlja, ali se pacient drži načrta (samo branje) |
+| Bolničar | Zdravnik ali medicinska sestra | Odpre rehabilitacijo in ukrepa, ko je treba |
+
+Odpuščenec in zadolženec nista vrsti računa, ampak odnos do pacienta. Ista oseba je lahko odpuščenec v svoji rehabilitaciji in zadolženec za svojo mamo.
 
 ### Odpuščenec
 
-Odpuščenec je oseba, ki je bila odpuščena iz bolnišnice po operaciji, zdravljenju ali pregledu in doma potrebuje pomoč pri okrevanju.
-
 Ima dostop do vseh svojih podatkov:
 
-- osebni podatki in podatki o odpustu (diagnoza, poseg, navodila),
-- seznam zdravil z odmerki ter časom jemanja (kolikokrat na dan in kdaj),
-- vaje za rehabilitacijo, po možnosti z videom,
-- navodila, kaj naj počne in česa naj se izogiba,
+- podatki o odpustu (diagnoza, poseg, navodila v preprostem jeziku),
+- seznam zdravil z odmerki in časom jemanja,
+- vaje za rehabilitacijo, po možnosti s sliko ali videom,
+- kaj naj počne in česa naj se izogiba,
 - opozorilni znaki, ob katerih naj poišče pomoč.
 
-Ob vsakem zdravilu in vaji lahko označi, da je opravljeno, kar je osnova za spremljanje, ali se drži načrta.
+Ob vsakem zdravilu in vaji označi, da je opravljeno. Sam odobri ali zavrne prošnje svojcev za dostop in jim dostop kadar koli odvzame.
 
 ### Zadolženec
 
-Zadolženec je oseba, ki doma skrbi za odpuščenca, na primer svojec ali skrbnik.
-
-- **Prijava:** z e-poštnim naslovom ali s številko zdravstvenega zavarovanja (ZZZS).
-- **Pregled:** vidi, kaj odpuščenec potrebuje (zdravila, odmerke, vaje, navodila).
-- **Spremljanje:** vidi, ali se odpuščenec drži načrta, na primer katera zdravila so bila vzeta in katere vaje opravljene ali izpuščene.
-- **Opomniki:** aplikacija zadolžencu (in odpuščencu) pošilja e-pošto ali SMS z opomniki za naloge, kot so jemanje zdravil in izvajanje vaj.
+- **Prijava:** se registrira sam, s svojo davčno številko in geslom, v svoj račun (nikoli v pacientovega).
+- **Dostop:** pod »Zaprosi za dostop« vpiše davčno številko pacienta. Aplikacija vedno odgovori »Prošnja poslana«, da nihče ne more ugotoviti, kdo uporablja zDoma. Dostop začne veljati, ko ga pacient odobri.
+- **Zavihek »Skrbim za«:** samo za branje. Vidi, katera zdravila so bila vzeta ali izpuščena, katere vaje opravljene ali izpuščene, ali je bil opravljen pregled stanja in kakšen je trenutni status.
+- **Obvestila (kasneje):** za vsakega pacienta lahko vklopi »Prejemaj obvestila« (privzeto izklopljeno) in izbere e-pošto, SMS ali oboje. Prejema iste opomnike kot pacient ter sporočilo, ko pacient kaj izpusti ali njegov status postane rumen ali rdeč. Sporočila ne vsebujejo diagnoze ali imen zdravil.
 
 ### Bolničar
 
-Bolničar je zdravnik ali medicinska sestra.
+Cilj: **čim manj dela za osebje.**
 
-- **Kartoteka ob odpustu:** ko je pacient odpuščen, bolničar izpolni njegovo kartoteko.
-- **Načrt okrevanja:** doda vaje, zdravila, odmerke in urnik (kolikokrat na dan, ob kateri uri).
-- **Predloge navodil:** za posamezne posege ali operacije obstajajo osnovne predloge navodil (na primer zamenjava kolka). Bolničar začne s predlogo in jo prilagodi pacientu.
-- **Urejanje predlog:** predloge lahko spreminjajo vsi zdravniki.
-- **Dnevnik sprememb (audit log):** vsaka sprememba kartoteke, načrta ali predloge se shrani v dnevnik: kdo je spremembo naredil, kdaj in kaj se je spremenilo.
+- **Odpust v približno 1 minuti:** izbere predlogo, vpiše davčno številko pacienta, prilagodi zdravila in datum konca. Vse drugo pride iz predloge.
+- **Rehabilitacija traja do datuma, ki ga določi bolničar.** Lahko jo podaljša (»Podaljšaj«) ali na novo odpre kmalu po koncu.
+- **Nadzorna plošča prikaže samo težave.** Zeleni bolniki so privzeto skriti. Vsako opozorilo pove, zakaj se je sprožilo.
+- **Aplikacija opominja pacienta, ne sestre.** Izpuščen pregled stanja → opomnik pacientu, nato svojcu, šele nato osebju.
+- **Hitra dejanja z enim dotikom:** »Poklicano – vse v redu«, »Naročen pregled«, »Obveščen osebni zdravnik«.
+- **Dnevnik sprememb:** vsaka sprememba načrta, podaljšanje ali dejanje se zapiše samodejno.
 
-### Pravice dostopa (osnutek)
+Računi bolničarjev se ne registrirajo sami. Ustvari jih skrbnik.
+
+### Pravice dostopa
 
 | Dejanje | Odpuščenec | Zadolženec | Bolničar |
 |---------|:----------:|:----------:|:--------:|
-| Ogled lastnega načrta in podatkov | ✓ | ✓ (za svojega pacienta) | ✓ |
-| Označevanje opravljenih nalog | ✓ | ✓ | |
+| Ogled načrta in podatkov | ✓ | ✓ (za odobrenega pacienta) | ✓ |
+| Pregled stanja, označevanje opravljenih nalog | ✓ | | |
 | Spremljanje upoštevanja načrta | ✓ | ✓ | ✓ |
-| Prejemanje opomnikov (e-pošta/SMS) | ✓ | ✓ | |
-| Urejanje kartoteke in načrta | | | ✓ |
-| Urejanje predlog navodil | | | ✓ (zdravniki) |
+| Odobritev dostopa svojcem | ✓ | | |
+| Prejemanje opomnikov (e-pošta/SMS, kasneje) | ✓ | ✓ (če vklopi) | |
+| Odpiranje, urejanje in podaljšanje rehabilitacije | | | ✓ |
 | Ogled dnevnika sprememb | | | ✓ |
 
-## Funkcionalnosti
+## Prijava in rehabilitacija
 
-### Za pacienta
+1. **Ob prvem odpustu** bolničar ustvari pacientov račun (davčna številka in ime). Sistem ustvari **začasno geslo**, ki se natisne na ločen **prijavni listek**, nikoli na odpustnico.
+2. **Ob prvi prijavi** pacient z začasnim geslom vstopi in si mora takoj nastaviti svoje geslo (dovoljen je 6-mestni PIN). Začasno geslo nato ne deluje več. Neuporabljeno poteče po 7 dneh; bolničar lahko izda novo.
+3. **Rehabilitacija** je eno obdobje okrevanja. Odpre jo bolničar po predlogi in določi datum konca. Dokler je **aktivna**, tečejo pregledi stanja, opomniki in opozorila. Ko poteče, je **zaključena**: vse ostane na voljo za branje.
+4. Pacient, ki že ima račun, ne dobi novega gesla. Nova rehabilitacija se mu samo prikaže.
+5. Po prijavi: če je aktivna ena rehabilitacija, se odpre takoj. Če jih je več, so prikazane kot velike kartice.
 
-- **Dnevni pregled stanja (približno 60 s).** Vprašanja so prilagojena diagnozi:
-  - operacija kolka ali kolena: bolečina, temperatura, fotografija rane, gibljivost,
-  - srčno popuščanje: teža, otekline, težko dihanje.
-- **Opomniki za zdravila.** Prikaže, katero zdravilo vzeti in kdaj, z gumbom »Vzeto«. Izpuščeni odmerki vplivajo na oceno tveganja.
-- **Načrt rehabilitacije.** Vaje z videi, prilagojene diagnozi, ki se iz tedna v teden stopnjujejo. Po vsaki vadbi pacient odgovori »Opravljeno?« in »Bolečina 0–10?«.
-- **Moje okrevanje.** Odpustno pismo v preprostem jeziku, lastni trendi (bolečina, temperatura, teža, upoštevanje načrta) in isti status (zeleno/rumeno/rdeče), kot ga vidi osebje.
-- **Eskalacija namesto odprtega klepeta.** Ko status postane rdeč, pacienta pokliče medicinska sestra.
+Davčna številka ni skrivnost, zato se brez gesla nikoli ni mogoče prijaviti.
 
-### Za osebje (nadzorna plošča)
+## Varnost
 
-- Seznam pacientov, razvrščen po semaforju (zeleno/rumeno/rdeče).
-- **Vsako opozorilo pove, zakaj se je sprožilo**, na primer: »Označen, ker se je bolečina v 3 dneh dvignila s 3 na 7 in sta bili izpuščeni 2 vadbi.«
-- Opozorila na trende, na primer »teža +2 kg v 3 dneh«.
-- Fotografije rane, prikazane ena ob drugi skozi čas.
-- Tedenski povzetek za vsakega pacienta, ki ga napiše AI.
-- Hitra dejanja: pokliči pacienta, prilagodi načrt, naroči obisk.
-
-## Klinična podlaga
-
-- **LACE indeks ob odpustu** (dolžina hospitalizacije, akutnost, pridružene bolezni, obiski urgence). Določa, kako pogosto pacient poroča: dnevno pri visokem tveganju, vsake 3 dni pri nizkem.
-- **Pravila za opozorila iz smernic:**
-  - srčno popuščanje: porast teže za več kot 2 kg v 3 dneh,
-  - po operaciji: temperatura nad 38 °C; rana, ki je rdeča, topla ali se izceja.
-- **Sintetični pacienti iz orodja Synthea** v formatu FHIR, ki ga uporabljajo bolnišnice.
+- **zDoma ni služba za nujno pomoč.** Pri bolečini v prsih, nenadnem hudem težkem dihanju, omedlevici ali znakih kapi aplikacija najprej prikaže celozaslonsko »Pokličite 112«, šele nato obvesti osebje.
 - **Podpora odločanju, ne diagnoza.** Sistem razvršča paciente, odločitve sprejema osebje. Brez AI diagnoz in brez AI analize ran.
+- **Samo izmišljeni podatki** v razvoju in demu. Izmišljene davčne številke, ki prestanejo preverjanje kontrolne števke.
+
+## Uporabniški vmesnik
+
+Uporabljajo ga tudi starejši, zato:
+
+- najprej slovenščina, preproste besede, brez strokovnih izrazov,
+- najprej za telefon, deluje tudi na računalniku,
+- en korak na zaslon, velika pisava (vsaj 18 px), veliki gumbi (vsaj 48 px),
+- barva statusa vedno z besedo, na primer »Rdeče – potrebna pozornost«,
+- jasna potrditev »Shranjeno ✓« in gumb »Nazaj« na vsakem zaslonu.
 
 ## Tehnične podrobnosti
 
-*Za dopolniti.*
+- **Tehnološki sklad:** Next.js (App Router) + TypeScript, Tailwind CSS + shadcn/ui, Supabase (Postgres, Realtime, Storage, Auth), gostovanje na Cloudflare Workers. Brez LLM.
+- **Ocena tveganja:** LACE indeks ob odpustu in pravila iz predloge. Tedenski povzetek je sestavljen po predlogi iz podatkov (brez AI).
+- **Sintetični pacienti** (na primer iz orodja Synthea, format FHIR, ki ga uporabljajo bolnišnice).
+- **Obvestila:** e-pošta in SMS, kasneje.
 
-- Tehnološki sklad: *še ni izbran*
-- Obvestila: e-pošta in SMS
-- Podatkovni model: *za dopolniti*
-- Prijava in avtentikacija: *za dopolniti*
+Pravila za razvijalce in agente: [AGENTS.md](AGENTS.md). Naloge: [TASKS.md](TASKS.md). Raziskave: [docs/research.md](docs/research.md).
 
 ## Obseg za 24 ur
 
 **Mora delovati v demu**
-- dnevni pregled stanja (splet, najprej za mobilne naprave),
+- prijava z začasnim geslom in nastavitev svojega gesla,
+- bolničar odpre rehabilitacijo po predlogi,
+- dnevni pregled stanja po predlogi, z zaslonom »Pokličite 112«,
 - nadzorna plošča s semaforjem in pojasnjenimi opozorili,
-- LACE ocena in pravila za opozorila,
-- vaje za rehabilitacijo z beleženjem opravljenega in bolečine,
-- opomniki za zdravila,
+- opomniki za zdravila in vaje z beleženjem,
+- zavihek »Skrbim za« za svojce,
 - demo v živo s kodo QR.
 
 **Samo klikljivi prototipi**
 - celoten pogled »Moje okrevanje«,
-- poročanje prek telefona/SMS in prek svojcev,
-- podatki o korakih iz Google Fit / Apple Health,
+- poročanje prek telefona/SMS,
 - zaslon za čustveno podporo.
+
+**Kasneje**
+- opomniki po e-pošti in SMS, tudi za svojce,
+- urejanje predlog za zdravnike,
+- podatki o korakih iz Google Fit / Apple Health.
 
 **Izpuščeno**
 - naročanje na preglede (to že pokrivata zVEM in eNaročanje),
 - odprt klepet z zdravnikom (ni skalabilno),
-- snemanje lastnih videov vaj (namesto tega vgradimo 3–5 obstoječih videov fizioterapevtov).
+- snemanje lastnih videov vaj (vgradimo obstoječe videe fizioterapevtov).
 
 ## Demo
 
 1. Član žirije skenira kodo QR in na svojem telefonu opravi pregled stanja.
-2. Poroča visoko bolečino in izpuščeno vadbo.
+2. Vpiše večjo težo in otekle gležnje.
 3. Na nadzorni plošči (na projektorju) njegova kartica postane rdeča, skupaj z razlogom.
 
-**Zgodba pacienta:** pacient po zamenjavi kolka ima LACE oceno 11 (visoko tveganje), zato poroča dnevno. Od 3. do 5. dne se mu bolečina stopnjuje in izpusti dve vadbi. Status postane rumen z navedenimi razlogi, medicinska sestra ga pokliče in okužba rane je odkrita zgodaj.
+**Zgodba pacienta:** 78-letni gospod s srčnim popuščanjem, suha teža 72 kg. Od 3. do 5. dne po odpustu se mu teža dvigne na 74,5 kg, gležnji otečejo in enkrat izpusti diuretik. Hčerka, ki ima dostop kot zadolženka, vidi izpuščeno zdravilo. Status postane rdeč z navedenimi razlogi, medicinska sestra ga pokliče in po telefonu prilagodi odmerek diuretika. Ponoven sprejem v bolnišnico je preprečen.
 
 ## Odprta vprašanja
 
-- [ ] Najti pravi podatek o stopnji ali stroških ponovnih sprejemov v Sloveniji ali EU
-- [ ] Preveriti mejne vrednosti opozoril z nekom z medicinskim znanjem
-- [ ] Izbrati tehnološki sklad
-- [ ] Izbrati 3–5 videov vaj po zamenjavi kolka iz zanesljivih virov
-- [ ] Določiti, kako se zadolženec poveže z odpuščencem (povabilo, potrditev)
+- [ ] Najti slovenski podatek o ponovnih sprejemih ali stroških pri srčnem popuščanju (NIJZ, ZZZS)
+- [ ] Preveriti mejne vrednosti opozoril z nekom z medicinskim znanjem (npr. 2 kg v 2 ali 3 dneh)
+- [ ] Preveriti vse številke v izvirnih člankih, preden gredo na prosojnice
+- [ ] Izbrati vaje in videe za vseh šest skupin iz zanesljivih virov
+- [x] Izbrati tehnološki sklad
+- [x] Določiti, kako se zadolženec poveže z odpuščencem (prošnja z davčno številko, pacient potrdi)
+- [x] Izbrati skupine bolnikov (šest, glavna je srčno popuščanje)
