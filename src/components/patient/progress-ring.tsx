@@ -31,7 +31,7 @@ export function ProgressRing({ data, extendedUntil }: { data: RingData; extended
 
   return (
     <figure className="flex flex-col items-center gap-3 text-center">
-      <div className="relative grid w-full max-w-64 place-items-center">
+      <div className="relative grid w-full max-w-60 place-items-center">
         <svg viewBox={`0 0 ${SIZE} ${SIZE}`} className="w-full" aria-hidden>
           {data.days.map((day, d) => {
             const a0 = -d * per - gap;
@@ -50,11 +50,11 @@ export function ProgressRing({ data, extendedUntil }: { data: RingData; extended
           })}
         </svg>
         <p className="absolute flex flex-col items-center">
-          <span className="text-5xl leading-none font-extrabold tracking-tight">{percent.format(data.overallShare)}</span>
+          <span className="text-[2.6rem] leading-none font-extrabold tracking-tight">{percent.format(data.overallShare)}</span>
           <span className="mt-1 text-base text-muted-foreground">opravljeno</span>
         </p>
       </div>
-      <figcaption className="text-lg text-muted-foreground">
+      <figcaption className="text-base text-muted-foreground">
         Opravljeno {dniBesedilo(data.doneDays)} · Izpuščeno {dniBesedilo(data.missedDays)} · Še {dniBesedilo(data.leftDays)}
       </figcaption>
       {extendedUntil && <p className="text-lg font-semibold">Okrevanje podaljšano do {extendedUntil}</p>}

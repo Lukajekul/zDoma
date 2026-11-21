@@ -1,10 +1,12 @@
 import { Suspense } from "react";
 import Link from "next/link";
-import { CalendarCheck, Plus } from "lucide-react";
+import { CalendarCheck } from "lucide-react";
 import { getStaffKind } from "@/lib/staff";
 import { LogoutButton } from "@/components/auth/logout-button";
+import { DashboardHero } from "@/components/nurse/dashboard-hero";
+import { DashboardSearch } from "@/components/nurse/dashboard-search";
 import { NurseDashboard } from "@/components/nurse/nurse-dashboard";
-import { AppShell, BigButton, IconTile } from "@/components/shell";
+import { AppShell, IconTile } from "@/components/shell";
 import { requireStaff } from "@/lib/auth";
 import { formatShortDay, greeting, todayLjubljana } from "@/lib/format";
 import { seznamPredlog } from "@/lib/templates";
@@ -36,15 +38,31 @@ async function Dashboard() {
     getCoveredNurseIds(staff.id, today),
     getStaffKind(staff.id),
   ]);
-  const subtitle = kind === "patronaza" ? `Patronažna sestra · ${obcine.join(", ")}` : "Bolnišnica · pregled pacientov";
+  const title = `${greeting()}, ${kind === "patronaza" ? "sestra " : ""}${staff.first_name}`;
 
   return (
-    <AppShell title={`${greeting()}, ${staff.first_name}`} subtitle={subtitle} aside={formatShortDay()} wide back={false}>
-      {kind === "bolnisnica" && (
-        <BigButton href="/nurse/odpust" icon={<Plus />} className="sm:w-fit sm:px-8">Nova rehabilitacija</BigButton>
+    <AppShell
+      title={title}
+      eyebrow={`Pregled / Pacienti · ${formatShortDay()}`}
+      compact
+      wide
+      back={false}
+      bandEnd={<Suspense><DashboardSearch /></Suspense>}
+      hero={rows && (
+        <Suspense>
+          <DashboardHero
+            kind={kind}
+            name={`${staff.first_name} ${staff.last_name}`}
+            place={obcine.join(", ")}
+            rows={rows}
+            nurseId={staff.id}
+            covering={covering}
+          />
+        </Suspense>
       )}
+    >
       {visits && visits.todo.length > 0 && (
-        <Link href="/nurse/danes" className="flex items-center gap-4 rounded-3xl bg-card p-4 text-lg font-semibold shadow-soft hover:shadow-lift">
+        <Link href="/nurse/danes" className="flex items-center gap-4 rounded-3xl bg-card p-4 text-lg font-semibold shadow-soft hover:shadow-lift sm:px-5">
           <IconTile><CalendarCheck /></IconTile>
           <span className="flex-1">
             Prvi obisk še ni opravljen: {visits.todo.length} {visits.todo.length === 1 ? "pacient" : "pacientov"}

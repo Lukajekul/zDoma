@@ -1,4 +1,6 @@
 import { useId } from "react";
+import Link from "next/link";
+import type { StaffKind } from "@/lib/staff";
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { dayBands, facetValues, matchesFilters } from "./dashboard-filters";
@@ -19,11 +21,12 @@ interface DashboardControlsProps {
   nurseId: string;
   covering?: string[];
   templates: TemplateOption[];
+  kind: StaffKind;
   change: (key: string, value: string | null) => void;
   clear: () => void;
 }
 
-export function DashboardControls({ rows, filters, nurseId, covering = [], templates, change, clear }: DashboardControlsProps) {
+export function DashboardControls({ rows, filters, nurseId, covering = [], templates, kind, change, clear }: DashboardControlsProps) {
   function picks(title: string, key: string, options: FilterOption[]) {
     return (
       <FilterGroup title={title}>
@@ -35,9 +38,9 @@ export function DashboardControls({ rows, filters, nurseId, covering = [], templ
             <button
               aria-pressed={option.active}
               className={cn(
-                "min-h-12 max-w-full rounded-full px-4 py-2 text-left leading-snug font-semibold",
+                "min-h-11 max-w-full rounded-full px-4 py-2 text-left leading-snug font-semibold",
                 "focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ring",
-                option.active ? "bg-primary text-primary-foreground" : "bg-muted hover:bg-brand-soft",
+                option.active ? "bg-primary text-primary-foreground" : "bg-canvas hover:bg-brand-soft",
               )}
               key={option.value}
               onClick={() => change(key, option.active ? null : option.value)}
@@ -51,16 +54,6 @@ export function DashboardControls({ rows, filters, nurseId, covering = [], templ
     );
   }
 
-  const scopes = [
-    { value: "moji", label: "Moji pacienti" },
-    { value: "vsi", label: "Vsi pacienti" },
-    { value: "nedodeljeni", label: "Nedodeljeni" },
-  ] as const;
-  const statuses = [
-    { value: "rdece", label: "Rdeče" },
-    { value: "rumeno", label: "Rumeno" },
-    { value: "zeleno", label: "Zeleno" },
-  ] as const;
   const municipalities = facetValues(rows, "municipality", filters.municipality);
   const places = facetValues(
     rows.filter((row) => !filters.municipality || row.municipality === filters.municipality),
@@ -73,12 +66,6 @@ export function DashboardControls({ rows, filters, nurseId, covering = [], templ
       <a className="flex min-h-12 w-fit items-center font-medium text-primary underline lg:hidden" href="#seznam-pacientov">
         Na seznam
       </a>
-      {picks("Dodelitev", "prikaz", scopes.map(({ value, label }) => ({
-        label, value, active: filters.scope === value, filter: { scope: value },
-      })))}
-      {picks("Stanje", "stanje", statuses.map(({ value, label }) => ({
-        label, value, active: filters.status === value, filter: { status: value },
-      })))}
       {picks("Dnevni pregled", "brez-pregleda", [
         { label: "Brez pregleda danes", value: "1", active: filters.missedCheckin, filter: { missedCheckin: true } },
       ])}
@@ -98,12 +85,17 @@ export function DashboardControls({ rows, filters, nurseId, covering = [], templ
         label, value, active: filters.days === value, filter: { days: value },
       })))}
       <button
-        className="min-h-12 rounded-2xl border-2 border-brand bg-card px-4 py-2 font-bold text-primary hover:bg-brand-soft"
+        className="min-h-12 w-full rounded-xl bg-brand-soft px-4 py-2 font-bold text-brand-ink hover:bg-brand-soft/70"
         onClick={clear}
         type="button"
       >
         Počisti filtre
       </button>
+      {kind === "patronaza" && (
+        <Link href="/nurse/nadomescanje" className="flex min-h-14 w-full items-center justify-center rounded-xl border-2 border-brand bg-card px-4 font-bold text-primary hover:bg-brand-soft">
+          Nadomeščanje
+        </Link>
+      )}
     </div>
   );
 }

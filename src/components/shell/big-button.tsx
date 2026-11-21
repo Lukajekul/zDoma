@@ -13,13 +13,13 @@ const variants = {
 
 export type BigButtonVariant = keyof typeof variants;
 
-/** Classes for a big tap target (min 64 px high, full width, large text). */
+/** Classes for a big tap target (min 56 px high, full width, large text). */
 export function bigButtonClass(variant: BigButtonVariant = "primary", className?: string) {
   return cn(
-    "flex min-h-16 w-full items-center justify-center gap-3 rounded-2xl border-2 px-5 py-3 text-center text-xl font-bold transition-colors select-none",
+    "flex min-h-14 w-full items-center justify-center gap-3 rounded-xl border-2 px-5 py-3 text-center text-lg font-bold transition-colors select-none",
     "focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ring",
     "disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50",
-    "[&_svg]:size-7 [&_svg]:shrink-0",
+    "[&_svg]:size-6 [&_svg]:shrink-0",
     variants[variant],
     className,
   );

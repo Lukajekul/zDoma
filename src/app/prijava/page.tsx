@@ -1,18 +1,19 @@
 import { Suspense } from "react";
-import { QrCode, UserPlus } from "lucide-react";
-import { AppShell, BigButton, Card, IconTile } from "@/components/shell";
+import Link from "next/link";
+import { BigButton, Card } from "@/components/shell";
 import { LogoutButton } from "@/components/auth/logout-button";
 import { getCurrentProfile } from "@/lib/auth";
 import { continueHome } from "./actions";
 import { LoginForm } from "./_components/login-form";
+import { LoginFrame } from "./_components/login-frame";
 
 export default function PrijavaPage() {
   return (
-    <AppShell title="Dobrodošli nazaj" subtitle="Prijava v zDoma" back="/">
+    <LoginFrame title="Dobrodošli nazaj" subtitle="Za osebje in svojce">
       <Suspense fallback={<p className="text-xl">Nalagam …</p>}>
         <LoginOrAccount />
       </Suspense>
-    </AppShell>
+    </LoginFrame>
   );
 }
 
@@ -21,7 +22,7 @@ async function LoginOrAccount() {
 
   if (profile) {
     return (
-      <Card className="max-w-xl">
+      <Card>
         <p className="rounded-2xl bg-status-zeleno-bg p-4 text-xl text-status-zeleno">
           Prijavljeni ste kot <strong>{profile.first_name} {profile.last_name}</strong> ✓
         </p>
@@ -33,36 +34,20 @@ async function LoginOrAccount() {
     );
   }
 
+  const link = "font-bold text-primary underline underline-offset-4";
   return (
-    <div className="grid items-start gap-4 lg:grid-cols-[minmax(0,6fr)_minmax(0,5fr)]">
-      <Card lift>
-        <div>
-          <h2 className="text-2xl font-bold text-primary">Za osebje in svojce</h2>
-          <p className="text-lg text-muted-foreground">Z davčno številko in geslom.</p>
-        </div>
-        <LoginForm />
-      </Card>
-      <div className="flex flex-col gap-4">
-        <Card>
-          <div className="flex items-center gap-4">
-            <IconTile><QrCode /></IconTile>
-            <h2 className="text-xl font-bold">Ste pacient?</h2>
-          </div>
-          <p className="text-lg">
-            Prvič se prijavite s kodo QR na prijavnem listku, nato s svojim geslom.
-          </p>
-          <BigButton href="/prijava/pacient">Prijava za paciente</BigButton>
-        </Card>
-        <Card>
-          <div className="flex items-center gap-4">
-            <IconTile ghost><UserPlus /></IconTile>
-            <h2 className="text-xl font-bold">Ste svojec brez računa?</h2>
-          </div>
-          <BigButton href="/prijava/registracija" variant="secondary">
-            Ustvari račun za svojce
-          </BigButton>
-        </Card>
+    <>
+      <LoginForm />
+      <div className="flex flex-col items-center gap-2 text-center text-lg text-muted-foreground">
+        <p>
+          Ste svojec brez računa?{" "}
+          <Link href="/prijava/registracija" className={link}>Ustvarite račun</Link>
+        </p>
+        <p>
+          Ste pacient?{" "}
+          <Link href="/prijava/pacient" className={link}>Prijava za paciente</Link>
+        </p>
       </div>
-    </div>
+    </>
   );
 }

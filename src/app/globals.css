@@ -51,13 +51,14 @@
   --color-status-rumeno-bg: var(--status-rumeno-bg);
   --color-status-rdece: var(--status-rdece);
   --color-status-rdece-bg: var(--status-rdece-bg);
+  /* Design v3 shapes: buttons, inputs and tiles 14 px, answer buttons 16 px, cards 20 px, bands 32 px. */
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) * 1.4);
-  --radius-2xl: calc(var(--radius) * 1.8);
-  --radius-3xl: calc(var(--radius) * 2.2);
-  --radius-4xl: calc(var(--radius) * 2.6);
+  --radius-xl: var(--radius);
+  --radius-2xl: calc(var(--radius) * 1.15);
+  --radius-3xl: calc(var(--radius) * 1.43);
+  --radius-4xl: calc(var(--radius) * 2.3);
 }
 
 :root {

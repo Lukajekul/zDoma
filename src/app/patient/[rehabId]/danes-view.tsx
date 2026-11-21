@@ -5,13 +5,14 @@ import { NextActionCard } from "@/components/patient/danes/next-action-card";
 import { NurseUpdateCard } from "@/components/patient/danes/nurse-update-card";
 import { ProgressRing } from "@/components/patient/progress-ring";
 import { rehabDay, rehabTitle } from "@/components/patient/rehab-info";
-import { Activity, Bell, ClipboardCheck, Phone, Pill, RefreshCw, Users } from "lucide-react";
+import { Activity, Bell, ClipboardCheck, Phone, Pill, RefreshCw, Scale, Users } from "lucide-react";
 import { AppShell, BigButton, Card, IconTile } from "@/components/shell";
 import { countPendingRequests } from "@/lib/family-access";
-import { formatDate, formatShortDay, greeting } from "@/lib/format";
+import { formatDate, formatNumber, formatShortDay, greeting } from "@/lib/format";
 import { createClient } from "@/lib/supabase/server";
 import type { Profile } from "@/lib/types";
 import type { loadCheckinContext } from "../_lib/checkins";
+import { targetFor } from "../_lib/checkin-plan";
 import { groupChanges, seenCookie } from "../_lib/changes";
 import { nextAction, nowMinutesLjubljana } from "../_lib/danes";
 import { getMedsAndLogs, logMissedDoses } from "../_lib/doses";
@@ -56,6 +57,8 @@ export async function DanesView({ ctx, profile, back }: { ctx: Ctx; profile: Pro
   const showChanges = changes.any && !(await cookies()).get(seenCookie(rehab.id));
   const { day, total } = rehabDay(rehab, today);
   const [h, m = "00"] = profile.checkin_time.split(":");
+  const weight = latestWeight(ctx);
+
 
   const links = [
     { href: `${base}/pregled`, label: "Pregled", hint: "Današnja vprašanja", Icon: ClipboardCheck },
@@ -69,15 +72,29 @@ export async function DanesView({ ctx, profile, back }: { ctx: Ctx; profile: Pro
   return (
     <AppShell
       title={`${greeting()}, ${profile.first_name}`}
-      subtitle={`${rehabTitle(rehab)} · Dan ${day} od ${total}`}
+      subtitle={`Dan ${day} od ${total} · ${rehabTitle(rehab)}`}
       aside={formatShortDay()}
       back={back}
       hero={
         <div className="grid items-start gap-4 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
-          <Card lift className="items-center">
+          <Card lift className="items-center py-6">
             <ProgressRing data={ring} extendedUntil={extendedUntil} />
           </Card>
           <div className="flex flex-col gap-4 lg:mt-14">
+            {weight && (
+              // Give something back every day, against the patient's own numbers (AGENTS.md §5a).
+              <Card className="flex-row items-center">
+                <IconTile ghost={!weight.green}><Scale /></IconTile>
+                <p className="flex flex-col">
+                  <strong className="text-xl">{formatNumber(weight.kg)} kg</strong>
+                  {weight.target !== undefined && (
+                    <span className="text-base text-muted-foreground">
+                      {weight.green ? `Blizu vaše ciljne teže ${formatNumber(weight.target)} kg ✓` : `Vaša ciljna teža je ${formatNumber(weight.target)} kg`}
+                    </span>
+                  )}
+                </p>
+              </Card>
+            )}
             {showChanges ? (
               // T-35: medicine changes come before anything else until the patient taps "Razumem".
               <Card lift>
@@ -130,18 +147,18 @@ export async function DanesView({ ctx, profile, back }: { ctx: Ctx; profile: Pro
         </div>
       }
     >
-      <h2 className="mt-2 text-xl font-bold">Več</h2>
+      <h2 className="mt-2 text-lg font-bold">Več</h2>
       <nav aria-label="Več" className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {links.map(({ href, label, hint, Icon }) => (
           <Link
             key={href}
             href={href}
-            className="flex min-h-20 items-center gap-4 rounded-3xl bg-card p-4 shadow-soft hover:shadow-lift focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ring"
+            className="flex min-h-16 items-center gap-4 rounded-3xl bg-card px-4 py-3 shadow-soft hover:shadow-lift focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ring"
           >
-            <IconTile ghost><Icon /></IconTile>
-            <span className="flex flex-col">
-              <span className="text-xl font-bold">{label}</span>
-              <span className="text-base text-muted-foreground">{hint}</span>
+            <IconTile ghost className="size-11"><Icon /></IconTile>
+            <span className="flex min-w-0 flex-col">
+              <span className="text-lg leading-snug font-bold">{label}</span>
+              <span className="text-base leading-snug text-muted-foreground">{hint}</span>
             </span>
           </Link>
         ))}
@@ -149,4 +166,19 @@ export async function DanesView({ ctx, profile, back }: { ctx: Ctx; profile: Pro
       <QuietLogout />
     </AppShell>
   );
+}
+
+/** Latest weighed check-in: weight, the patient's own target and whether that day was green. */
+function latestWeight(ctx: Ctx) {
+  const q = ctx.predloga.vprasanja.find((v) => v.tip === "teza");
+  if (!q) return null;
+  const last = [ctx.todayCheckin, ...ctx.history]
+    .filter((c): c is NonNullable<typeof c> => !!c && typeof c.answers[q.id] === "number")
+    .sort((a, b) => b.checkin_date.localeCompare(a.checkin_date))[0];
+  if (!last) return null;
+  return {
+    kg: last.answers[q.id] as number,
+    target: targetFor(ctx.predloga, q.id, ctx.rehab.patient_values),
+    green: last.triage_status === "zeleno",
+  };
 }

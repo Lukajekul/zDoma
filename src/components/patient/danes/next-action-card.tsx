@@ -17,8 +17,8 @@ function Head({ icon, title, sub, done = false }: { icon: React.ReactNode; title
     <div className="flex items-center gap-4">
       <IconTile ghost={!done}>{icon}</IconTile>
       <div>
-        <h2 className="text-2xl leading-tight font-bold">{title}</h2>
-        {sub && <p className="text-lg text-muted-foreground">{sub}</p>}
+        <h2 className="text-xl leading-tight font-bold">{title}</h2>
+        {sub && <p className="text-base text-muted-foreground">{sub}</p>}
       </div>
     </div>
   );
@@ -29,14 +29,16 @@ export function NextActionCard({ action, base, nextCheckin, onSlotTaken }: Props
   switch (action.kind) {
     case "checkin":
       return (
-        <Card lift>
-          <Head
-            icon={action.weight ? <Scale /> : <ClipboardCheck />}
-            title={action.weight ? "Stopite na tehtnico" : "Današnji pregled"}
-            sub={`${action.weight ? "Nato nekaj vprašanj. " : ""}Traja 30 sekund.`}
-          />
+        <>
+          <Card>
+            <Head
+              icon={action.weight ? <Scale /> : <ClipboardCheck />}
+              title={action.weight ? "Stopite na tehtnico" : "Današnji pregled"}
+              sub={`${action.weight ? "Nato nekaj vprašanj. " : ""}Traja 30 sekund.`}
+            />
+          </Card>
           <BigButton href={`${base}/pregled`}>Začni pregled</BigButton>
-        </Card>
+        </>
       );
     case "pills":
       return (

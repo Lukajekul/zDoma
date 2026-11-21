@@ -3,8 +3,7 @@
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState, useTransition } from "react";
-import type { FormEvent } from "react";
-import { Activity, Bell, ClipboardX, Pill, Search, SlidersHorizontal } from "lucide-react";
+import { Activity, Bell, ClipboardX, Pill, SlidersHorizontal } from "lucide-react";
 import { claimRehab } from "@/app/nurse/actions";
 import { IconTile, StatusBadge } from "@/components/shell";
 import type { StaffKind } from "@/lib/staff";
@@ -14,6 +13,8 @@ import type { TemplateOption } from "./dashboard-controls";
 import { readFilters, searchPatients, selectDashboardRows } from "./dashboard-filters";
 import type { DashboardRow } from "./dashboard-filters";
 import { useDashboardRealtime } from "./use-dashboard-realtime";
+import { initials, setDashboardParam } from "./url-params";
+import { cn } from "@/lib/utils";
 
 const messages = {
   claimed: "Pacient prevzet ✓",
@@ -37,7 +38,6 @@ export function NurseDashboard({ kind, rows, nurseId, covering = [], templates }
   const filters = readFilters(params, kind === "patronaza" ? "moji" : "vsi");
   const router = useRouter();
   const realtimeUnavailable = useDashboardRealtime();
-  const searchForm = useRef<HTMLFormElement>(null);
   const filterPanel = useRef<HTMLDetailsElement>(null);
   const [pending, startTransition] = useTransition();
   const [claiming, setClaiming] = useState<string>();
@@ -55,21 +55,7 @@ export function NurseDashboard({ kind, rows, nurseId, covering = [], templates }
     return () => desktop.removeEventListener("change", updatePanel);
   }, []);
 
-  function change(key: string, value: string | null) {
-    const latest = new URLSearchParams(window.location.search);
-    if (key === "obcina") latest.delete("kraj");
-    if (value) latest.set(key, value);
-    else latest.delete(key);
-    const search = latest.toString();
-    if (search === window.location.search.slice(1)) return;
-    window.history.pushState(null, "", search ? `?${search}` : window.location.pathname);
-  }
-
-  function search(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const value = new FormData(event.currentTarget).get("q");
-    change("q", typeof value === "string" ? value.trim() : null);
-  }
+  const change = setDashboardParam;
 
   function claim(id: string) {
     setClaiming(id);
@@ -92,31 +78,16 @@ export function NurseDashboard({ kind, rows, nurseId, covering = [], templates }
     { key: "zdravila", value: "1", label: "Zdravila niso prevzeta", count: scoped.filter((r) => r.medicineUncollected).length, Icon: Pill, tone: undefined, active: filters.medicineUncollected },
   ];
 
+  const statusChips = (["rdece", "rumeno", "zeleno"] as const).map((value) => ({
+    value,
+    label: { rdece: "Rdeče", rumeno: "Rumeno", zeleno: "Zeleno" }[value],
+    count: selectDashboardRows(searchedRows, { ...filters, status: value }, nurseId, covering).length,
+    active: filters.status === value,
+  }));
+
   return (
     <>
-      <form ref={searchForm} onSubmit={search} role="search" className="flex flex-col gap-2 rounded-3xl bg-card p-4 shadow-soft sm:p-5">
-        <label htmlFor="iskanje-pacienta" className="block font-semibold">
-          Ime, priimek ali davčna številka
-        </label>
-        <div className="flex flex-wrap items-stretch gap-2">
-          <div className="flex min-h-14 min-w-0 flex-1 items-center gap-2 rounded-2xl border-2 border-border bg-card px-4 focus-within:border-ring">
-            <Search aria-hidden className="size-5 shrink-0 text-muted-foreground" />
-            <input
-              className="min-w-0 flex-1 bg-transparent text-lg outline-none"
-              defaultValue={query}
-              id="iskanje-pacienta"
-              key={query}
-              maxLength={120}
-              name="q"
-              type="search"
-            />
-          </div>
-          <button className="min-h-14 rounded-2xl bg-primary px-6 text-lg font-bold text-primary-foreground hover:bg-primary/90" type="submit">
-            Išči
-          </button>
-        </div>
-      </form>
-      <ul aria-label="Povzetek" className="grid grid-cols-2 gap-3 xl:grid-cols-4">
+      <ul aria-label="Povzetek" className="grid grid-cols-2 gap-4 xl:grid-cols-4">
         {stats.map((s) => (
           <li key={s.label} className="flex">
             <button
@@ -127,7 +98,7 @@ export function NurseDashboard({ kind, rows, nurseId, covering = [], templates }
             >
               <span>
                 <span className="block font-semibold text-muted-foreground">{s.label}</span>
-                <span className="text-3xl font-extrabold tabular-nums">{s.count}</span>
+                <span className="text-2xl font-extrabold tabular-nums">{s.count}</span>
               </span>
               <IconTile tone={s.tone}><s.Icon /></IconTile>
             </button>
@@ -139,11 +110,27 @@ export function NurseDashboard({ kind, rows, nurseId, covering = [], templates }
           Povezava za sprotne posodobitve je prekinjena. Seznam lahko osvežite v brskalniku.
         </p>
       )}
-      <div className="grid items-start gap-4 lg:grid-cols-[minmax(0,1fr)_19rem]">
+      <div className="grid items-start gap-4 lg:grid-cols-[minmax(0,2fr)_minmax(17rem,1fr)]">
         <section aria-labelledby="seznam-pacientov" className="min-w-0 rounded-3xl bg-card p-4 shadow-soft sm:p-6">
           <h2 aria-live="polite" className="scroll-mt-4 text-xl font-bold" id="seznam-pacientov">
             {filters.status === "zeleno" ? "Zeleni pacienti" : "Potrebujejo pozornost"} ({filtered.length})
           </h2>
+          <div className="mt-3 flex flex-wrap gap-2" role="group" aria-label="Stanje">
+            {statusChips.map((c) => (
+              <button
+                key={c.value}
+                type="button"
+                aria-pressed={c.active}
+                onClick={() => change("stanje", c.active ? null : c.value)}
+                className={cn(
+                  "min-h-11 rounded-full px-4 font-semibold focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ring",
+                  c.active ? "bg-primary text-primary-foreground" : "bg-canvas hover:bg-brand-soft",
+                )}
+              >
+                {c.label} · {c.count}
+              </button>
+            ))}
+          </div>
           {feedback && (
             <p role={feedback === "claimed" ? "status" : "alert"} className="mt-3 rounded-2xl bg-brand-soft px-4 py-3 font-semibold text-brand-ink">
               {messages[feedback]}
@@ -154,30 +141,25 @@ export function NurseDashboard({ kind, rows, nurseId, covering = [], templates }
           ) : (
             <ul className="mt-2 divide-y divide-border">
               {filtered.map((row) => (
-                <li key={row.id} className="flex flex-wrap items-center gap-x-4 gap-y-2 py-4">
-                  <span aria-hidden className="grid size-12 shrink-0 place-items-center rounded-2xl bg-brand-soft font-extrabold text-brand-ink">
+                <li key={row.id} className="flex flex-wrap items-center gap-x-4 gap-y-2 py-3">
+                  <div className="flex min-w-0 flex-1 basis-64 items-center gap-4">
+                  <span aria-hidden className="grid size-12 shrink-0 place-items-center rounded-xl bg-brand-soft font-extrabold text-brand-ink">
                     {initials(row.name)}
                   </span>
-                  <div className="min-w-0 flex-1 basis-56 wrap-break-word">
-                    <h3 className="text-xl leading-snug font-bold">
-                      <Link
-                        className="inline-flex min-h-12 items-center hover:text-primary hover:underline hover:underline-offset-4"
-                        prefetch={false}
-                        href={{ pathname: `/nurse/${row.id}`, query: listQuery ? { seznam: listQuery } : undefined }}
-                      >
-                        {row.name}
-                      </Link>
-                    </h3>
-                    {row.reason && <p className="font-semibold">{row.reason}</p>}
-                    <p className="text-muted-foreground">
+                  <div className="min-w-0 flex-1 wrap-break-word">
+                    <h3 className="text-lg leading-snug font-bold">{row.name}</h3>
+                    <p className="text-base leading-snug text-muted-foreground">
+                      {row.reason && <span className="font-semibold text-foreground">{row.reason} · </span>}
                       {[row.place ?? row.municipality ?? "Kraj ni vpisan", row.templateLabel, `od odpusta ${dniBesedilo(row.daysSinceDischarge)}`].join(" · ")}
                     </p>
                   </div>
+                  </div>
+                  <span className="flex flex-wrap items-center gap-x-4 gap-y-2 max-sm:pl-16">
                   <StatusBadge className="shrink-0" short status={row.status} />
                   {row.nurseId === null ? (
                     <button
                       aria-label={`Prevzemi: ${row.name}`}
-                      className="min-h-12 rounded-2xl bg-primary px-4 font-bold text-primary-foreground disabled:opacity-60"
+                      className="min-h-12 rounded-xl bg-primary px-4 font-bold text-primary-foreground disabled:opacity-60"
                       disabled={pending}
                       onClick={() => claim(row.id)}
                       type="button"
@@ -191,7 +173,7 @@ export function NurseDashboard({ kind, rows, nurseId, covering = [], templates }
                         prefetch={false}
                         aria-label={`Obisk: ${row.name}`}
                         href={`/nurse/obisk/${row.id}`}
-                        className="inline-flex min-h-12 items-center rounded-2xl bg-primary px-4 font-bold text-primary-foreground hover:bg-primary/90"
+                        className="inline-flex min-h-12 items-center rounded-xl bg-primary px-4 font-bold text-primary-foreground hover:bg-primary/90"
                       >
                         Obisk
                       </Link>
@@ -206,6 +188,7 @@ export function NurseDashboard({ kind, rows, nurseId, covering = [], templates }
                     </Link>
                     </span>
                   )}
+                  </span>
                 </li>
               ))}
             </ul>
@@ -217,8 +200,8 @@ export function NurseDashboard({ kind, rows, nurseId, covering = [], templates }
           </summary>
           <DashboardControls
             change={change}
+            kind={kind}
             clear={() => {
-              searchForm.current?.reset();
               if (window.location.search) window.history.pushState(null, "", window.location.pathname);
             }}
             filters={filters}
@@ -232,6 +215,3 @@ export function NurseDashboard({ kind, rows, nurseId, covering = [], templates }
     </>
   );
 }
-
-const initials = (name: string) =>
-  name.split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0]?.toUpperCase()).join("");
