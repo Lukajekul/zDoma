@@ -5,6 +5,7 @@ import { getMedsAndLogs } from "@/app/patient/_lib/doses";
 import { getExercisesForDay } from "@/app/patient/_lib/exercises";
 import { getMarkerNames } from "@/app/patient/_lib/marker-names";
 import { addDays, dosesOn, TIME_LABEL, unloggedDoses } from "@/app/patient/_lib/schedule";
+import { PickupWarning } from "@/components/carer/pickup-warning";
 import { rehabDay, rehabTitle } from "@/components/patient/rehab-info";
 import { AppShell, BigButton, StatusBadge } from "@/components/shell";
 import { createClient } from "@/lib/supabase/server";
@@ -74,7 +75,7 @@ async function Overview({ params }: Pick<PageProps<"/carer/[rehabId]">, "params"
         {rehabTitle(rehab)} · {active ? `Dan ${day} od ${total}` : "Zaključeno"}
       </p>
 
-      {/* T-31: medicines not picked up at the pharmacy go here, first, as a warning. */}
+      {active && <PickupWarning meds={meds} odpust={rehab.start_date} danes={today} ime={patient.first_name} />}
 
       <StatusBadge status={rehab.current_status} />
 
