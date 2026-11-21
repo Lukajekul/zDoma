@@ -56,9 +56,10 @@ Odpuščenec and zadolženec describe a relationship to a patient, not an accoun
 
 1. **"Danes", not menus:** the app opens on today's next action and ends with "Končano za danes ✓". A normal day is 3–4 taps.
 2. **"Enako kot včeraj":** if nothing changed, one tap. The app asks more only when something is different.
-3. **Something back every day:** own numbers ("72,4 kg – blizu vaše ciljne teže ✓", "Dan 6 od 30"), and the nurse's name when she acts ("Sestra Mojca vas bo poklicala danes do 12:00").
-4. **Medicines, end to end:** what changed at discharge (Novo / Spremenjeno / Ukinjeno, with a photo of each box), whether it was picked up (eRecept), and a reminder before it runs out.
-5. **Set up at the first patronaža visit:** the patronažna sestra installs it on the patient's phone and does the first check-in with them, so nobody aged 80 has to set up an app alone.
+3. **A progress bar for the whole recovery:** every answered question fills it a little (questions × days of the rehabilitacija), "Vaše okrevanje: 42 % ✓". It never goes backwards. The family sees the same bar.
+4. **Something back every day:** own numbers ("72,4 kg – blizu vaše ciljne teže ✓", "Dan 6 od 30"), and the nurse's name when she acts ("Sestra Mojca vas bo poklicala danes do 12:00").
+5. **Medicines, end to end:** what changed at discharge (Novo / Spremenjeno / Ukinjeno, with a photo of each box), whether it was picked up (eRecept), and a reminder before it runs out.
+6. **Set up at the first patronaža visit:** the patronažna sestra installs it on the patient's phone and does the first check-in with them, so nobody aged 80 has to set up an app alone.
 
 ### Patient app
 - **Daily check-in (about 30 s):** at most 5 questions, one per screen, **one tap per answer**. The questions are chosen for this patient by the bolničar and use their own values ("Ali tehtate več kot 72 kg?"), not a generic form.

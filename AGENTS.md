@@ -103,6 +103,7 @@ Background and sources: `docs/research.md`. Six templates, heart failure is the 
 ### What makes a patient keep using it
 - **"Danes", not menus.** The patient's home is today's next action, one at a time, ending with "Končano za danes ✓".
 - **Give something back every day,** against the patient's own numbers ("72,4 kg – blizu vaše ciljne teže ✓", "Dan 6 od 30"), never a diagnosis.
+- **Progress bar for the whole rehabilitacija.** Total = check-in questions per day × days of the rehabilitacija; every answered question fills it a little (questions answered with "Enako kot včeraj" count too, so the shortcut is never punished). Always with words: "Vaše okrevanje: 42 % ✓". It never goes backwards; a missed day just stays empty. When the bolničar extends the rehabilitacija, the total grows and the patient sees "Okrevanje podaljšano do 21. 1. 2027". No points, badges or competition.
 - **A real person behind it.** When a nurse acts, the patient sees her name and what happens next ("Sestra Mojca vas bo poklicala danes do 12:00").
 - **Medicine changes first.** At discharge the pill list shows Novo / Spremenjeno / Ukinjeno against the medicines before admission, with a photo of each box.
 - **Set up at the first home visit.** The patronažna sestra logs the patient in on their phone and does the first check-in with them.

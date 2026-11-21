@@ -68,9 +68,10 @@ Ob vsakem zdravilu in vaji označi, da je opravljeno. Sam odobri ali zavrne pro�
 
 1. **»Danes« namesto menijev:** aplikacija se odpre na naslednjem današnjem opravilu in konča s »Končano za danes ✓«. Običajen dan so 3–4 dotiki.
 2. **»Enako kot včeraj«:** če se ni nič spremenilo, en dotik. Več vpraša le, ko je kaj drugače.
-3. **Vsak dan nekaj nazaj:** lastne številke (»72,4 kg – blizu vaše ciljne teže ✓«, »Dan 6 od 30«) in ime sestre, ko ukrepa (»Sestra Mojca vas bo poklicala danes do 12:00«).
-4. **Zdravila od začetka do konca:** kaj se je ob odpustu spremenilo (Novo / Spremenjeno / Ukinjeno, s fotografijo škatlice), ali so prevzeta (eRecept) in opomnik, preden zmanjka.
-5. **Namestitev ob prvem patronažnem obisku:** patronažna sestra aplikacijo namesti na pacientov telefon in z njim opravi prvi pregled stanja.
+3. **Vrstica napredka za celo okrevanje:** vsak odgovor na vprašanje jo malo napolni (vprašanja na dan × dnevi rehabilitacije), npr. »Vaše okrevanje: 42 % ✓«. Nikoli ne gre nazaj, izpuščen dan ostane prazen. Če bolničar rehabilitacijo podaljša, pacient vidi nov datum konca. Isto vrstico vidi tudi zadolženec.
+4. **Vsak dan nekaj nazaj:** lastne številke (»72,4 kg – blizu vaše ciljne teže ✓«, »Dan 6 od 30«) in ime sestre, ko ukrepa (»Sestra Mojca vas bo poklicala danes do 12:00«).
+5. **Zdravila od začetka do konca:** kaj se je ob odpustu spremenilo (Novo / Spremenjeno / Ukinjeno, s fotografijo škatlice), ali so prevzeta (eRecept) in opomnik, preden zmanjka.
+6. **Namestitev ob prvem patronažnem obisku:** patronažna sestra aplikacijo namesti na pacientov telefon in z njim opravi prvi pregled stanja.
 
 ### Pregled stanja in zdravila
 
