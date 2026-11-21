@@ -41,13 +41,13 @@ async function Exercises({ params }: Pick<PageProps<"/patient/[rehabId]/vaje">, 
   return (
     <AppShell title={active ? "Vaje danes" : "Vaje"} back={`/patient/${rehab.id}`}>
       {!active && (
-        <p className="rounded-xl bg-muted p-4 text-xl">
+        <p className="rounded-3xl bg-card shadow-soft p-4 text-xl">
           To okrevanje je zaključeno. Tukaj so vaje, ki ste jih takrat delali.
         </p>
       )}
 
       {items.length === 0 ? (
-        <p className="rounded-xl bg-muted p-4 text-xl">V vašem načrtu ni vaj.</p>
+        <p className="rounded-3xl bg-card shadow-soft p-4 text-xl">V vašem načrtu ni vaj.</p>
       ) : (
         active && (
           <p className="text-xl font-semibold">
@@ -57,7 +57,7 @@ async function Exercises({ params }: Pick<PageProps<"/patient/[rehabId]/vaje">, 
         )
       )}
 
-      <ul className="flex flex-col gap-4">
+      <ul className="grid items-start gap-4 lg:grid-cols-2">
         {items.map(({ exercise: ex, content, logs }) => (
           <ExerciseCard
             key={ex.id}
@@ -80,7 +80,7 @@ async function Exercises({ params }: Pick<PageProps<"/patient/[rehabId]/vaje">, 
         ))}
       </ul>
 
-      <p className="rounded-xl border-2 border-status-rdece p-4 text-lg">
+      <p className="rounded-3xl bg-card border-2 border-status-rdece p-4 text-lg">
         Če med vajo začutite bolečino v prsih, nenadno hudo zadihanost ali omedlevico, prenehajte in
         pokličite <a href="tel:112" className="font-bold text-status-rdece underline">112</a>.
       </p>

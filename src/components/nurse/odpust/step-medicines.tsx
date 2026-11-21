@@ -25,13 +25,13 @@ export function StepMedicines({ lines, catalogue, note, onChange, onNext }: Prop
 
   return (
     <div className="flex flex-col gap-4">
-      {note && <p className="rounded-xl bg-muted p-4 text-lg">{note}</p>}
+      {note && <p className="rounded-3xl bg-card shadow-soft p-4 text-lg">{note}</p>}
       <p className="text-lg text-muted-foreground">Predlogi za osebje. Pacient možnosti odmerkov ne vidi.</p>
       {lines.length === 0 && <p className="text-lg">Predloga nima priporočenih zdravil. Dodajte jih spodaj.</p>}
       {lines.map((l) => {
         const change = medicineChange(l);
         return (
-          <section key={l.key} className="flex flex-col gap-3 rounded-xl border-2 border-border p-4">
+          <section key={l.key} className="flex flex-col gap-3 rounded-3xl bg-card shadow-soft p-4">
             <label className="flex items-center gap-3 text-xl font-bold">
               <input type="checkbox" className="size-6" checked={l.selected} onChange={() => set(l.key, { selected: !l.selected })} />
               {l.name}
@@ -64,7 +64,7 @@ export function StepMedicines({ lines, catalogue, note, onChange, onNext }: Prop
                   ))}
                 </div>
                 <div className="flex flex-wrap gap-2">
-                  <button type="button" onClick={() => setEditing(editing === l.key ? undefined : l.key)} className="min-h-12 rounded-lg border-2 border-border px-4 text-lg font-semibold hover:bg-muted">
+                  <button type="button" onClick={() => setEditing(editing === l.key ? undefined : l.key)} className="min-h-12 rounded-xl bg-card shadow-soft px-4 text-lg font-semibold hover:bg-muted">
                     {editing === l.key ? "Končaj urejanje" : "Uredi"}
                   </button>
                   {l.added && (
@@ -89,7 +89,7 @@ export function StepMedicines({ lines, catalogue, note, onChange, onNext }: Prop
               onChange([...lines, { key: `a${Date.now()}`, name: z.ime, activeSubstance: z.ucinkovina, purpose: z.zaKaj, doseOptions: z.odmerki, dose: "", times: [...z.casi], selected: true, previousDose: null, added: true, asNeeded: z.poPotrebi, when: z.kdaj }]);
               setSearch("");
             }}
-            className="flex min-h-12 items-center gap-2 rounded-lg border-2 border-border px-3 text-left text-lg hover:bg-muted"
+            className="flex min-h-12 items-center gap-2 rounded-xl bg-card shadow-soft px-3 text-left text-lg hover:bg-muted"
           >
             <Plus aria-hidden className="size-5" /> {z.ime} <span className="text-muted-foreground">({z.ucinkovina})</span>
           </button>

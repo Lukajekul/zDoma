@@ -11,7 +11,7 @@ export default function MockupPage() {
         Za ljudi brez pametnega telefona. Isti dnevni pregled po SMS ali po telefonu: vsak odgovor je
         ena številka.
       </p>
-      <p className="rounded-xl bg-muted p-4 text-muted-foreground">
+      <p className="rounded-3xl bg-card shadow-soft p-4 text-muted-foreground">
         To je prikaz. Nič se ne pošlje in nič se ne shrani.
       </p>
       <BigButton href="/patient/mockup/sms" icon={<MessageSquare />}>

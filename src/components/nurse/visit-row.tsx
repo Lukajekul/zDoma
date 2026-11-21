@@ -5,7 +5,7 @@ import type { VisitRow } from "@/app/nurse/_patronaza/visits";
 /** One patient on "Danes obiščite": name, status word, address, "Prvi obisk" if not set up yet. */
 export function VisitRowCard({ r }: { r: VisitRow }) {
   return (
-    <li className="flex flex-col gap-2 rounded-xl border-2 border-border p-3">
+    <li className="flex flex-col gap-2 rounded-3xl bg-card shadow-soft p-3">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <Link href={`/nurse/${r.rehabId}`} className="text-xl font-bold underline-offset-4 hover:underline">{r.name}</Link>
         <StatusBadge status={r.status} short />

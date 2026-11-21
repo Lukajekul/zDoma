@@ -39,7 +39,7 @@ async function History() {
         const d = (r.details ?? {}) as Record<string, unknown>;
         const p = getPredloga(String(d.template_id ?? ""));
         return (
-          <li key={r.id} className="flex flex-col gap-1 rounded-xl border-2 border-border p-4">
+          <li key={r.id} className="flex flex-col gap-1 rounded-3xl bg-card shadow-soft p-4">
             <p className="text-lg text-muted-foreground">
               {formatDate(r.created_at)} ob {formatTime(r.created_at)} · {ime(r.actor_id)}
             </p>

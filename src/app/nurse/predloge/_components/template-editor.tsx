@@ -7,10 +7,10 @@ import { NAJVEC_DNI, preveriPrilagoditev, uporabiPrilagoditev, type Prilagoditev
 import { shraniPrilagoditev } from "../actions";
 
 const HITRI_DNEVI = [14, 30, 60, 90];
-const box = "flex flex-col gap-3 rounded-xl border-2 border-border p-4";
+const box = "flex flex-col gap-3 rounded-3xl bg-card shadow-soft p-4";
 const row = "flex min-h-14 cursor-pointer items-start gap-3 rounded-lg p-2 hover:bg-muted";
 const input =
-  "min-h-12 w-full rounded-xl border-2 border-input bg-background px-4 text-lg focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ring";
+  "min-h-12 w-full rounded-2xl border-2 border-border bg-card px-4 text-lg focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ring";
 
 /** T-24: edit plan defaults of one template. Rules, thresholds and medicines are not editable here. */
 export function TemplateEditor({ predloga, prilagoditev }: { predloga: Predloga; prilagoditev: Prilagoditev }) {
@@ -59,7 +59,7 @@ export function TemplateEditor({ predloga, prilagoditev }: { predloga: Predloga;
               type="button"
               onClick={() => setDni(String(d))}
               aria-pressed={Number(dni) === d}
-              className="min-h-12 rounded-xl border-2 border-border px-4 text-lg font-semibold aria-pressed:border-primary aria-pressed:bg-primary aria-pressed:text-primary-foreground"
+              className="min-h-12 rounded-2xl bg-card shadow-soft px-4 text-lg font-semibold aria-pressed:border-primary aria-pressed:bg-primary aria-pressed:text-primary-foreground"
             >
               {d} dni
             </button>
@@ -112,13 +112,13 @@ export function TemplateEditor({ predloga, prilagoditev }: { predloga: Predloga;
         ))}
       </section>
 
-      <p className="rounded-xl bg-muted p-4 text-lg">
+      <p className="rounded-3xl bg-card shadow-soft p-4 text-lg">
         Opozorilna pravila, pragovi, besedila vprašanj in zdravila so zaklenjeni, ker izhajajo iz smernic. Sprememba velja
         za nove rehabilitacije; obstoječe ostanejo, kot so.
       </p>
 
       {napake.length > 0 && (
-        <p role="alert" className="rounded-xl border-2 border-status-rdece bg-status-rdece/10 p-4 text-lg font-semibold">
+        <p role="alert" className="rounded-3xl border-2 border-status-rdece bg-status-rdece/10 p-4 text-lg font-semibold">
           {napake.join(" ")}
         </p>
       )}
@@ -127,8 +127,8 @@ export function TemplateEditor({ predloga, prilagoditev }: { predloga: Predloga;
           role="status"
           className={
             sporocilo.ok
-              ? "rounded-xl border-2 border-status-zeleno bg-status-zeleno/10 p-4 text-xl font-bold"
-              : "rounded-xl border-2 border-status-rdece bg-status-rdece/10 p-4 text-lg font-semibold"
+              ? "rounded-3xl border-2 border-status-zeleno bg-status-zeleno/10 p-4 text-xl font-bold"
+              : "rounded-3xl border-2 border-status-rdece bg-status-rdece/10 p-4 text-lg font-semibold"
           }
         >
           {sporocilo.text}
@@ -139,7 +139,7 @@ export function TemplateEditor({ predloga, prilagoditev }: { predloga: Predloga;
         {pending ? "Shranjujem …" : "Shrani"}
       </BigButton>
       {potrdiPonastavitev ? (
-        <div className="flex flex-col gap-3 rounded-xl border-2 border-status-rdece p-4">
+        <div className="flex flex-col gap-3 rounded-3xl bg-card border-2 border-status-rdece p-4">
           <p className="text-lg font-semibold">Ponastavim na izvirne nastavitve iz predloge?</p>
           <BigButton variant="danger" onClick={() => shrani({}, "Ponastavljeno na izvirnik ✓")} disabled={pending}>
             Da, ponastavi

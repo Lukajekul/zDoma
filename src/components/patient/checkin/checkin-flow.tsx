@@ -109,19 +109,28 @@ export function CheckinFlow({ rehabId, today, questions, canRepeat, save }: Prop
 
   return (
     <div className="flex flex-col gap-5">
-      <p className="text-lg font-semibold text-muted-foreground">
-        Vprašanje {index + 1} od {queue.length}
-      </p>
-      <h2 className="text-3xl leading-snug font-bold">{q.text}</h2>
+      <div className="flex flex-col gap-3">
+        <p className="text-lg font-bold text-muted-foreground">
+          Vprašanje {index + 1} od {queue.length}
+        </p>
+        <div aria-hidden className="flex gap-1.5">
+          {queue.map((_, i) => (
+            <i key={i} className={i <= index ? "h-1.5 flex-1 rounded-full bg-brand" : "h-1.5 flex-1 rounded-full bg-border"} />
+          ))}
+        </div>
+      </div>
+      <div className="rounded-3xl bg-card p-6 shadow-soft">
+        <h2 className="text-3xl leading-snug font-extrabold tracking-tight">{q.text}</h2>
+      </div>
 
       {q.kind === "teza" ? (
         <WeightScreen key={q.id} options={q.options} onAnswer={(kg) => answer(q, kg)} />
       ) : (
-        <div className="flex flex-col gap-3">
+        <div className="grid gap-3 md:grid-cols-2">
           {q.options.map((o) => (
             <BigButton
               key={o.id}
-              variant="secondary"
+              variant="choice"
               onClick={() => (o.emergency ? setEmergency({ q, optionId: o.id, e: o.emergency }) : answer(q, o.id))}
             >
               {o.text}
@@ -134,7 +143,7 @@ export function CheckinFlow({ rehabId, today, questions, canRepeat, save }: Prop
         <button
           type="button"
           onClick={() => setIndex(index - 1)}
-          className="inline-flex min-h-12 w-fit items-center gap-2 rounded-lg border-2 border-border px-4 text-lg font-semibold hover:bg-muted"
+          className="inline-flex min-h-12 w-fit items-center gap-2 rounded-xl bg-card shadow-soft px-4 text-lg font-semibold hover:bg-muted"
         >
           <ArrowLeft aria-hidden className="size-6" />
           Prejšnje vprašanje

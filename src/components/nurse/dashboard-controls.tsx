@@ -35,9 +35,9 @@ export function DashboardControls({ rows, filters, nurseId, covering = [], templ
             <button
               aria-pressed={option.active}
               className={cn(
-                "min-h-12 max-w-full rounded-xl border-2 px-3 py-2 text-left leading-snug font-medium",
-                "hover:border-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary",
-                option.active ? "border-primary bg-primary/10 text-primary" : "border-border bg-background",
+                "min-h-12 max-w-full rounded-full px-4 py-2 text-left leading-snug font-semibold",
+                "focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ring",
+                option.active ? "bg-primary text-primary-foreground" : "bg-muted hover:bg-brand-soft",
               )}
               key={option.value}
               onClick={() => change(key, option.active ? null : option.value)}
@@ -69,7 +69,7 @@ export function DashboardControls({ rows, filters, nurseId, covering = [], templ
   );
 
   return (
-    <div className="space-y-5 px-4 pb-4">
+    <div className="space-y-5 px-5 pb-5">
       <a className="flex min-h-12 w-fit items-center font-medium text-primary underline lg:hidden" href="#seznam-pacientov">
         Na seznam
       </a>
@@ -98,7 +98,7 @@ export function DashboardControls({ rows, filters, nurseId, covering = [], templ
         label, value, active: filters.days === value, filter: { days: value },
       })))}
       <button
-        className="min-h-12 rounded-xl border-2 border-primary bg-background px-3 py-2 font-semibold text-primary hover:bg-primary/10"
+        className="min-h-12 rounded-2xl border-2 border-brand bg-card px-4 py-2 font-bold text-primary hover:bg-brand-soft"
         onClick={clear}
         type="button"
       >

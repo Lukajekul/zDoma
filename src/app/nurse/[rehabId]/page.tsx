@@ -34,7 +34,7 @@ async function PatientPageContent({ params, searchParams }: PageProps<"/nurse/[r
   if (!detail) {
     return (
       <AppShell title="Podrobnosti pacienta" back={back} wide>
-        <p className="rounded-xl border p-4" role="alert">
+        <p className="rounded-3xl bg-card shadow-soft p-4" role="alert">
           Podrobnosti ni bilo mogoče naložiti. Osvežite stran in poskusite znova.
         </p>
       </AppShell>

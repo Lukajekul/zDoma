@@ -21,12 +21,12 @@ export function StepExercises({ predloga, exercises, start, end, onExercises, on
   const toggle = (id: string) => onExercises(exercises.includes(id) ? exercises.filter((x) => x !== id) : [...exercises, id]);
   return (
     <div className="flex flex-col gap-4">
-      {predloga.vajeOpomba && <p className="rounded-xl bg-muted p-4 text-lg">{predloga.vajeOpomba}</p>}
+      {predloga.vajeOpomba && <p className="rounded-3xl bg-card shadow-soft p-4 text-lg">{predloga.vajeOpomba}</p>}
       {predloga.vaje.length === 0 && <p className="text-lg">Predloga nima vaj.</p>}
       <ul className="flex flex-col gap-2">
         {predloga.vaje.map((v) => (
           <li key={v.id}>
-            <label className="flex min-h-12 items-start gap-3 rounded-lg border-2 border-border p-3 text-lg">
+            <label className="flex min-h-12 items-start gap-3 rounded-xl bg-card shadow-soft p-3 text-lg">
               <input type="checkbox" className="mt-1 size-6 shrink-0" checked={exercises.includes(v.id)} onChange={() => toggle(v.id)} />
               <span>
                 <strong>{v.naslov}</strong>
@@ -56,19 +56,19 @@ export function StepNurse({ suggestion, nurses, nurseId, onPick, onNext }: Nurse
   return (
     <div className="flex flex-col gap-4">
       {suggestion ? (
-        <p className="rounded-xl bg-muted p-4 text-xl">
+        <p className="rounded-3xl bg-card shadow-soft p-4 text-xl">
           Predlog: <strong>Patronažna sestra: {suggestion.nurse.name} ({suggestion.obcina})</strong>
           {suggestion.via && <span className="block text-lg">Nadomešča: {suggestion.via.name}</span>}
         </p>
       ) : (
-        <p className="rounded-xl border-2 border-status-rumeno bg-status-rumeno-bg p-4 text-lg text-status-rumeno">
+        <p className="rounded-3xl border-2 border-status-rumeno bg-status-rumeno-bg p-4 text-lg text-status-rumeno">
           Nobena patronažna sestra ne pokriva tega naslova. Izberite jo ali pustite »Nedodeljeni«.
         </p>
       )}
       <ul className="flex flex-col gap-2" role="radiogroup" aria-label="Patronažna sestra">
         {[...nurses, null].map((n) => (
           <li key={n?.id ?? "none"}>
-            <label className="flex min-h-12 items-center gap-3 rounded-lg border-2 border-border p-3 text-lg">
+            <label className="flex min-h-12 items-center gap-3 rounded-xl bg-card shadow-soft p-3 text-lg">
               <input type="radio" name="nurse" className="size-6" checked={nurseId === (n?.id ?? null)} onChange={() => onPick(n?.id ?? null)} />
               {n ? `${n.name}${n.tereni.length ? ` – ${n.tereni.map((t) => t.obcina).join(", ")}` : ""}` : "Nedodeljeni (prevzame ga katera koli sestra)"}
             </label>

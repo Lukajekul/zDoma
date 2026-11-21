@@ -15,7 +15,7 @@ export function StepTemplate({ templates, value, onPick }: { templates: Predloga
           type="button"
           aria-pressed={value === p.id}
           onClick={() => onPick(p.id)}
-          className="flex min-h-16 flex-col items-start gap-1 rounded-xl border-2 border-border p-4 text-left hover:bg-muted aria-pressed:border-primary"
+          className="flex min-h-16 flex-col items-start gap-1 rounded-3xl bg-card shadow-soft p-4 text-left hover:bg-muted aria-pressed:border-primary"
         >
           <span className="text-xl font-bold">
             {value === p.id && "✓ "}
@@ -60,7 +60,7 @@ export function StepValues({ predloga, values, questions, onValues, onQuestions,
       <ul className="flex flex-col gap-2">
         {predloga.vprasanja.map((q) => (
           <li key={q.id}>
-            <label className="flex min-h-12 items-start gap-3 rounded-lg border-2 border-border p-3 text-lg">
+            <label className="flex min-h-12 items-start gap-3 rounded-xl bg-card shadow-soft p-3 text-lg">
               <input type="checkbox" className="mt-1 size-6 shrink-0" checked={questions.includes(q.id)} onChange={() => toggle(q.id)} />
               <span>
                 {vstaviVrednosti(q.besedilo, values)}

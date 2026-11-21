@@ -16,7 +16,7 @@ export function FirstVisitChecklist({ steps, onInstalled }: { steps: Step[]; onI
     <div className="flex flex-col gap-4">
       <ol className="flex flex-col gap-3">
         {steps.map((s, i) => (
-          <li key={s.id} className="flex flex-col gap-2 rounded-xl border-2 border-border p-4">
+          <li key={s.id} className="flex flex-col gap-2 rounded-3xl bg-card shadow-soft p-4">
             <h2 className="text-xl font-bold">{i + 1}. {s.title}</h2>
             <div className="text-lg">{s.body}</div>
             <label className="flex min-h-12 items-center gap-3 text-lg font-semibold">

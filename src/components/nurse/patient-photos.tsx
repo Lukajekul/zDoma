@@ -4,7 +4,7 @@ import { formatDate } from "@/lib/format";
 
 export function PatientPhotos({ photos, photosUnavailable }: Pick<PatientDetail, "photos" | "photosUnavailable">) {
   return (
-    <section className="space-y-3 rounded-2xl border p-4" aria-labelledby="fotografije">
+    <section className="space-y-3 rounded-3xl bg-card shadow-soft p-4" aria-labelledby="fotografije">
       <h2 className="text-xl font-bold" id="fotografije">Fotografije rane</h2>
       {photosUnavailable ? <p>Fotografij trenutno ni mogoče naložiti. Osvežite stran.</p> : (
         photos.length === 0 ? <p>Fotografij še ni.</p> : (

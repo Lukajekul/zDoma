@@ -7,19 +7,21 @@ type RehabListProps = { firstName: string; active: Rehabilitacija[]; past: Rehab
 export function RehabList({ firstName, active, past, today }: RehabListProps) {
   return (
     <>
-      <p className="text-xl">Pozdravljeni, {firstName}.</p>
+      <p className="text-2xl font-bold">Pozdravljeni, {firstName}.</p>
 
       {active.length > 0 ? (
         <section className="flex flex-col gap-3">
           <h2 className="text-2xl font-bold">
             {active.length === 1 ? "Vaše okrevanje" : "Izberite okrevanje"}
           </h2>
-          {active.map((r) => (
-            <RehabCard key={r.id} rehab={r} today={today} />
-          ))}
+          <div className="grid gap-4 lg:grid-cols-2">
+            {active.map((r) => (
+              <RehabCard key={r.id} rehab={r} today={today} />
+            ))}
+          </div>
         </section>
       ) : (
-        <p className="rounded-xl bg-muted p-4 text-xl">
+        <p className="rounded-3xl bg-card shadow-soft p-4 text-xl">
           Trenutno nimate odprtega okrevanja. Ko vas odpustijo iz bolnišnice, se bo pojavilo tukaj.
         </p>
       )}
@@ -28,9 +30,11 @@ export function RehabList({ firstName, active, past, today }: RehabListProps) {
         <section className="mt-4 flex flex-col gap-3">
           <h2 className="text-2xl font-bold">Pretekle rehabilitacije</h2>
           <p className="text-lg text-muted-foreground">Te lahko samo pregledate.</p>
-          {past.map((r) => (
-            <RehabCard key={r.id} rehab={r} today={today} past />
-          ))}
+          <div className="grid gap-4 lg:grid-cols-2">
+            {past.map((r) => (
+              <RehabCard key={r.id} rehab={r} today={today} past />
+            ))}
+          </div>
         </section>
       )}
     </>

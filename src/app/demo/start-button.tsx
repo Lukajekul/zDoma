@@ -9,7 +9,7 @@ export function StartButton() {
   return (
     <form action={action} className="flex flex-col gap-3">
       {state.error && (
-        <p role="alert" className="rounded-xl border-2 border-status-rdece bg-status-rdece/10 p-4 text-lg font-semibold">
+        <p role="alert" className="rounded-3xl border-2 border-status-rdece bg-status-rdece/10 p-4 text-lg font-semibold">
           {state.error}
         </p>
       )}

@@ -6,6 +6,8 @@ const variants = {
   primary: "bg-primary text-primary-foreground hover:bg-primary/90 border-primary shadow-[0_6px_14px_-4px_var(--primary)]",
   secondary: "bg-brand-soft text-brand-ink hover:bg-brand-soft/70 border-brand-soft",
   danger: "bg-status-rdece text-white hover:bg-status-rdece/90 border-status-rdece",
+  /** An answer button: white with a soft shadow, like a card (check-in answers). */
+  choice: "bg-card text-foreground shadow-soft hover:shadow-lift hover:bg-brand-soft border-transparent",
   success: "bg-status-zeleno text-white hover:bg-status-zeleno/90 border-status-zeleno",
 } as const;
 

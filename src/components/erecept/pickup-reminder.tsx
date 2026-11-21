@@ -14,7 +14,7 @@ export function PickupReminder({ meds, odpust, danes }: { meds: PrevzemZdravilo[
   if (imena.length === 0) return null;
 
   return (
-    <div role="status" className="flex gap-3 rounded-xl border-2 border-status-rumeno bg-status-rumeno-bg p-4 text-status-rumeno">
+    <div role="status" className="flex gap-3 rounded-3xl border-2 border-status-rumeno bg-status-rumeno-bg p-4 text-status-rumeno">
       <Pill aria-hidden className="mt-1 size-7 shrink-0" />
       <div className="flex flex-col gap-1">
         <p className="text-xl font-bold">{prevzemBesediloPacient(imena)}</p>

@@ -53,7 +53,7 @@ async function Rehab({ params }: Pick<PageProps<"/patient/[rehabId]">, "params">
 
   return (
     <AppShell title={rehabTitle(rehab)} back={BACK}>
-      <p className="rounded-xl bg-muted p-4 text-xl">
+      <p className="rounded-3xl bg-card shadow-soft p-4 text-xl">
         To okrevanje je zaključeno {formatDate(rehab.end_date)}. Pregledov ne pošiljate več, podatke
         pa lahko še vedno pregledate.
       </p>

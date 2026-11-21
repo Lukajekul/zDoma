@@ -37,7 +37,7 @@ export function PatientOverview({ detail, back }: { detail: PatientDetail; back:
       <PatientAlerts active={detail.active} openAlerts={detail.openAlerts} closedAlerts={detail.closedAlerts} />
       <div className="grid items-start gap-4 lg:grid-cols-2">
         <PatientTrends trends={detail.trends} />
-        <section aria-labelledby="povzetek" className="space-y-3 rounded-2xl border p-4">
+        <section aria-labelledby="povzetek" className="space-y-3 rounded-3xl bg-card shadow-soft p-4">
           <h2 className="text-xl font-bold" id="povzetek">Tedenski povzetek</h2>
           {detail.participation !== null && <p><strong>Sodelovanje</strong> {percent.format(detail.participation)}</p>}
           {detail.lace !== null && <p><strong>LACE</strong> {detail.lace}</p>}

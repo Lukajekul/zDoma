@@ -11,11 +11,14 @@ export function EmergencyScreen({ emergency, onContinue, onBack }: Props) {
   const number = is112 ? "112" : emergency.phone;
   return (
     <div role="alertdialog" aria-labelledby="nujno-naslov" className="fixed inset-0 z-50 overflow-y-auto bg-status-rdece text-white">
-      <div className="mx-auto flex min-h-full max-w-xl flex-col gap-6 p-6">
-        <h2 id="nujno-naslov" className="text-4xl font-bold">
+      <div className="mx-auto flex min-h-full max-w-xl flex-col justify-center gap-6 p-6 text-center">
+        <span aria-hidden className="mx-auto grid size-24 place-items-center rounded-4xl bg-white/20">
+          <Phone className="size-12" />
+        </span>
+        <h2 id="nujno-naslov" className="text-5xl font-extrabold tracking-tight">
           {is112 ? "Pokličite 112" : "Takoj pokličite oddelek"}
         </h2>
-        <p className="text-2xl">{emergency.reason}. Ne čakajte.</p>
+        <p className="text-2xl leading-snug">{emergency.reason}. Ne čakajte.</p>
         {number ? (
           <a
             href={`tel:${number.replace(/\s/g, "")}`}
@@ -30,8 +33,8 @@ export function EmergencyScreen({ emergency, onContinue, onBack }: Props) {
           </p>
         )}
         <p className="text-xl">Vaši odgovori še niso poslani.</p>
-        <div className="mt-auto flex flex-col gap-3">
-          <button type="button" onClick={onContinue} className="min-h-16 rounded-xl border-2 border-white text-xl font-semibold">
+        <div className="mt-6 flex flex-col gap-3">
+          <button type="button" onClick={onContinue} className="min-h-16 rounded-2xl border-2 border-white text-xl font-bold">
             Nadaljuj pregled
           </button>
           <button type="button" onClick={onBack} className="min-h-14 rounded-xl text-xl font-semibold underline">

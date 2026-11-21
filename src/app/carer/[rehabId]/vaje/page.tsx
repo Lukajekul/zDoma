@@ -33,7 +33,7 @@ async function Exercises({ params }: Pick<PageProps<"/carer/[rehabId]/vaje">, "p
   if (!c.active) {
     return (
       <AppShell title="Vaje danes" back={back}>
-        <p className="rounded-xl bg-muted p-4 text-xl">To okrevanje je zaključeno. Vaj ne označujete več.</p>
+        <p className="rounded-3xl bg-card shadow-soft p-4 text-xl">To okrevanje je zaključeno. Vaj ne označujete več.</p>
       </AppShell>
     );
   }
@@ -46,8 +46,8 @@ async function Exercises({ params }: Pick<PageProps<"/carer/[rehabId]/vaje">, "p
   return (
     <AppShell title="Vaje danes" back={back}>
       <TogetherNote name={patientName(c.patient)} />
-      {items.length === 0 && <p className="rounded-xl bg-muted p-4 text-xl">V načrtu ni vaj.</p>}
-      <ul className="flex flex-col gap-4">
+      {items.length === 0 && <p className="rounded-3xl bg-card shadow-soft p-4 text-xl">V načrtu ni vaj.</p>}
+      <ul className="grid items-start gap-4 lg:grid-cols-2">
         {items.map(({ exercise: ex, content, logs }) => (
           <ExerciseCard
             key={ex.id}
@@ -68,7 +68,7 @@ async function Exercises({ params }: Pick<PageProps<"/carer/[rehabId]/vaje">, "p
           />
         ))}
       </ul>
-      <p className="rounded-xl border-2 border-status-rdece p-4 text-lg">
+      <p className="rounded-3xl bg-card border-2 border-status-rdece p-4 text-lg">
         Če med vajo začuti bolečino v prsih, nenadno hudo zadihanost ali omedli, naj preneha. Pokličite{" "}
         <a href="tel:112" className="font-bold text-status-rdece underline">
           112

@@ -35,7 +35,7 @@ export function WeightScreen({ options, onAnswer }: Props) {
             setText(e.target.value);
             setError(false);
           }}
-          className="min-h-16 rounded-xl border-2 border-input px-4 text-3xl font-bold"
+          className="min-h-16 rounded-2xl border-2 border-border bg-card px-4 text-3xl font-bold"
           placeholder="npr. 72,5"
         />
         {error && <p role="alert" className="text-lg font-semibold text-status-rdece">Vpišite število, npr. 72,5.</p>}
@@ -49,12 +49,14 @@ export function WeightScreen({ options, onAnswer }: Props) {
 
   return (
     <div className="flex flex-col gap-3">
-      {options.map((kg) => (
-        <BigButton key={kg} variant="secondary" onClick={() => onAnswer(kg)} className="text-2xl">
-          {formatNumber(kg)} kg
-        </BigButton>
-      ))}
-      <BigButton variant="secondary" onClick={() => setOther(true)}>
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+        {options.map((kg) => (
+          <BigButton key={kg} variant="choice" onClick={() => onAnswer(kg)} className="px-2 text-2xl">
+            {formatNumber(kg)} kg
+          </BigButton>
+        ))}
+      </div>
+      <BigButton variant="choice" onClick={() => setOther(true)}>
         Drugo
       </BigButton>
     </div>

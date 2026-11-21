@@ -39,7 +39,7 @@ async function List() {
           <li key={p.id}>
             <Link
               href={`/nurse/predloge/${p.id}`}
-              className="flex min-h-16 items-center gap-3 rounded-xl border-2 border-border p-4 hover:bg-muted focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ring"
+              className="flex min-h-16 items-center gap-3 rounded-3xl bg-card shadow-soft p-4 hover:bg-muted focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ring"
             >
               <span className="flex flex-1 flex-col">
                 <span className="text-xl font-semibold">{p.ime}</span>

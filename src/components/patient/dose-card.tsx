@@ -26,7 +26,7 @@ export function DoseCard({ name, dose, purpose, taken, markedBy, canUndo, onTake
   const error = takeState.error ?? undoState.error;
 
   return (
-    <li className="flex flex-col gap-3 rounded-xl border-2 border-border p-4">
+    <li className="flex flex-col gap-3 rounded-3xl bg-card shadow-soft p-4">
       <div>
         <p className="text-2xl font-bold">
           {name} <span className="font-semibold">{dose}</span>
@@ -45,7 +45,7 @@ export function DoseCard({ name, dose, purpose, taken, markedBy, canUndo, onTake
               <button
                 type="submit"
                 disabled={undoing}
-                className="inline-flex min-h-12 items-center gap-2 rounded-lg border-2 border-border px-4 text-lg font-semibold hover:bg-muted disabled:opacity-50"
+                className="inline-flex min-h-12 items-center gap-2 rounded-xl bg-card shadow-soft px-4 text-lg font-semibold hover:bg-muted disabled:opacity-50"
               >
                 <Undo2 aria-hidden className="size-6" />
                 {undoing ? "Razveljavljam …" : "Razveljavi"}

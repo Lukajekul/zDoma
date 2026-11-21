@@ -35,8 +35,8 @@ async function Message({ searchParams }: Props) {
       role="status"
       className={
         msg.ok
-          ? "rounded-xl border-2 border-status-zeleno bg-status-zeleno/10 p-4 text-xl font-bold"
-          : "rounded-xl border-2 border-status-rdece bg-status-rdece/10 p-4 text-xl font-bold"
+          ? "rounded-3xl border-2 border-status-zeleno bg-status-zeleno/10 p-4 text-xl font-bold"
+          : "rounded-3xl border-2 border-status-rdece bg-status-rdece/10 p-4 text-xl font-bold"
       }
     >
       {msg.text}
@@ -55,7 +55,7 @@ async function AccessList() {
       {pending.map((r) => {
         const name = r.person ? personLabel(r.person, r.relation) : "Neznana oseba";
         return (
-          <section key={r.id} className="flex flex-col gap-3 rounded-xl border-2 border-primary p-4">
+          <section key={r.id} className="flex flex-col gap-3 rounded-3xl bg-card shadow-lift p-4">
             <p className="text-xl">
               <strong>{name}</strong> želi spremljati vaše okrevanje.
             </p>
@@ -80,11 +80,11 @@ async function AccessList() {
       {approved.length === 0 ? (
         <p className="text-xl">Nihče. Svojec lahko zaprosi za dostop v svoji aplikaciji zDoma.</p>
       ) : (
-        <ul className="flex flex-col gap-4">
+        <ul className="grid items-start gap-4 lg:grid-cols-2">
           {approved.map((r) => {
             const name = r.person ? personLabel(r.person, r.relation) : "Neznana oseba";
             return (
-              <li key={r.id} className="flex flex-col gap-3 rounded-xl border-2 border-border p-4">
+              <li key={r.id} className="flex flex-col gap-3 rounded-3xl bg-card shadow-soft p-4">
                 <p className="text-xl font-semibold">{name}</p>
                 <RemoveButton id={r.id} name={name} />
               </li>

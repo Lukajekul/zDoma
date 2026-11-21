@@ -34,7 +34,7 @@ async function Pills({ params }: Pick<PageProps<"/carer/[rehabId]/zdravila">, "p
   if (!c.active) {
     return (
       <AppShell title="Zdravila danes" back={back}>
-        <p className="rounded-xl bg-muted p-4 text-xl">To okrevanje je zaključeno. Tablet ne označujete več.</p>
+        <p className="rounded-3xl bg-card shadow-soft p-4 text-xl">To okrevanje je zaključeno. Tablet ne označujete več.</p>
       </AppShell>
     );
   }
@@ -48,11 +48,11 @@ async function Pills({ params }: Pick<PageProps<"/carer/[rehabId]/zdravila">, "p
   return (
     <AppShell title="Zdravila danes" back={back}>
       <TogetherNote name={patientName(c.patient)} />
-      {groups.length === 0 && <p className="rounded-xl bg-muted p-4 text-xl">Danes ni predpisanih tablet.</p>}
+      {groups.length === 0 && <p className="rounded-3xl bg-card shadow-soft p-4 text-xl">Danes ni predpisanih tablet.</p>}
       {groups.map(({ time, doses }) => (
         <section key={time} className="flex flex-col gap-3">
           <h2 className="mt-2 text-2xl font-bold">{TIME_LABEL[time]}</h2>
-          <ul className="flex flex-col gap-3">
+          <ul className="grid items-start gap-3 lg:grid-cols-2">
             {doses.map(({ medication: m, log }) => (
               <DoseCard
                 key={m.id}

@@ -17,7 +17,7 @@ export function RemoveButton({ id, name }: { id: string; name: string }) {
   }
 
   return (
-    <div className="flex flex-col gap-3 rounded-xl border-2 border-status-rdece p-4">
+    <div className="flex flex-col gap-3 rounded-3xl bg-card border-2 border-status-rdece p-4">
       <p className="text-xl font-semibold">
         Odstranim osebo {name}? Ta oseba ne bo več videla vašega okrevanja.
       </p>

@@ -65,10 +65,10 @@ async function CheckinScreen({ params }: Pick<PageProps<"/patient/[rehabId]/preg
   }
 
   if (!ctx.active) {
-    return shell(<p className="rounded-xl bg-muted p-4 text-xl">To okrevanje je zaključeno. Pregledov ne pošiljate več.</p>);
+    return shell(<p className="rounded-3xl bg-card shadow-soft p-4 text-xl">To okrevanje je zaključeno. Pregledov ne pošiljate več.</p>);
   }
   if (!ctx.questions.length) {
-    return shell(<p className="rounded-xl bg-muted p-4 text-xl">Za danes nimate vprašanj.</p>);
+    return shell(<p className="rounded-3xl bg-card shadow-soft p-4 text-xl">Za danes nimate vprašanj.</p>);
   }
 
   return shell(

@@ -12,7 +12,7 @@ export function PainPicker({ onPick, disabled }: { onPick: (pain: number) => voi
             type="button"
             onClick={() => onPick(n)}
             aria-label={n === 0 ? "0 – brez bolečine" : n === 10 ? "10 – najhujša bolečina" : String(n)}
-            className="min-h-14 rounded-xl border-2 border-border text-2xl font-bold hover:bg-muted focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ring disabled:opacity-50"
+            className="min-h-14 rounded-2xl bg-card shadow-soft text-2xl font-bold hover:bg-muted focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ring disabled:opacity-50"
           >
             {n}
           </button>

@@ -4,9 +4,10 @@ import { NextActionCard } from "@/components/patient/danes/next-action-card";
 import { NurseUpdateCard } from "@/components/patient/danes/nurse-update-card";
 import { ProgressRing } from "@/components/patient/progress-ring";
 import { rehabDay, rehabTitle } from "@/components/patient/rehab-info";
-import { AppShell, BigButton } from "@/components/shell";
+import { Activity, Bell, ClipboardCheck, Phone, Pill, RefreshCw, Users } from "lucide-react";
+import { AppShell, BigButton, Card, IconTile } from "@/components/shell";
 import { countPendingRequests } from "@/lib/family-access";
-import { formatDate } from "@/lib/format";
+import { formatDate, formatShortDay, greeting } from "@/lib/format";
 import { createClient } from "@/lib/supabase/server";
 import type { Profile } from "@/lib/types";
 import type { loadCheckinContext } from "../_lib/checkins";
@@ -21,9 +22,6 @@ import { dosesOn } from "../_lib/schedule";
 import { markSlotTaken } from "./zdravila/actions";
 
 type Ctx = NonNullable<Awaited<ReturnType<typeof loadCheckinContext>>>;
-
-const smallLink =
-  "inline-flex min-h-12 items-center rounded-lg px-3 text-lg font-semibold text-primary underline underline-offset-4 hover:bg-muted";
 
 /** T-33: today's next action, one at a time, plus small links below. */
 export async function DanesView({ ctx, profile, back }: { ctx: Ctx; profile: Profile; back: string }) {
@@ -58,65 +56,94 @@ export async function DanesView({ ctx, profile, back }: { ctx: Ctx; profile: Pro
   const { day, total } = rehabDay(rehab, today);
   const [h, m = "00"] = profile.checkin_time.split(":");
 
+  const links = [
+    { href: `${base}/pregled`, label: "Pregled", hint: "Današnja vprašanja", Icon: ClipboardCheck },
+    { href: `${base}/zdravila`, label: "Vse tablete", hint: "Kdaj in koliko", Icon: Pill },
+    { href: `${base}/vaje`, label: "Vaje", hint: "Za danes", Icon: Activity },
+    ...(changes.any ? [{ href: `${base}/spremembe`, label: "Spremembe zdravil", hint: "Novo in ukinjeno", Icon: RefreshCw }] : []),
+    { href: "/patient/dostop", label: "Družina", hint: "Kdo vam pomaga", Icon: Users },
+    { href: "/patient/opomnik", label: "Opomnik", hint: `Vsak dan ob ${Number(h)}:${m}`, Icon: Bell },
+  ];
+
   return (
-    <AppShell title="Danes" back={back}>
-      <p className="text-xl">
-        <strong>{rehabTitle(rehab)}</strong> · Dan {day} od {total}
-      </p>
-
-      {nurse && (
-        <p className="text-lg">
-          Vaša patronažna sestra: <strong>{nurse.nurse}</strong>
-          {nurse.substitute && (
-            <span className="block">
-              Do {formatDate(nurse.substitute.until)} vas obiskuje <strong>{nurse.substitute.name}</strong>.
+    <AppShell
+      title={`${greeting()}, ${profile.first_name}`}
+      subtitle={`${rehabTitle(rehab)} · Dan ${day} od ${total}`}
+      aside={formatShortDay()}
+      back={back}
+      hero={
+        <div className="grid items-start gap-4 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
+          <Card lift className="items-center">
+            <ProgressRing data={ring} extendedUntil={extendedUntil} />
+          </Card>
+          <div className="flex flex-col gap-4 lg:mt-14">
+            {showChanges ? (
+              // T-35: medicine changes come before anything else until the patient taps "Razumem".
+              <Card lift>
+                <div className="flex items-center gap-4">
+                  <IconTile><Pill /></IconTile>
+                  <h2 className="text-2xl leading-tight font-bold">Vaša zdravila so se spremenila</h2>
+                </div>
+                <p className="text-xl">
+                  {[
+                    changes.novo.length && `Novo: ${changes.novo.length}`,
+                    changes.spremenjeno.length && `Spremenjeno: ${changes.spremenjeno.length}`,
+                    changes.ukinjeno.length && `Ukinjeno: ${changes.ukinjeno.length}`,
+                  ].filter(Boolean).join(" · ")}
+                </p>
+                <BigButton href={`${base}/spremembe`}>Poglejte spremembe</BigButton>
+              </Card>
+            ) : (
+              <NextActionCard
+                action={action}
+                base={base}
+                nextCheckin={`${Number(h)}:${m}`}
+                onSlotTaken={action.kind === "pills" ? markSlotTaken.bind(null, rehab.id, action.time) : undefined}
+              />
+            )}
+            {pending > 0 && (
+              <Link href="/patient/dostop" className="flex items-center gap-4 rounded-3xl bg-status-rumeno-bg p-5 text-xl font-semibold text-status-rumeno">
+                <IconTile tone="rumeno"><Users /></IconTile>
+                <span>
+                  {pending === 1 ? "Nekdo želi spremljati vaše okrevanje." : `${pending} osebe želijo spremljati vaše okrevanje.`}{" "}
+                  <span className="underline underline-offset-4">Poglejte</span>
+                </span>
+              </Link>
+            )}
+            {nurseUpdate && <NurseUpdateCard update={nurseUpdate} />}
+            {nurse && (
+              <Card className="flex-row items-center">
+                <IconTile ghost><Phone /></IconTile>
+                <p className="text-lg">
+                  <span className="block text-muted-foreground">Vaša patronažna sestra</span>
+                  <strong className="text-xl">{nurse.nurse}</strong>
+                  {nurse.substitute && (
+                    <span className="block">
+                      Do {formatDate(nurse.substitute.until)} vas obiskuje <strong>{nurse.substitute.name}</strong>.
+                    </span>
+                  )}
+                </p>
+              </Card>
+            )}
+          </div>
+        </div>
+      }
+    >
+      <h2 className="mt-2 text-xl font-bold">Več</h2>
+      <nav aria-label="Več" className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        {links.map(({ href, label, hint, Icon }) => (
+          <Link
+            key={href}
+            href={href}
+            className="flex min-h-20 items-center gap-4 rounded-3xl bg-card p-4 shadow-soft hover:shadow-lift focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ring"
+          >
+            <IconTile ghost><Icon /></IconTile>
+            <span className="flex flex-col">
+              <span className="text-xl font-bold">{label}</span>
+              <span className="text-base text-muted-foreground">{hint}</span>
             </span>
-          )}
-        </p>
-      )}
-
-      {pending > 0 && (
-        <Link href="/patient/dostop" className="rounded-xl border-2 border-status-rumeno bg-status-rumeno-bg p-4 text-xl font-semibold text-status-rumeno">
-          {pending === 1 ? "Nekdo želi spremljati vaše okrevanje." : `${pending} osebe želijo spremljati vaše okrevanje.`}{" "}
-          <span className="underline">Poglejte</span>
-        </Link>
-      )}
-
-      {showChanges && (
-        // T-35: medicine changes come before anything else until the patient taps "Razumem".
-        <section className="flex flex-col gap-4 rounded-2xl border-2 border-primary p-5">
-          <h2 className="text-3xl font-bold">Vaša zdravila so se spremenila</h2>
-          <p className="text-xl">
-            {[
-              changes.novo.length && `Novo: ${changes.novo.length}`,
-              changes.spremenjeno.length && `Spremenjeno: ${changes.spremenjeno.length}`,
-              changes.ukinjeno.length && `Ukinjeno: ${changes.ukinjeno.length}`,
-            ].filter(Boolean).join(" · ")}
-          </p>
-          <BigButton href={`${base}/spremembe`}>Poglejte spremembe</BigButton>
-        </section>
-      )}
-
-      {nurseUpdate && <NurseUpdateCard update={nurseUpdate} />}
-
-      {!showChanges && (
-        <NextActionCard
-          action={action}
-          base={base}
-          nextCheckin={`${Number(h)}:${m}`}
-          onSlotTaken={action.kind === "pills" ? markSlotTaken.bind(null, rehab.id, action.time) : undefined}
-        />
-      )}
-
-      <ProgressRing data={ring} extendedUntil={extendedUntil} />
-
-      <nav aria-label="Več" className="mt-4 flex flex-wrap gap-x-2 gap-y-1">
-        <Link href={`${base}/pregled`} className={smallLink}>Pregled</Link>
-        <Link href={`${base}/zdravila`} className={smallLink}>Vse tablete</Link>
-        <Link href={`${base}/vaje`} className={smallLink}>Vaje</Link>
-        {changes.any && <Link href={`${base}/spremembe`} className={smallLink}>Spremembe zdravil</Link>}
-        <Link href="/patient/dostop" className={smallLink}>Družina</Link>
-        <Link href="/patient/opomnik" className={smallLink}>Opomnik</Link>
+          </Link>
+        ))}
       </nav>
     </AppShell>
   );

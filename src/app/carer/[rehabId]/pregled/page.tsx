@@ -40,7 +40,7 @@ async function Checkin({ params }: Pick<PageProps<"/carer/[rehabId]/pregled">, "
   if (ctx.todayCheckin) {
     return shell(
       <>
-        <p role="status" className="rounded-xl border-2 border-status-zeleno bg-status-zeleno-bg p-5 text-2xl font-bold text-status-zeleno">
+        <p role="status" className="rounded-3xl border-2 border-status-zeleno bg-status-zeleno-bg p-5 text-2xl font-bold text-status-zeleno">
           Shranjeno ✓
         </p>
         <StatusBadge status={ctx.todayCheckin.triage_status} />
@@ -48,8 +48,8 @@ async function Checkin({ params }: Pick<PageProps<"/carer/[rehabId]/pregled">, "
       </>,
     );
   }
-  if (!ctx.active) return shell(<p className="rounded-xl bg-muted p-4 text-xl">To okrevanje je zaključeno.</p>);
-  if (!ctx.questions.length) return shell(<p className="rounded-xl bg-muted p-4 text-xl">Za danes ni vprašanj.</p>);
+  if (!ctx.active) return shell(<p className="rounded-3xl bg-card shadow-soft p-4 text-xl">To okrevanje je zaključeno.</p>);
+  if (!ctx.questions.length) return shell(<p className="rounded-3xl bg-card shadow-soft p-4 text-xl">Za danes ni vprašanj.</p>);
 
   return shell(
     <>

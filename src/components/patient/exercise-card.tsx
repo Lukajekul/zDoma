@@ -40,7 +40,7 @@ export function ExerciseCard(props: ExerciseCardProps) {
   }
 
   return (
-    <li className="flex flex-col gap-4 rounded-xl border-2 border-border p-4">
+    <li className="flex flex-col gap-4 rounded-3xl bg-card shadow-soft p-4">
       <div>
         <h2 className="text-2xl font-bold">{title}</h2>
         <p className="text-lg">
@@ -77,7 +77,7 @@ export function ExerciseCard(props: ExerciseCardProps) {
               type="button"
               disabled={pending}
               onClick={() => run(() => onUndo(l.id))}
-              className="inline-flex min-h-12 w-fit items-center gap-2 rounded-lg border-2 border-border px-4 text-lg font-semibold hover:bg-muted disabled:opacity-50"
+              className="inline-flex min-h-12 w-fit items-center gap-2 rounded-xl bg-card shadow-soft px-4 text-lg font-semibold hover:bg-muted disabled:opacity-50"
             >
               <Undo2 aria-hidden className="size-6" />
               Razveljavi

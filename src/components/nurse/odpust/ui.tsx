@@ -20,7 +20,7 @@ export function Field(props: {
         inputMode={props.inputMode}
         value={props.value}
         onChange={(e) => props.onChange(e.target.value)}
-        className="min-h-12 rounded-lg border-2 border-input px-3 text-xl font-normal"
+        className="min-h-12 rounded-2xl border-2 border-border bg-card px-3 text-xl font-normal"
       />
       {props.hint && <span className="text-base font-normal text-muted-foreground">{props.hint}</span>}
     </label>

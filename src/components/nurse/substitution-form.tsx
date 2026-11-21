@@ -6,7 +6,7 @@ import { BigButton } from "@/components/shell";
 type Nurse = { id: string; name: string };
 type Result = { error?: string; ok?: boolean };
 
-const select = "min-h-12 rounded-lg border-2 border-input bg-background px-3 text-xl";
+const select = "min-h-12 rounded-2xl border-2 border-border bg-card px-3 text-xl";
 
 /** "Nadomeščanje": whose patients, to whom, until when. */
 export function SubstitutionForm({ nurses, me, today, onCreate }: {

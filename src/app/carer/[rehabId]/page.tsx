@@ -101,7 +101,7 @@ async function Overview({ params }: Pick<PageProps<"/carer/[rehabId]">, "params"
           </p>
         )}
         {yesterdayMissed.length > 0 && (
-          <p className="rounded-xl border-2 border-status-rumeno bg-status-rumeno-bg p-3 text-lg text-status-rumeno">
+          <p className="rounded-3xl border-2 border-status-rumeno bg-status-rumeno-bg p-3 text-lg text-status-rumeno">
             Včeraj ni bilo označeno: {yesterdayMissed.join(", ")}.
           </p>
         )}
@@ -137,7 +137,7 @@ async function Overview({ params }: Pick<PageProps<"/carer/[rehabId]">, "params"
 
 function Card({ icon, title, children }: { icon: React.ReactNode; title: string; children: React.ReactNode }) {
   return (
-    <section className="flex flex-col gap-3 rounded-xl border-2 border-border p-4">
+    <section className="flex flex-col gap-3 rounded-3xl bg-card shadow-soft p-4">
       <h2 className="flex items-center gap-2 text-2xl font-bold [&_svg]:size-7">
         <span aria-hidden>{icon}</span>
         {title}

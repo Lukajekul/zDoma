@@ -1,5 +1,6 @@
 import { Suspense } from "react";
-import { AppShell, BigButton } from "@/components/shell";
+import { QrCode, UserPlus } from "lucide-react";
+import { AppShell, BigButton, Card, IconTile } from "@/components/shell";
 import { LogoutButton } from "@/components/auth/logout-button";
 import { getCurrentProfile } from "@/lib/auth";
 import { continueHome } from "./actions";
@@ -7,7 +8,7 @@ import { LoginForm } from "./_components/login-form";
 
 export default function PrijavaPage() {
   return (
-    <AppShell title="Prijava" back="/">
+    <AppShell title="Dobrodošli nazaj" subtitle="Prijava v zDoma" back="/">
       <Suspense fallback={<p className="text-xl">Nalagam …</p>}>
         <LoginOrAccount />
       </Suspense>
@@ -20,37 +21,47 @@ async function LoginOrAccount() {
 
   if (profile) {
     return (
-      <>
-        <p className="rounded-xl border-2 border-status-zeleno bg-status-zeleno/10 p-4 text-xl">
+      <Card className="max-w-xl">
+        <p className="rounded-2xl bg-status-zeleno-bg p-4 text-xl text-status-zeleno">
           Prijavljeni ste kot <strong>{profile.first_name} {profile.last_name}</strong> ✓
         </p>
         <form action={continueHome}>
           <BigButton type="submit">Naprej</BigButton>
         </form>
         <LogoutButton />
-      </>
+      </Card>
     );
   }
 
   return (
-    <>
-      <section className="rounded-xl border-2 border-border bg-muted/50 p-4 text-lg">
-        <h2 className="text-xl font-bold">Ste pacient?</h2>
-        <p className="mt-1">
-          Gesla ne potrebujete. S kamero telefona skenirajte kodo QR na prijavnem listku, ki ste ga dobili ob
-          odpustu.
-        </p>
-      </section>
-
-      <p className="text-xl">Za zdravstvene delavce in svojce:</p>
-      <LoginForm />
-
-      <div className="mt-4 flex flex-col gap-3 border-t-2 pt-6">
-        <p className="text-xl">Ste svojec in še nimate računa?</p>
-        <BigButton href="/prijava/registracija" variant="secondary">
-          Ustvari račun za svojce
-        </BigButton>
+    <div className="grid items-start gap-4 lg:grid-cols-[minmax(0,6fr)_minmax(0,5fr)]">
+      <Card lift>
+        <div>
+          <h2 className="text-2xl font-bold text-primary">Za osebje in svojce</h2>
+          <p className="text-lg text-muted-foreground">Z davčno številko in geslom.</p>
+        </div>
+        <LoginForm />
+      </Card>
+      <div className="flex flex-col gap-4">
+        <Card>
+          <div className="flex items-center gap-4">
+            <IconTile><QrCode /></IconTile>
+            <h2 className="text-xl font-bold">Ste pacient?</h2>
+          </div>
+          <p className="text-lg">
+            Gesla ne potrebujete. S kamero telefona skenirajte kodo QR na prijavnem listku, ki ste ga dobili ob odpustu.
+          </p>
+        </Card>
+        <Card>
+          <div className="flex items-center gap-4">
+            <IconTile ghost><UserPlus /></IconTile>
+            <h2 className="text-xl font-bold">Ste svojec brez računa?</h2>
+          </div>
+          <BigButton href="/prijava/registracija" variant="secondary">
+            Ustvari račun za svojce
+          </BigButton>
+        </Card>
       </div>
-    </>
+    </div>
   );
 }

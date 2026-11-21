@@ -25,12 +25,13 @@ export function StatusBadge({ status, label, short = false, className }: StatusB
   return (
     <span
       className={cn(
-        "inline-flex w-fit items-center gap-2 rounded-full border-2 px-3.5 py-1 text-lg font-semibold",
+        "inline-flex w-fit items-center gap-2 rounded-full px-3.5 py-1 font-bold",
+        short ? "text-base" : "text-lg",
         cls,
         className,
       )}
     >
-      <Icon aria-hidden className="size-6 shrink-0" />
+      <Icon aria-hidden className={cn("shrink-0", short ? "size-5" : "size-6")} />
       {short ? word : `${word} – ${label ?? meaning}`}
     </span>
   );

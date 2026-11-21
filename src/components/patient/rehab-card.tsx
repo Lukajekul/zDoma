@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, HeartPulse } from "lucide-react";
+import { IconTile } from "@/components/shell";
 import { formatDate } from "@/lib/format";
 import type { IsoDate, Rehabilitacija } from "@/lib/types";
 import { rehabDay, rehabTitle } from "./rehab-info";
@@ -10,8 +11,9 @@ export function RehabCard({ rehab, today, past = false }: { rehab: Rehabilitacij
   return (
     <Link
       href={`/patient/${rehab.id}`}
-      className="flex min-h-20 items-center gap-4 rounded-xl border-2 border-border p-4 hover:bg-muted focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ring"
+      className="flex min-h-24 items-center gap-4 rounded-3xl bg-card shadow-soft p-5 hover:shadow-lift focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ring"
     >
+      <IconTile ghost={past}><HeartPulse /></IconTile>
       <span className="flex flex-1 flex-col gap-1">
         <span className="text-xl font-bold">{rehabTitle(rehab)}</span>
         <span className="text-lg text-muted-foreground">

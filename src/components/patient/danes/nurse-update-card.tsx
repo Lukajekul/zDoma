@@ -4,7 +4,7 @@ import { formatDate } from "@/lib/format";
 
 export function NurseUpdateCard({ update }: { update: NurseUpdate }) {
   return (
-    <section aria-label="Sporočilo o okrevanju" className="rounded-2xl border border-primary/40 bg-primary/5 p-4">
+    <section aria-label="Sporočilo o okrevanju" className="rounded-3xl bg-card p-5 shadow-soft">
       <div className="flex items-center gap-3">
         <div aria-hidden className="relative grid size-14 shrink-0 place-items-center overflow-hidden rounded-full bg-primary/10 font-bold text-primary">
           <span>{update.initials}</span>

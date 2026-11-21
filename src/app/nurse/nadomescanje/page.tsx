@@ -42,10 +42,10 @@ async function Substitution() {
       {!active?.length && <p className="text-lg text-muted-foreground">Ni nadomeščanj.</p>}
       <ul className="flex flex-col gap-2">
         {active?.map((s) => (
-          <li key={s.id} className="flex flex-wrap items-center justify-between gap-2 rounded-xl border-2 border-border p-3 text-lg">
+          <li key={s.id} className="flex flex-wrap items-center justify-between gap-2 rounded-3xl bg-card shadow-soft p-3 text-lg">
             <span>{name(s.nurse_id)} → {name(s.substitute_id)}, do {formatDate(s.until_date)}</span>
             <form action={async () => { "use server"; await cancelSubstitution(s.id); }}>
-              <button type="submit" className="min-h-12 rounded-lg border-2 border-border px-4 font-semibold hover:bg-muted">Prekliči</button>
+              <button type="submit" className="min-h-12 rounded-xl bg-card shadow-soft px-4 font-semibold hover:bg-muted">Prekliči</button>
             </form>
           </li>
         ))}

@@ -4,25 +4,19 @@ import type { RingData, RingPart } from "@/lib/progress-ring";
 const COLOR: Record<RingPart, string> = {
   answered: "var(--brand)",
   missed: "oklch(0.65 0.18 27)",
-  future: "oklch(0.92 0.008 240)",
+  future: "oklch(0.93 0.006 240)",
 };
 
-const SIZE = 240;
+const SIZE = 220;
 const C = SIZE / 2;
-const R_OUT = 116;
-const R_IN = 84;
+const R = 90;
+const W = 20;
 
-/** Point on a circle; angle in degrees from 12 o'clock, negative = counter-clockwise. */
-const pt = (r: number, deg: number) => {
-  const a = (deg * Math.PI) / 180;
-  return `${(C + r * Math.sin(a)).toFixed(2)} ${(C - r * Math.cos(a)).toFixed(2)}`;
-};
+/** Point on the ring's centre line; angle in radians from 12 o'clock, negative = counter-clockwise. */
+const pt = (a: number) => `${(C + R * Math.sin(a)).toFixed(2)} ${(C - R * Math.cos(a)).toFixed(2)}`;
 
-/** Thick ring sector from angle a to b (b < a, counter-clockwise). */
-function sector(a: number, b: number) {
-  const large = a - b > 180 ? 1 : 0;
-  return `M ${pt(R_OUT, a)} A ${R_OUT} ${R_OUT} 0 ${large} 0 ${pt(R_OUT, b)} L ${pt(R_IN, b)} A ${R_IN} ${R_IN} 0 ${large} 1 ${pt(R_IN, a)} Z`;
-}
+/** Arc stroke from angle a to b (b < a, counter-clockwise). */
+const arc = (a: number, b: number) => `M ${pt(a)} A ${R} ${R} 0 ${a - b > Math.PI ? 1 : 0} 0 ${pt(b)}`;
 
 const percent = new Intl.NumberFormat("sl-SI", { style: "percent", maximumFractionDigits: 0 });
 
@@ -31,30 +25,39 @@ const percent = new Intl.NumberFormat("sl-SI", { style: "percent", maximumFracti
  * counter-clockwise, one slice per day split by its questions. Always with words.
  */
 export function ProgressRing({ data, extendedUntil }: { data: RingData; extendedUntil?: string }) {
-  const dayDeg = 360 / Math.max(data.days.length, 1);
-  const gap = data.days.length <= 120 ? Math.min(1, dayDeg * 0.15) : 0;
+  const n = Math.max(data.days.length, 1);
+  const per = (2 * Math.PI) / n;
+  const gap = n <= 120 ? Math.min(0.014, per * 0.12) : 0;
 
   return (
-    <figure className="flex flex-col items-center gap-3">
-      <div className="relative w-full max-w-60">
+    <figure className="flex flex-col items-center gap-3 text-center">
+      <div className="relative grid w-full max-w-64 place-items-center">
         <svg viewBox={`0 0 ${SIZE} ${SIZE}`} className="w-full" aria-hidden>
           {data.days.map((day, d) => {
-            const start = -d * dayDeg - gap / 2;
-            const partDeg = (dayDeg - gap) / day.parts.length;
-            return day.parts.map((p, i) => (
-              <path key={`${d}-${i}`} d={sector(start - i * partDeg, start - (i + 1) * partDeg)} fill={COLOR[p]} stroke={COLOR[p]} strokeWidth={0.6} strokeLinejoin="round" />
+            const a0 = -d * per - gap;
+            const span = per - 2 * gap;
+            const part = span / day.parts.length;
+            // Merge neighbouring parts of the same colour, so a day has no seams inside it.
+            const runs: { p: RingPart; from: number; to: number }[] = [];
+            day.parts.forEach((p, i) => {
+              const last = runs.at(-1);
+              if (last?.p === p) last.to = i + 1;
+              else runs.push({ p, from: i, to: i + 1 });
+            });
+            return runs.map((r) => (
+              <path key={`${d}-${r.from}`} d={arc(a0 - r.from * part, a0 - r.to * part)} fill="none" stroke={COLOR[r.p]} strokeWidth={W} />
             ));
           })}
         </svg>
-        <p className="absolute inset-0 flex flex-col items-center justify-center">
-          <span className="text-4xl font-bold">{percent.format(data.answeredShare)}</span>
-          <span className="text-base text-muted-foreground">odgovorov</span>
+        <p className="absolute flex flex-col items-center">
+          <span className="text-5xl leading-none font-extrabold tracking-tight">{percent.format(data.answeredShare)}</span>
+          <span className="mt-1 text-base text-muted-foreground">odgovorjeno</span>
         </p>
       </div>
-      <figcaption className="text-center text-lg font-semibold">
+      <figcaption className="text-lg text-muted-foreground">
         Opravljeno {dniBesedilo(data.doneDays)} · Izpuščeno {dniBesedilo(data.missedDays)} · Še {dniBesedilo(data.leftDays)}
       </figcaption>
-      {extendedUntil && <p className="text-center text-lg">Okrevanje podaljšano do {extendedUntil}</p>}
+      {extendedUntil && <p className="text-lg font-semibold">Okrevanje podaljšano do {extendedUntil}</p>}
     </figure>
   );
 }

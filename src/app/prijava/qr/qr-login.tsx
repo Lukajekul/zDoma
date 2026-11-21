@@ -39,7 +39,7 @@ export function QrLogin() {
 
   return (
     <>
-      <p role="alert" className="rounded-xl border-2 border-status-rdece bg-status-rdece/10 p-4 text-xl font-semibold">
+      <p role="alert" className="rounded-3xl border-2 border-status-rdece bg-status-rdece/10 p-4 text-xl font-semibold">
         {state === "failed"
           ? "Ta koda QR ne deluje več. Morda je bila zamenjana z novo."
           : "Kode QR ni bilo mogoče prebrati."}

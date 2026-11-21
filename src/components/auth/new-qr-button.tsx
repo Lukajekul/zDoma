@@ -24,7 +24,7 @@ export function NewQrButton({ patientId }: { patientId: Uuid }) {
   }
 
   return (
-    <div className="flex flex-col gap-3 rounded-xl border-2 border-status-rumeno p-4">
+    <div className="flex flex-col gap-3 rounded-3xl bg-card border-2 border-status-rumeno p-4">
       <p className="text-xl font-semibold">Naredim novo kodo QR?</p>
       <p className="text-lg">
         Stara koda in stari listek bosta takoj prenehala delovati. Pacient bo odjavljen na vseh telefonih in se

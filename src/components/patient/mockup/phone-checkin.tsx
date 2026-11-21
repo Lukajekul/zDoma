@@ -45,13 +45,13 @@ export function PhoneCheckin() {
         </p>
       </div>
 
-      <div className="rounded-xl border-2 border-border p-4" aria-live="polite">
+      <div className="rounded-3xl bg-card shadow-soft p-4" aria-live="polite">
         <p className="mb-2 font-semibold text-muted-foreground">Glas v telefonu:</p>
         <p className="text-xl whitespace-pre-line">{voice}</p>
         <button
           type="button"
           onClick={() => speak(voice)}
-          className="mt-4 inline-flex min-h-12 items-center gap-2 rounded-lg border-2 border-border px-4 text-lg font-semibold hover:bg-muted"
+          className="mt-4 inline-flex min-h-12 items-center gap-2 rounded-xl bg-card shadow-soft px-4 text-lg font-semibold hover:bg-muted"
         >
           <Volume2 aria-hidden className="size-6" />
           Poslušaj

@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 import { requestAccess, type RequestState } from "../actions";
 
 const chip =
-  "flex min-h-14 cursor-pointer items-center justify-center rounded-xl border-2 border-border bg-background px-4 text-xl font-semibold capitalize select-none " +
+  "flex min-h-14 cursor-pointer items-center justify-center rounded-2xl bg-card shadow-soft bg-background px-4 text-xl font-semibold capitalize select-none " +
   "has-[:checked]:border-primary has-[:checked]:bg-primary has-[:checked]:text-primary-foreground " +
   "has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-ring";
 
@@ -20,7 +20,7 @@ export function RequestForm() {
       <div className="flex flex-col gap-4">
         <p
           role="status"
-          className="rounded-xl border-2 border-status-zeleno bg-status-zeleno/10 p-5 text-2xl font-bold"
+          className="rounded-3xl border-2 border-status-zeleno bg-status-zeleno/10 p-5 text-2xl font-bold"
         >
           Prošnja poslana ✓
         </p>

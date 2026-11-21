@@ -4,7 +4,7 @@ import { useState, type ComponentProps } from "react";
 import { cn } from "@/lib/utils";
 
 const inputClass =
-  "min-h-14 w-full rounded-xl border-2 border-input bg-background px-4 text-xl text-foreground focus-visible:border-ring focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ring";
+  "min-h-14 w-full rounded-2xl border-2 border-border bg-card px-4 text-xl text-foreground focus-visible:border-ring focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ring";
 
 type FieldProps = { label: string; hint?: string } & Omit<ComponentProps<"input">, "className">;
 
@@ -78,7 +78,7 @@ export function PasswordField({ label = "Geslo", autoComplete, hint }: { label?:
 export function FormError({ message }: { message?: string }) {
   if (!message) return null;
   return (
-    <p role="alert" className="rounded-xl border-2 border-status-rdece bg-status-rdece/10 p-4 text-lg font-semibold">
+    <p role="alert" className="rounded-3xl border-2 border-status-rdece bg-status-rdece/10 p-4 text-lg font-semibold">
       {message}
     </p>
   );

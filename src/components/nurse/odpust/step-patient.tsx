@@ -51,13 +51,13 @@ export function StepPatient({ value: v, onChange, onNext }: Props) {
         </p>
       ) : (
         <>
-          <p className="rounded-xl bg-muted p-4 text-xl">Nov pacient. Ob koncu natisnete prijavni listek s kodo QR.</p>
+          <p className="rounded-3xl bg-card shadow-soft p-4 text-xl">Nov pacient. Ob koncu natisnete prijavni listek s kodo QR.</p>
           <Field label="Ime" value={v.firstName} onChange={(firstName) => set({ firstName })} />
           <Field label="Priimek" value={v.lastName} onChange={(lastName) => set({ lastName })} />
         </>
       )}
       {v.found.hasActiveRehab && (
-        <p className="rounded-xl border-2 border-status-rumeno bg-status-rumeno-bg p-4 text-lg text-status-rumeno">
+        <p className="rounded-3xl border-2 border-status-rumeno bg-status-rumeno-bg p-4 text-lg text-status-rumeno">
           Pacient že ima odprto rehabilitacijo. Novo odprite samo, če gre za drugo okrevanje.
         </p>
       )}

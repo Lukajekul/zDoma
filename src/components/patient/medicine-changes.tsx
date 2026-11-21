@@ -26,7 +26,7 @@ export function MedicineChanges({ meds }: { meds: Medication[] }) {
           {g.spremenjeno.map((m) => <MedCard key={m.id} m={m} line={`Prej ${m.previous_dose ?? "?"} → zdaj ${m.dose} · ${times(m)}`} />)}
         </Group>
       )}
-      {!g.any && <p className="rounded-xl bg-muted p-4 text-xl">Zdravila so ostala enaka kot pred bolnišnico.</p>}
+      {!g.any && <p className="rounded-3xl bg-card shadow-soft p-4 text-xl">Zdravila so ostala enaka kot pred bolnišnico.</p>}
       {g.enako.length > 0 && <p className="text-lg">Kot prej jemljete: {g.enako.map((m) => `${m.name} ${m.dose}`).join(", ")}.</p>}
     </>
   );
@@ -34,7 +34,7 @@ export function MedicineChanges({ meds }: { meds: Medication[] }) {
 
 function Group({ title, stop, children }: { title: string; stop?: boolean; children: ReactNode }) {
   return (
-    <section className={stop ? "flex flex-col gap-3 rounded-2xl border-2 border-status-rdece bg-status-rdece-bg p-4" : "flex flex-col gap-3"}>
+    <section className={stop ? "flex flex-col gap-3 rounded-3xl border-2 border-status-rdece bg-status-rdece-bg p-4" : "flex flex-col gap-3"}>
       <h2 className={stop ? "text-2xl font-bold text-status-rdece" : "text-2xl font-bold"}>{title}</h2>
       <ul className="flex flex-col gap-3">{children}</ul>
     </section>
@@ -43,7 +43,7 @@ function Group({ title, stop, children }: { title: string; stop?: boolean; child
 
 function MedCard({ m, line }: { m: Medication; line: string }) {
   return (
-    <li className="flex gap-4 rounded-xl border-2 border-border bg-background p-3">
+    <li className="flex gap-4 rounded-3xl bg-card shadow-soft p-3">
       <MedicineBox name={m.name} photoUrl={m.photo_url} />
       <div className="flex min-w-0 flex-col gap-1">
         <p className="text-xl font-bold">{m.name}</p>

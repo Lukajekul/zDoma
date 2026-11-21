@@ -50,13 +50,13 @@ async function MedicineList() {
     .filter((r) => r.ocene.length > 0);
 
   if (rows.length === 0) {
-    return <p className="rounded-xl bg-muted p-4 text-xl">Ni aktivnih rehabilitacij z novimi ali spremenjenimi zdravili.</p>;
+    return <p className="rounded-3xl bg-card shadow-soft p-4 text-xl">Ni aktivnih rehabilitacij z novimi ali spremenjenimi zdravili.</p>;
   }
 
   return (
     <ul className="flex flex-col gap-6">
       {rows.map((r) => (
-        <li key={r.id} className="flex flex-col gap-3 rounded-xl border-2 border-border p-4">
+        <li key={r.id} className="flex flex-col gap-3 rounded-3xl bg-card shadow-soft p-4">
           <h2 className="text-2xl font-bold">
             {r.patient?.first_name} {r.patient?.last_name}
           </h2>

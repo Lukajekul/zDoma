@@ -1,8 +1,8 @@
 import { Suspense } from "react";
 import Link from "next/link";
-import { ChevronRight, UserPlus } from "lucide-react";
+import { ChevronRight, HeartPulse, UserPlus } from "lucide-react";
 import { rehabDay, rehabTitle } from "@/components/patient/rehab-info";
-import { AppShell, BigButton, StatusBadge } from "@/components/shell";
+import { AppShell, BigButton, IconTile, StatusBadge } from "@/components/shell";
 import { LogoutButton } from "@/components/auth/logout-button";
 import { requireProfile } from "@/lib/auth";
 import { formatDate } from "@/lib/format";
@@ -43,6 +43,7 @@ async function CarerHome() {
         <p className="text-xl">Še nikogar ne spremljate. Zaprosite za dostop z davčno številko osebe, ki ji pomagate.</p>
       )}
 
+      <div className="grid items-start gap-6 lg:grid-cols-2">
       {patients.map(({ patient, active, past }) => (
         <section key={patient.id} className="flex flex-col gap-3">
           <h2 className="text-2xl font-bold">{patientName(patient)}</h2>
@@ -53,14 +54,15 @@ async function CarerHome() {
               <Link
                 key={r.id}
                 href={`/carer/${r.id}`}
-                className="flex items-center gap-3 rounded-xl border-2 border-primary p-4 hover:bg-muted focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                className="flex items-center gap-4 rounded-3xl bg-card shadow-lift p-5 hover:shadow-lift focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ring"
               >
+                <IconTile><HeartPulse /></IconTile>
                 <span className="flex flex-1 flex-col gap-2">
-                  <span className="text-xl font-semibold">{rehabTitle(r)}</span>
+                  <span className="text-xl font-bold">{rehabTitle(r)}</span>
                   <span className="text-lg">
                     Dan {day} od {total}
                   </span>
-                  <StatusBadge status={r.current_status} />
+                  <StatusBadge short status={r.current_status} />
                 </span>
                 <span className="flex items-center text-lg font-semibold text-primary">
                   Odpri <ChevronRight aria-hidden className="size-7" />
@@ -69,7 +71,7 @@ async function CarerHome() {
             );
           })}
           {past.length > 0 && (
-            <div className="rounded-xl border-2 border-border p-4">
+            <div className="rounded-3xl bg-card shadow-soft p-4">
               <h3 className="text-xl font-semibold">Pretekle rehabilitacije</h3>
               <ul className="mt-3 flex flex-col gap-3">
                 {past.map((r) => (
@@ -84,9 +86,10 @@ async function CarerHome() {
           )}
         </section>
       ))}
+      </div>
 
       {pending > 0 && (
-        <p className="rounded-xl border-2 border-border bg-muted/50 p-4 text-xl">
+        <p className="rounded-3xl bg-card shadow-soft p-4 text-xl">
           {pending === 1 ? "1 prošnja čaka na odobritev." : `Prošnje, ki čakajo na odobritev: ${pending}`}
         </p>
       )}

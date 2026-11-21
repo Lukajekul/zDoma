@@ -39,7 +39,7 @@ async function PhoneQr() {
     margin: 2,
   });
   return (
-    <figure className="flex flex-col items-center gap-2 rounded-xl border-2 border-border p-4">
+    <figure className="flex flex-col items-center gap-2 rounded-3xl bg-card shadow-soft p-4">
       <div
         role="img"
         aria-label="Koda QR za to stran"

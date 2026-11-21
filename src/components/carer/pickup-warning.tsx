@@ -25,7 +25,7 @@ export function PickupWarning({
   if (manjka.length === 0) return null;
 
   return (
-    <div role="alert" className="flex gap-3 rounded-xl border-2 border-status-rdece bg-status-rdece-bg p-4 text-status-rdece">
+    <div role="alert" className="flex gap-3 rounded-3xl border-2 border-status-rdece bg-status-rdece-bg p-4 text-status-rdece">
       <Pill aria-hidden className="mt-1 size-7 shrink-0" />
       <div className="flex flex-col gap-2">
         <p className="text-xl font-bold">{prevzemBesediloZadolzenec(ime)}</p>

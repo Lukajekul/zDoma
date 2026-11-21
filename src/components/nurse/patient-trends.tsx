@@ -22,7 +22,7 @@ export function PatientTrends({ trends }: { trends: PatientDetail["trends"] }) {
   }).join(" · ");
 
   return (
-    <section className="space-y-4 rounded-2xl border p-4" aria-labelledby="trendi">
+    <section className="space-y-4 rounded-3xl bg-card shadow-soft p-4" aria-labelledby="trendi">
       <div>
         <h2 className="text-xl font-bold" id="trendi">Trendi pregledov</h2>
         <p className="text-muted-foreground">{formatDate(trends.start)} – {formatDate(trends.end)}</p>

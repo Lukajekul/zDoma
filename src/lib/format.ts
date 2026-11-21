@@ -18,3 +18,15 @@ export const formatNumber = (n: number, digits = 1) =>
   new Intl.NumberFormat(LOCALE, { maximumFractionDigits: digits }).format(n);
 /** Today's date in Ljubljana as "2026-11-21", for "today" comparisons. */
 export const todayLjubljana = (now: Date = new Date()) => isoDayFmt.format(now);
+
+const hourFmt = new Intl.DateTimeFormat("sl-SI", { hour: "numeric", hourCycle: "h23", timeZone: TIME_ZONE });
+const shortDayFmt = new Intl.DateTimeFormat("sl-SI", { weekday: "short", day: "numeric", month: "numeric", timeZone: TIME_ZONE });
+
+/** "Dobro jutro" / "Dober dan" / "Dober večer" by the time in Ljubljana. */
+export function greeting(now: Date = new Date()) {
+  const h = Number(hourFmt.format(now));
+  return h < 10 ? "Dobro jutro" : h < 18 ? "Dober dan" : "Dober večer";
+}
+
+/** "sob, 21. 11." for the header band. */
+export const formatShortDay = (now: Date = new Date()) => shortDayFmt.format(now).replace(/\.$/, ".");

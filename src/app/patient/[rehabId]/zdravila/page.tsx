@@ -45,7 +45,7 @@ async function Pills({ params }: Pick<PageProps<"/patient/[rehabId]/zdravila">, 
   if (!isRehabActive(rehab, today)) {
     return (
       <AppShell title="Zdravila" back={back}>
-        <p className="rounded-xl bg-muted p-4 text-xl">
+        <p className="rounded-3xl bg-card shadow-soft p-4 text-xl">
           To okrevanje je zaključeno. Tukaj so zdravila, ki ste jih takrat jemali.
         </p>
         <MedicationList meds={meds} />
@@ -73,7 +73,7 @@ async function Pills({ params }: Pick<PageProps<"/patient/[rehabId]/zdravila">, 
       <SupplyReminder meds={meds} danes={today} />
 
       {all.length === 0 ? (
-        <p className="rounded-xl bg-muted p-4 text-xl">Danes nimate predpisanih tablet.</p>
+        <p className="rounded-3xl bg-card shadow-soft p-4 text-xl">Danes nimate predpisanih tablet.</p>
       ) : (
         <p className="text-xl font-semibold">
           Vzeto {takenCount} od {all.length}
@@ -82,7 +82,7 @@ async function Pills({ params }: Pick<PageProps<"/patient/[rehabId]/zdravila">, 
       )}
 
       {yesterdayMissed.length > 0 && (
-        <p className="rounded-xl border-2 border-status-rumeno bg-status-rumeno-bg p-4 text-lg text-status-rumeno">
+        <p className="rounded-3xl border-2 border-status-rumeno bg-status-rumeno-bg p-4 text-lg text-status-rumeno">
           Včeraj ni bilo označeno: {yesterdayMissed.join(", ")}. Če niste prepričani, kaj storiti, pokličite patronažno sestro.
         </p>
       )}
@@ -90,7 +90,7 @@ async function Pills({ params }: Pick<PageProps<"/patient/[rehabId]/zdravila">, 
       {groups.map(({ time, doses }) => (
         <section key={time} className="flex flex-col gap-3">
           <h2 className="mt-2 text-2xl font-bold">{TIME_LABEL[time]}</h2>
-          <ul className="flex flex-col gap-3">
+          <ul className="grid items-start gap-3 lg:grid-cols-2">
             {doses.map(({ medication: m, log }) => (
               <DoseCard
                 key={m.id}
@@ -124,9 +124,9 @@ function missedOn(meds: Medication[], logs: DoseLog[], date: string) {
 
 function MedicationList({ meds }: { meds: Medication[] }) {
   return (
-    <ul className="flex flex-col gap-3">
+    <ul className="grid items-start gap-3 lg:grid-cols-2">
       {meds.map((m) => (
-        <li key={m.id} className="rounded-xl border-2 border-border p-4">
+        <li key={m.id} className="rounded-3xl bg-card shadow-soft p-4">
           <p className="text-xl font-bold">
             {m.name} {m.dose}
           </p>

@@ -39,7 +39,7 @@ export function PatientAlerts({ active, openAlerts, closedAlerts }: Pick<
     <section aria-labelledby="opozorila" className="space-y-3">
       <h2 className="text-xl font-bold" id="opozorila">Odprta opozorila ({openAlerts.length})</h2>
       {message && (
-        <p className="rounded-xl border bg-muted p-3 font-semibold" role={message === "saved" ? "status" : "alert"}>
+        <p className="rounded-3xl bg-card shadow-soft p-3 font-semibold" role={message === "saved" ? "status" : "alert"}>
           {feedback[message]}
         </p>
       )}
@@ -47,7 +47,7 @@ export function PatientAlerts({ active, openAlerts, closedAlerts }: Pick<
       {openAlerts.length === 0 ? <p>Ni odprtih opozoril.</p> : (
         <ul className="space-y-3">
           {openAlerts.map((alert) => (
-            <li className="space-y-3 rounded-2xl border p-4" key={alert.id}>
+            <li className="space-y-3 rounded-3xl bg-card shadow-soft p-4" key={alert.id}>
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <h3 className="wrap-break-word font-bold">{alert.reason}</h3>
                 <StatusBadge short status={alert.status} />
@@ -75,7 +75,7 @@ export function PatientAlerts({ active, openAlerts, closedAlerts }: Pick<
         </ul>
       )}
       {closedAlerts.length > 0 && (
-        <details className="rounded-2xl border">
+        <details className="rounded-3xl bg-card shadow-soft">
           <summary className="min-h-12 cursor-pointer px-4 py-3 font-semibold">Zadnja zaprta opozorila</summary>
           <ul className="divide-y px-4 pb-2">
             {closedAlerts.map((alert) => (

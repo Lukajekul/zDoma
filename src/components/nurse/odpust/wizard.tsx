@@ -68,7 +68,7 @@ export function DischargeWizard({ today, nurses, subs, catalogue, templates }: P
   }
 
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex flex-col gap-5 rounded-3xl bg-card p-5 shadow-soft sm:p-8">
       <StepTitle n={step + 1} total={TITLES.length}>{TITLES[step]}</StepTitle>
 
       {step === 0 && <StepPatient value={patient} onChange={setPatient} onNext={next} />}
@@ -101,7 +101,7 @@ export function DischargeWizard({ today, nurses, subs, catalogue, templates }: P
       )}
 
       {step > 0 && !saving && (
-        <button type="button" onClick={() => setStep(step - 1)} className="inline-flex min-h-12 w-fit items-center gap-2 rounded-lg border-2 border-border px-4 text-lg font-semibold hover:bg-muted">
+        <button type="button" onClick={() => setStep(step - 1)} className="inline-flex min-h-12 w-fit items-center gap-2 rounded-xl bg-card shadow-soft px-4 text-lg font-semibold hover:bg-muted">
           <ArrowLeft aria-hidden className="size-6" /> Prejšnji korak
         </button>
       )}

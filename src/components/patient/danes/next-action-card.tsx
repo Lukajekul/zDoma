@@ -1,4 +1,5 @@
-import { BigButton } from "@/components/shell";
+import { CalendarClock, Check, ClipboardCheck, Dumbbell, Pill, Scale } from "lucide-react";
+import { BigButton, Card, IconTile } from "@/components/shell";
 import { minutesToTime, SLOT_ADJ, type DanesAction } from "@/app/patient/_lib/danes";
 import type { DoseActionState } from "@/app/patient/[rehabId]/zdravila/actions";
 import { SlotTakenButton } from "./slot-taken-button";
@@ -11,23 +12,36 @@ type Props = {
   onSlotTaken?: () => Promise<DoseActionState>;
 };
 
-/** The one thing to do now on "Danes", as a big card with one main button. */
-export function NextActionCard({ action, base, nextCheckin, onSlotTaken }: Props) {
-  const card = "flex flex-col gap-4 rounded-2xl border-2 border-primary p-5";
+function Head({ icon, title, sub, done = false }: { icon: React.ReactNode; title: string; sub?: React.ReactNode; done?: boolean }) {
+  return (
+    <div className="flex items-center gap-4">
+      <IconTile ghost={!done}>{icon}</IconTile>
+      <div>
+        <h2 className="text-2xl leading-tight font-bold">{title}</h2>
+        {sub && <p className="text-lg text-muted-foreground">{sub}</p>}
+      </div>
+    </div>
+  );
+}
 
+/** The one thing to do now on "Danes", as a card with one main button. */
+export function NextActionCard({ action, base, nextCheckin, onSlotTaken }: Props) {
   switch (action.kind) {
     case "checkin":
       return (
-        <section className={card}>
-          <h2 className="text-3xl font-bold">{action.weight ? "Stopite na tehtnico" : "Čas za današnji pregled"}</h2>
-          <p className="text-xl">{action.weight ? "Nato odgovorite na nekaj vprašanj. " : ""}Traja 30 sekund.</p>
+        <Card lift>
+          <Head
+            icon={action.weight ? <Scale /> : <ClipboardCheck />}
+            title={action.weight ? "Stopite na tehtnico" : "Današnji pregled"}
+            sub={`${action.weight ? "Nato nekaj vprašanj. " : ""}Traja 30 sekund.`}
+          />
           <BigButton href={`${base}/pregled`}>Začni pregled</BigButton>
-        </section>
+        </Card>
       );
     case "pills":
       return (
-        <section className={card}>
-          <h2 className="text-3xl font-bold">Ste vzeli {SLOT_ADJ[action.time]} tablete?</h2>
+        <Card lift>
+          <Head icon={<Pill />} title={`Ste vzeli ${SLOT_ADJ[action.time]} tablete?`} />
           <ul className="flex flex-col gap-1 text-xl">
             {action.doses.map((d, i) => (
               <li key={i}>
@@ -39,31 +53,26 @@ export function NextActionCard({ action, base, nextCheckin, onSlotTaken }: Props
           <BigButton href={`${base}/zdravila`} variant="secondary">
             Označim vsako posebej
           </BigButton>
-        </section>
+        </Card>
       );
     case "exercise":
       return (
-        <section className={card}>
-          <h2 className="text-3xl font-bold">Čas za vajo</h2>
-          <p className="text-2xl font-semibold">{action.title}</p>
+        <Card lift>
+          <Head icon={<Dumbbell />} title="Čas za vajo" sub={action.title} />
           <BigButton href={`${base}/vaje`}>Odpri vajo</BigButton>
-        </section>
+        </Card>
       );
     case "later":
       return (
-        <section className="flex flex-col gap-3 rounded-2xl bg-status-zeleno-bg p-5 text-status-zeleno">
-          <h2 className="text-3xl font-bold">Za zdaj je vse opravljeno ✓</h2>
-          <p className="text-xl font-semibold text-foreground">
-            Ob {minutesToTime(action.at)}: {SLOT_ADJ[action.time]} tablete.
-          </p>
-        </section>
+        <Card>
+          <Head done icon={<CalendarClock />} title="Za zdaj je vse opravljeno ✓" sub={`Ob ${minutesToTime(action.at)}: ${SLOT_ADJ[action.time]} tablete.`} />
+        </Card>
       );
     case "done":
       return (
-        <section className="flex flex-col gap-3 rounded-2xl bg-status-zeleno-bg p-5 text-status-zeleno">
-          <h2 className="text-3xl font-bold">Končano za danes ✓</h2>
-          <p className="text-xl font-semibold text-foreground">Jutri ob {nextCheckin}.</p>
-        </section>
+        <Card>
+          <Head done icon={<Check />} title="Končano za danes ✓" sub={`Jutri ob ${nextCheckin}.`} />
+        </Card>
       );
   }
 }
