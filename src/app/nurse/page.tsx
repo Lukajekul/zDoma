@@ -1,12 +1,14 @@
 import { Suspense } from "react";
 import { LogoutButton } from "@/components/auth/logout-button";
 import { NurseDashboard } from "@/components/nurse/nurse-dashboard";
+import Link from "next/link";
 import { Plus } from "lucide-react";
 import { AppShell, BigButton } from "@/components/shell";
 import { requireStaff } from "@/lib/auth";
 import { seznamPredlog } from "@/lib/templates";
 import { todayLjubljana } from "@/lib/format";
 import { getDashboardRows } from "./_lib/dashboard";
+import { getVisits } from "./_patronaza/visits";
 
 export const metadata = { title: "Pacienti – zDoma" };
 
@@ -22,13 +24,20 @@ export default function NursePage() {
 
 async function Dashboard() {
   const staff = await requireStaff();
-  const rows = await getDashboardRows(todayLjubljana());
+  const [rows, visits] = await Promise.all([getDashboardRows(todayLjubljana()), getVisits(staff.id, todayLjubljana())]);
 
   return (
     <>
-      <div className="mb-4 sm:max-w-sm">
+      <div className="mb-4 grid gap-3 sm:grid-cols-3">
         <BigButton href="/nurse/odpust" icon={<Plus />}>Nova rehabilitacija</BigButton>
+        <BigButton href="/nurse/danes" variant="secondary">Danes obiščite</BigButton>
+        <BigButton href="/nurse/nadomescanje" variant="secondary">Nadomeščanje</BigButton>
       </div>
+      {visits && visits.todo.length > 0 && (
+        <Link href="/nurse/danes" className="mb-4 block rounded-xl border-2 border-primary p-4 text-lg font-semibold">
+          Prvi obisk še ni opravljen: {visits.todo.length} {visits.todo.length === 1 ? "pacient" : "pacientov"} ›
+        </Link>
+      )}
       {rows ? (
         <NurseDashboard rows={rows} nurseId={staff.id} templates={seznamPredlog.map(({ id, ime }) => ({ id, label: ime }))} />
       ) : (

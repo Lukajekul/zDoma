@@ -27,12 +27,15 @@ export async function DanesView({ ctx, profile, back }: { ctx: Ctx; profile: Pro
   const base = `/patient/${rehab.id}`;
   const supabase = await createClient();
 
-  const [{ meds, logs: loaded }, exercises, pending, { ring, extendedUntil }] = await Promise.all([
+  const [{ meds, logs: loaded }, exercises, pending, { ring, extendedUntil }, nurse] = await Promise.all([
 
     getMedsAndLogs(rehab.id),
     getExercisesForDay(rehab, today),
     countPendingRequests(supabase, profile.id),
     getRing(rehab, ctx.predloga, today),
+    rehab.assigned_nurse_id
+      ? supabase.from("staff_directory").select("first_name, last_name").eq("id", rehab.assigned_nurse_id).maybeSingle().then((r) => r.data)
+      : null,
   ]);
   const logs = await logMissedDoses(rehab, meds, loaded, today);
 
@@ -57,6 +60,12 @@ export async function DanesView({ ctx, profile, back }: { ctx: Ctx; profile: Pro
       <p className="text-xl">
         <strong>{rehabTitle(rehab)}</strong> · Dan {day} od {total}
       </p>
+
+      {nurse && (
+        <p className="text-lg">
+          Vaša patronažna sestra: <strong>{nurse.first_name} {nurse.last_name}</strong>
+        </p>
+      )}
 
       {pending > 0 && (
         <Link href="/patient/dostop" className="rounded-xl border-2 border-status-rumeno bg-status-rumeno-bg p-4 text-xl font-semibold text-status-rumeno">
