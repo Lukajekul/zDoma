@@ -47,6 +47,9 @@ async function Rehab({ params }: Pick<PageProps<"/patient/[rehabId]">, "params">
         <p className="rounded-xl bg-muted p-4 text-xl">
           Tukaj bodo vaši današnji koraki: pregled, tablete in vaje.
         </p>
+        <BigButton href={`/patient/${rehab.id}/zdravila`} variant="secondary">
+          Zdravila danes
+        </BigButton>
       </AppShell>
     );
   }
