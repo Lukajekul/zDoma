@@ -879,6 +879,10 @@ export type Database = {
         Args: { p_davcna: string; p_relation?: string }
         Returns: undefined
       }
+      resolve_nurse_alert: {
+        Args: { p_action: string; p_alert_id: string }
+        Returns: boolean
+      }
       revoke_user_sessions: { Args: { p_user: string }; Returns: undefined }
       today_lj: { Args: never; Returns: string }
       valid_davcna: { Args: { d: string }; Returns: boolean }
