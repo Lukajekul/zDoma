@@ -18,6 +18,8 @@ Each question below names the guideline sentence it rests on. So the honest line
 
 **Rules from `AGENTS.md` §5a still apply.** At most 5 questions a day, one tap per answer, the patient's own values in `{braces}`, and emergency answers go to "Pokličite 112" first. The guidelines say *what* to watch. Most don't set a yellow/red colour, so the "Alert" column means *a nurse looks at it*, and T-04 decides the colour.
 
+**Blood pressure question (shared rule).** Srčno popuščanje, Po infarktu and Možganska kap always ask "Izmerite krvni tlak. Kakšen je?" whether or not the patient has a monitor. Answers: **Pod {ciljniTlak} · {ciljniTlak} ali več · Nimam ga**. "Nimam ga" saves no reading and **counts as not completed**: a red part of that day's slice in the progress ring (§5a), and the nurse sees "Brez merilnika tlaka". The target `{ciljniTlak}` is set per patient at discharge (default 130/80). No guideline gives a red-flag number for a single home reading, so a reading above target is only a trend for the nurse: alert after several days in a row (number of days to confirm, T-42).
+
 ---
 
 ## 1. Srčno popuščanje (`srcno-popuscanje`)
@@ -33,6 +35,7 @@ Each question below names the guideline sentence it rests on. So the honest line
 | 3 | Ali so vam gležnji ali noge danes bolj otekli? | Ne · Da | Da → alert | HFA Table 2: *"Oedema (legs, hands, ankles, thighs, scrotum, waist, abdomen)"* | ✅ |
 | 4 | Ste včeraj vzeli {zdravilo za vodo}? | Da · Ne | Ne → alert "Izpuščen diuretik" | HFA: *"Patients who are non‐adherent have significantly increased rates of hospitalization and decompensation."* and *"Recommend patients not to skip the diuretic therapy…"* | ✅ |
 | 5 | Ali imate bolečino v prsih ali ste omedleli? | Ne · Da | Da → **Pokličite 112** | HFA Table 2 lists *"Chest pain"* and *"Dizziness"* as signs to monitor. That they mean 112 comes from `AGENTS.md` §5a. heartfailurematters has a page "Chest pain: when to get urgent medical help", not read. | ⚠️ |
+| 6 | Izmerite krvni tlak. Kakšen je? | Pod {ciljniTlak} · {ciljniTlak} ali več · Nimam ga | see shared rule above | HFA Table 2 lists *"Blood pressure"* and *"Pulse"* among things to self-monitor | ✅ |
 
 - Weight is checked against the patient's dry weight too (`{suhaTeza}`). The guideline says to tailor the 2 kg rule to the individual, so T-21 should let the bolničar change it.
 
@@ -50,6 +53,7 @@ Each question below names the guideline sentence it rests on. So the honest line
 | 3 | Ali vas bolj duši kot običajno? | Ne · Malo · Zelo, tudi v mirovanju | "Zelo" → alert | EAPC Table 1: self-monitoring of *"symptoms"*. No specific threshold. | ⚠️ |
 | 4 | *(after surgery only)* Kakšna je rana? | V redu · Bolj rdeča, otekla ali boleča · Iz nje se cedi | either problem → alert + wound photo | ECDC 3.1.1 superficial SSI: *"purulent drainage… from the superficial incision"* or *"pain or tenderness, localised swelling, redness, or heat"*, within 30 days | ✅ |
 | 5 | *(after surgery only)* Ali imate vročino 38 °C ali več? | Ne · Da | Da → alert | ECDC 3.1.2 deep SSI lists *"fever (> 38°C)"* | ✅ |
+| 6 | Izmerite krvni tlak. Kakšen je? | Pod {ciljniTlak} · {ciljniTlak} ali več · Nimam ga | see shared rule above | EAPC Table 1: *"self-monitoring (weight, BP, symptoms)"* | ✅ |
 
 - The walking plan is in the rehab module, not the check-in. EAPC: cardiac rehab *"has received the highest class of recommendation and level of evidence"* ✅.
 
@@ -98,7 +102,7 @@ GOLD 2023 defines a flare-up as *an event with dyspnoea and/or cough and sputum 
 | # | Question (SL) | Answers | Alert | Source | |
 |---|---|---|---|---|---|
 | 1 | Ste opazili nov povešen kot ust, šibko roko ali nogo ali težave z govorom? | Ne · Da | Da → **Pokličite 112** | SAP-E: *"Stroke is a medical emergency… everyone across Europe can recognise stroke symptoms and know to call an ambulance."* The FAST signs (face, arm, speech) are the common European campaign, but no ESO page naming them was read. | ✅ / ⚠️ |
-| 2 | Kakšen je bil vaš krvni tlak danes? *(if they have a monitor)* | Pod 130/80 · 130/80 ali več · Nisem meril | above target several days in a row → alert | ESO: *"BP lowering treatment to a target of <130/80 mmHg, except in subgroups at increased risk of harm"*. SAP-E: *"Blood pressure must be monitored regularly after leaving the hospital."* | ✅ |
+| 2 | Izmerite krvni tlak. Kakšen je? | Pod {ciljniTlak} · {ciljniTlak} ali več · Nimam ga | see shared rule above (default target 130/80) | ESO: *"BP lowering treatment to a target of <130/80 mmHg, except in subgroups at increased risk of harm"*. SAP-E: *"Blood pressure must be monitored regularly after leaving the hospital."* | ✅ |
 | 3 | Ste včeraj vzeli {zdravilo proti strjevanju krvi}? | Da · Ne | Ne → alert | SAP-E: treatment choice should consider *"maximising compliance (to encourage the stroke survivor to take their medication as prescribed)"* | ✅ |
 | 4 | Ste od včeraj padli? | Ne · Da | Da → alert | SAP-E: *"Stroke professionals should follow local practice to prevent falls."* | ✅ |
 | 5 | Ste se pri jedi ali pitju zakašljali ali zadušili? | Ne · Da | Da → alert | ESO/ESSD recommends swallowing screening in all stroke patients, but in hospital. Use at home is our own choice. | ⚠️ |
@@ -130,6 +134,8 @@ GOLD 2023 defines a flare-up as *an event with dyspnoea and/or cough and sputum 
 ---
 
 ## Still to confirm before the pitch
+- [ ] **Over the 5-question limit:** with blood pressure added, Srčno popuščanje has 6 questions, and Po infarktu after surgery has 6. Either the bolničar unticks one at discharge (never the 112 question), or `AGENTS.md` §5a allows 6. Needs a team decision.
+- [ ] "Nimam ga" turns part of every day red for a patient without a monitor, and red never turns green. Is that the intended nudge to get one, or should the bolničar untick the question when the patient has no monitor?
 - [ ] HF: heartfailurematters "Chest pain" page as the 112 source.
 - [ ] After MI: the ESC ACS 2023 wording on chest pain and when to call emergency services, and on DAPT adherence.
 - [ ] Hip/knee: ESA VTE guideline citations and clot warning signs; any European source for "pain rising over days".
