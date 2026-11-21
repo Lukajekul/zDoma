@@ -83,6 +83,7 @@ Cilj: **čim manj dela za osebje.**
 - **Odpust v približno 1 minuti:** izbere predlogo, vpiše davčno številko pacienta, prilagodi zdravila in datum konca. Vse drugo pride iz predloge.
 - **Rehabilitacija traja do datuma, ki ga določi bolničar.** Lahko jo podaljša (»Podaljšaj«) ali na novo odpre kmalu po koncu.
 - **Nadzorna plošča prikaže samo težave.** Zeleni bolniki so privzeto skriti. Vsako opozorilo pove, zakaj se je sprožilo.
+- **Primerna za patronažno sestro z veliko pacienti:** tudi na telefonu lahko išče po imenu ali davčni številki in filtrira po »Moji pacienti« (privzeto vklopljeno), statusu, občini, predlogi, izpuščenem pregledu stanja in neprevzetih zdravilih.
 - **Aplikacija opominja pacienta, ne sestre.** Izpuščen pregled stanja → opomnik pacientu, nato svojcu, šele nato osebju.
 - **Hitra dejanja z enim dotikom:** »Poklicano – vse v redu«, »Naročen pregled«, »Obveščen osebni zdravnik«.
 - **Dnevnik sprememb:** vsaka sprememba načrta, podaljšanje ali dejanje se zapiše samodejno.

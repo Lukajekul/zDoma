@@ -69,6 +69,7 @@ Odpuščenec and zadolženec describe a relationship to a patient, not an accoun
 ### Staff (bolničar): as little work as possible
 - **Discharge in about 1 minute:** pick a template, enter the patient's davčna številka, adjust medicines and the end date.
 - **The dashboard shows only problems.** Green patients are hidden, and every alert says why it fired.
+- **Built for the patronažna sestra with many patients:** on her phone she searches and filters by "Moji pacienti", status, občina, template, missed check-in and medicines not picked up.
 - **The app chases the patient, not the nurse:** a missed check-in reminds the patient, then the family, and only then reaches staff.
 - **One-tap actions:** "Poklicano – vse v redu", "Naročen pregled", "Obveščen osebni zdravnik".
 - **Extend the rehabilitacija** with one button.
