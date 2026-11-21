@@ -119,7 +119,7 @@ GOLD 2023 defines a flare-up as *an event with dyspnoea and/or cough and sputum 
 
 | # | Question (SL) | Answers | Alert | Source | |
 |---|---|---|---|---|---|
-| 1 | Koliko je vaša temperatura? | Pod 36,0 · 36,0–37,4 · 37,5–37,9 · 38,0 ali več | **see open question** → "Takoj pokličite oddelek: {telefonOddelka}" | UKONS "Fever on SACT": *"IF TEMPERATURE 37.5˚C OR ABOVE OR BELOW 36.0˚C OR GENERALLY UNWELL - URGENT ASSESSMENT"* ✅. ESMO 2016: >38.0 °C twice / >38.3 °C ⚠️ | ✅ / ⚠️ |
+| 1 | Koliko je vaša temperatura? | Pod 36,0 · 36,0–37,4 · 37,5–37,9 · 38,0 ali več | **38,0 ali več** → "Takoj pokličite oddelek: {telefonOddelka}"; 37,5–37,9 or pod 36,0 → alert | UKONS "Fever on SACT": *"IF TEMPERATURE 37.5˚C OR ABOVE OR BELOW 36.0˚C OR GENERALLY UNWELL - URGENT ASSESSMENT"* ✅. ESMO 2016: >38.0 °C twice / >38.3 °C ⚠️ | ✅ / ⚠️ |
 | 2 | Kolikokrat ste bruhali v zadnjih 24 urah? | Nič · 1–2 · 3–5 · 6 ali več | 3+ → alert | UKONS "Vomiting" grades 1–2 / 3–5 / 6–10 / >10 episodes in 24 h | ✅ |
 | 3 | Kolikokrat ste imeli blato več kot običajno? | Nič · Do 3 · 4–6 · 7 ali več | 4+ → alert | UKONS "Diarrhoea": increase up to 3 / 4–6 / 7–9 / >10 a day | ✅ |
 | 4 | Ali lahko jeste in pijete? | Normalno · Manj kot običajno · Skoraj nič | "Skoraj nič" → alert | UKONS "Nausea", "Mucositis", "Anorexia" | ✅ |
@@ -128,8 +128,8 @@ GOLD 2023 defines a flare-up as *an event with dyspnoea and/or cough and sputum 
 - **UKONS triage logic, worth copying into T-04**: *"All Green = self care advice · 1 Amber = review within 24 hours · 2 or more amber = escalate to red · Red = … face to face assessment as soon as possible."* ✅
 - ESMO reportedly suggests keeping questionnaires to about 10–20 items. We use at most 6 a day. ⚠️
 
-### ⚠️ Open question: fever threshold for cancer
-`AGENTS.md` §5a says **≥ 38 °C** → ward phone. UKONS, the triage tool actually used on oncology phone lines, already escalates at **37,5 °C or below 36,0 °C**. ESMO's definition of neutropenic fever is >38,0 °C twice or >38,3 °C once. Someone with oncology knowledge needs to choose, and then update `AGENTS.md`. Until then, the buttons above can follow either rule.
+### Decided: fever threshold for cancer is 38 °C
+Team decision on 21. 11. 2026: **38,0 °C or more** shows the ward's phone number, as in `AGENTS.md` §5a. It's in line with the ESMO fever definition (>38,0 °C). UKONS escalates earlier (37,5 °C or below 36,0 °C), so those answers still raise a normal alert for the nurse instead of the phone screen.
 
 ---
 
@@ -141,4 +141,4 @@ GOLD 2023 defines a flare-up as *an event with dyspnoea and/or cough and sputum 
 - [ ] Hip/knee: ESA VTE guideline citations and clot warning signs; any European source for "pain rising over days".
 - [ ] COPD: GOLD 2023/2025 report text (definition, severe signs, "can't finish a sentence"), and the ERS/ATS 2017 exacerbation guideline.
 - [ ] Stroke: an ESO page that names FAST and 112; whether swallowing questions make sense at home.
-- [ ] Cancer: ESMO PROM guideline full text (recommended symptoms, grades), ESMO 2016 fever definition from the journal, and the fever threshold decision above.
+- [ ] Cancer: ESMO PROM guideline full text (recommended symptoms, grades), and the ESMO 2016 fever definition from the journal.
