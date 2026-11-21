@@ -65,7 +65,7 @@ Each team member owns one lane, and their agents take that lane's tasks **in the
 
 Cut: T-13 "Moje okrevanje" (own trend moved to the T-05 end screen) and T-15 emotional support screen, both too generic.
 
-- [ ] **T-14** Phone/SMS check-in screens. Deps: T-01
+- [~] **T-14** Phone/SMS check-in screens. Deps: T-01 — *An Jesenko (Claude), feat/T-14-sms-mockup*
 
 ## eRecept (mock)
 
