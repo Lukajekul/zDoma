@@ -99,5 +99,5 @@ Agents: don't claim T-27. Build the triage engine as T-04 unless a human says ot
 - [ ] **T-22** Email reminders for pills, exercises and check-ins to the odpuščenec, e.g. Resend from a scheduled Worker. Email field on profiles. Deps: T-06, T-07
 - [ ] **T-23** SMS reminders and phone-number field on profiles. Deps: T-22
 - [ ] **T-28** Notifications for zadolženci (AGENTS.md §6): "Prejemaj obvestila" switch per patient in "Skrbim za" (off by default, email/SMS choice), same reminders as the patient plus missed-task, medicine-not-picked-up (T-31) and yellow/red status messages, patient sees who gets them. No diagnosis or medicine names in outgoing messages. Deps: T-20, T-22
-- [ ] **T-24** Bolničar template editor for recovery plans (all doctors can edit), with audit log view. Deps: T-21
+- [~] **T-24** Bolničar template editor for recovery plans (all doctors can edit), with audit log view. Deps: T-21 — *Žan Luka Tušar (Claude), feat/T-24-template-editor (agreed with the human: plan defaults only — length, pre-ticked questions, exercises; rules, thresholds and medicines stay locked)*
 - [ ] **T-18** LLM "paste a discharge letter → plain-language version" as an isolated API route. Only after all demo tasks are done.
