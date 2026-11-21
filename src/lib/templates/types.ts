@@ -1,13 +1,10 @@
 // Template format (AGENTS.md §5a). A template is data, not code: screens and
 // the triage engine read whatever a template lists. UI text is Slovenian.
 
-export type PredlogaId =
-  | "srcno-popuscanje"
-  | "srce-po-infarktu"
-  | "kolk-koleno"
-  | "kopb"
-  | "mozganska-kap"
-  | "rak-sistemsko";
+import type { TemplateId } from "@/lib/types";
+
+/** Template ids are defined once in the shared data model (`TEMPLATE_IDS`). */
+export type PredlogaId = TemplateId;
 
 /** Source of a question, rule or value. `potrjeno: false` = ⚠️ in docs/checkin-questions.md, still to confirm (T-42). */
 export interface Vir {
