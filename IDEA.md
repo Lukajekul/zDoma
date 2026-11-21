@@ -100,14 +100,14 @@ Earlier trials failed when patients stopped using the system. So:
 
 ## Accounts and rehabilitacije
 
-1. At the first discharge, the bolničar creates the patient's account. The server generates a **temporary password**, printed on a separate **prijavni listek**, never on the odpustnica.
-2. On first login the patient must set their own password (a 6-digit PIN is allowed). Unused temporary passwords expire after 7 days, and the bolničar can issue a new one.
+1. At the first discharge, the bolničar creates the patient's account and prints a **prijavni listek** with a login QR code, never on the odpustnica.
+2. The patient scans the QR with the phone camera and is logged in: no password, no PIN. The phone stays logged in.
 3. A **rehabilitacija** is one recovery episode. The bolničar opens it from a template and sets an end date, and can extend it. While active, check-ins, reminders and alerts run. After the end date it's read-only.
-4. A returning patient keeps their account and password. The new rehabilitacija just appears.
+4. A returning patient keeps their account and ticket. The new rehabilitacija just appears.
 
-The davčna številka isn't secret, so a password is always required.
+The davčna številka isn't secret, so it never logs anyone in on its own. Staff and family log in with davčna številka + password.
 
-**QR login:** the QR code on the prijavni listek is the patient's permanent login. Scanning it with the phone camera opens zDoma with everything filled in except the PIN, so an 80-year-old types only 6 digits. The same QR can also be shown on the patronažna sestra's or the zadolženec's phone when the paper isn't at hand. The QR never logs in on its own, so a lost paper is harmless, and the bolničar can issue a new QR, which disables the old one.
+**QR login:** the QR code on the prijavni listek is the patient's login: scan it and you're in, so an 80-year-old never types anything. The same QR can be shown on the patronažna sestra's or the zadolženec's phone. The ticket works like a key: if it's lost, "Nova koda QR" disables the old one at once and signs out every device.
 
 ## Safety
 
@@ -137,7 +137,7 @@ Next.js + TypeScript, Tailwind + shadcn/ui, Supabase (Postgres, Realtime, Storag
 
 **Must work in the demo**
 - Daily check-in notification (Web Push)
-- Login with the temporary password and setting your own
+- Patient login by scanning the QR ticket
 - Bolničar opens a rehabilitacija from a template
 - Daily check-in from the template, with the "Pokličite 112" screen
 - Dashboard with traffic lights and explained alerts

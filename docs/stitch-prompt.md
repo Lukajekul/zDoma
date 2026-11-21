@@ -38,18 +38,16 @@ Recurring component, the PROGRESS RING: a thick circle that starts at 12 o'clock
 
 **1. Prijava**
 ```
-Login screen. Large title "zDoma", subtitle "Spremljanje okrevanja doma". Field "Davčna številka" (8 digits, numeric keypad hint) and field "Geslo ali PIN" with a "Pokaži" toggle. Full-width primary button "Prijava". Below, a secondary link "Ste svojec? Ustvarite račun". Small footer text: "zDoma ni služba za nujno pomoč. V nuji pokličite 112."
+Login screen for staff and family (patients use the QR ticket instead). Large title "zDoma", subtitle "Spremljanje okrevanja doma". Field "Davčna številka" (8 digits, numeric keypad hint) and field "Geslo" with a "Pokaži" toggle. Full-width primary button "Prijava". Below, a secondary link "Ste svojec? Ustvarite račun", and a muted note "Ste bolnik? Skenirajte kodo QR s prijavnega listka." Small footer text: "zDoma ni služba za nujno pomoč. V nuji pokličite 112."
 ```
 
 **2. Prijava s kodo QR**
 ```
-Login after scanning the personal QR code. Card at the top: "Prijava za" + "Davčna številka 1234 5679" (already filled, read-only) with small link "To nisem jaz". Big heading "Vpišite svoj PIN". Six large PIN boxes and a big on-screen numeric keypad (digits 0–9, "Briši"). Primary button "Prijava". Also show the error state variant below as a separate frame: red-bordered message with icon and text "Napačen PIN. Še 2 poskusa." and a locked variant: "Prijava je zaklenjena za 15 minut. Pokličite svojo patronažno sestro."
+What the patient sees right after scanning the QR on the prijavni listek: no fields at all. Large check-mark icon, heading "Pozdravljeni, Janez", text "Prijavljeni ste. Telefon si bo to zapomnil.", one big primary button "Naprej". Also show the error variant as a separate frame: icon with label, heading "Ta koda ne deluje več", text "Morda ste dobili nov listek. Pokličite svojo patronažno sestro.", big button with phone icon "Pokliči sestro".
 ```
 
-**3. Novo geslo (first login)**
-```
-First-login screen. Heading "Nastavite svoje geslo". Text: "Prvič ste se prijavili z začasnim geslom. Zdaj si izberite svoje." Fields "Novo geslo" and "Ponovite geslo", hint under them "Lahko je tudi 6-mestna številka (PIN), ki si jo boste zapomnili." Primary button "Shrani geslo".
-```
+**3. (removed)**
+Patients no longer set a password: the QR ticket is their login. Skip this screen.
 
 **4. Registracija svojca**
 ```
@@ -129,7 +127,7 @@ Family access management. A highlighted request card: "Ana Novak želi spremljat
 
 **16. Nastavitve**
 ```
-Simple settings. "Ura opomnika": big time chips "7:00", "8:00" (selected), "9:00", "10:00", "Drugo"; note "Opomnik prejmete vsak dan, dokler traja okrevanje." Row "Nova koda QR za prijavo" with explanation "Stara koda takoj preneha delovati." Row "Spremeni PIN". Big outline button "Odjava".
+Simple settings. "Ura opomnika": big time chips "7:00", "8:00" (selected), "9:00", "10:00", "Drugo"; note "Opomnik prejmete vsak dan, dokler traja okrevanje." Row "Nova koda QR za prijavo" with explanation "Stara koda takoj preneha delovati." Big outline button "Odjava".
 ```
 
 ---
@@ -184,7 +182,7 @@ Patient detail. Header: "Janez Novak, 78 · Srčno popuščanje · Šentjur", ba
 Red-bordered "Razlogi" card: "Teža +2,5 kg v 3 dneh", "Otekli gležnji 2 dni zapored", "Izpuščen Furosemid včeraj".
 Three big one-tap actions: "Poklicano – vse v redu", "Naročen pregled", "Obveščen osebni zdravnik".
 Cards: 7-day weight line chart with dry-weight 72 kg reference line; breathlessness yes/no strip; "Zdravila" taken/missed per day with pharmacy pick-up status; "Vaje" done/skipped; "Sodelovanje 85 %" with a small progress ring; short plain-text summary paragraph.
-Box "Rehabilitacija: aktivna do 21. 12. 2026" with "Podaljšaj" (chips "+14 dni", "+30 dni", "+60 dni"), "Pokaži QR za prijavo", "Novo začasno geslo".
+Box "Rehabilitacija: aktivna do 21. 12. 2026" with "Podaljšaj" (chips "+14 dni", "+30 dni", "+60 dni"), "Pokaži QR za prijavo", "Nova koda QR".
 "Dnevnik sprememb" (who, when, what), e.g. "Maja Kos · 18. 11. 2026 10:12 · Odprla rehabilitacijo".
 Desktop: reasons and actions across the top, a 2–3 column grid of cards, the rehabilitacija box in a right side column, log at the bottom.
 Mobile: order is header → Razlogi → action buttons stacked full width → charts one per card (full width, simplified axes) → rehabilitacija box → log collapsed under "Pokaži dnevnik sprememb". Medicine table becomes a list per medicine.
@@ -204,14 +202,14 @@ Mobile: step indicator as "Korak 3 od 5" with a thin bar, everything in one colu
 
 **23. Prijavni listek (Web + Mobile)**
 ```
-A printable A5 sheet, black on white. Title "zDoma – prijavni listek". "Janez Novak", "Davčna številka: 1234 5679", a large QR code, "Začasno geslo: KM7P-4XQ2" in a big monospace font, "Velja do: 28. 11. 2026". Three numbered steps: "Skenirajte kodo QR s telefonom.", "Vpišite začasno geslo.", "Nastavite svoj PIN." Boxed note: "Hranite ločeno od odpustnice." Patronažna sestra name and phone at the bottom.
-Desktop: the sheet as a print preview in the centre, buttons "Natisni" and "Novo začasno geslo" beside it.
+A printable A5 sheet, black on white. Title "zDoma – prijavni listek". "Janez Novak", a very large QR code. Two numbered steps: "Odprite kamero na telefonu.", "Usmerite jo v kodo QR in tapnite povezavo." Boxed note: "Hranite kot ključ, ločeno od odpustnice. Če ga izgubite, pokličite patronažno sestro." Patronažna sestra name and phone at the bottom.
+Desktop: the sheet as a print preview in the centre, buttons "Natisni" and "Nova koda QR" beside it.
 Mobile: the sheet scaled to the screen width, the QR large enough to scan from the phone, buttons stacked below.
 ```
 
 **24. Prvi obisk (Web + Mobile)**
 ```
-Checklist for the first home visit. Heading "Prvi obisk · Janez Novak". Big checklist rows with tick boxes and short helper text: "Prijava na bolnikovem telefonu", "Nastavljen PIN", "zDoma dodan na začetni zaslon", "Dovoljena obvestila", "Prvi pregled stanja opravljen skupaj". Secondary button "Pokaži QR za prijavo". Primary button "Nameščeno ✓".
+Checklist for the first home visit. Heading "Prvi obisk · Janez Novak". Big checklist rows with tick boxes and short helper text: "Prijava na bolnikovem telefonu (skeniran listek)", "zDoma dodan na začetni zaslon", "Dovoljena obvestila", "Prvi pregled stanja opravljen skupaj". Secondary button "Pokaži QR za prijavo". Primary button "Nameščeno ✓".
 Mobile (main use, at the patient's home): single column, sticky "Nameščeno ✓" at the bottom.
 Desktop: checklist on the left, the patient's login QR shown large on the right.
 ```

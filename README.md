@@ -125,15 +125,15 @@ Računi bolničarjev se ne registrirajo sami. Ustvari jih skrbnik.
 
 ## Prijava in rehabilitacija
 
-1. **Ob prvem odpustu** bolničar ustvari pacientov račun (davčna številka in ime). Sistem ustvari **začasno geslo**, ki se natisne na ločen **prijavni listek**, nikoli na odpustnico.
-2. **Ob prvi prijavi** pacient z začasnim geslom vstopi in si mora takoj nastaviti svoje geslo (dovoljen je 6-mestni PIN). Začasno geslo nato ne deluje več. Neuporabljeno poteče po 7 dneh; bolničar lahko izda novo.
+1. **Ob prvem odpustu** bolničar ustvari pacientov račun (davčna številka in ime) in natisne **prijavni listek** s kodo QR, nikoli na odpustnico.
+2. **Prijava:** pacient (ali patronažna sestra ob prvem obisku) skenira kodo QR s kamero telefona in je prijavljen. Brez gesla, brez PIN-a. Telefon si prijavo zapomni.
 3. **Rehabilitacija** je eno obdobje okrevanja. Odpre jo bolničar po predlogi in določi datum konca. Dokler je **aktivna**, tečejo pregledi stanja, opomniki in opozorila. Ko poteče, je **zaključena**: vse ostane na voljo za branje.
-4. Pacient, ki že ima račun, ne dobi novega gesla. Nova rehabilitacija se mu samo prikaže.
+4. Pacient, ki že ima račun, uporablja isti listek. Nova rehabilitacija se mu samo prikaže.
 5. Po prijavi: če je aktivna ena rehabilitacija, se odpre takoj. Če jih je več, so prikazane kot velike kartice.
 
-Davčna številka ni skrivnost, zato se brez gesla nikoli ni mogoče prijaviti.
+Davčna številka ni skrivnost, zato sama nikoli ne prijavi. Bolničarji in svojci se prijavijo z davčno številko in geslom.
 
-**Prijava s kodo QR:** koda QR na prijavnem listku je pacientova stalna osebna koda za prijavo. Ko jo skenira s kamero telefona, se odpre zDoma z že vpisanimi podatki in pacient vpiše samo svoj PIN. Začasno geslo velja le za prvo prijavo, nato zadoščata koda QR in PIN. Kodo QR lahko dobi na tri načine: natisnjeno na prijavnem listku, na telefonu patronažne sestre ali na telefonu zadolženca (»QR za prijavo«), ki s tem ne dobi dostopa do pacientovega računa. Koda QR sama nikoli ne prijavi, zato izgubljen listek ni nevaren. Bolničar lahko izda novo kodo, stara takoj preneha delovati. Po 5 napačnih PIN-ih se prijava za 15 minut zaklene.
+**Prijavni listek je kot ključ:** kdor ima kodo QR, lahko odpre račun. Isto kodo lahko pokaže tudi telefon patronažne sestre ali zadolženca (»QR za prijavo«). Če se listek izgubi, bolničar ali pacient izda novo kodo (»Nova koda QR«): stara takoj preneha delovati, vse naprave se odjavijo.
 
 ## Varnost
 
@@ -164,7 +164,7 @@ Pravila za razvijalce in agente umetne inteligence: [AGENTS.md](AGENTS.md). Nalo
 
 **Mora delovati na predstavitvi**
 - dnevni opomnik za pregled stanja na telefonu,
-- prijava z začasnim geslom in nastavitev svojega gesla,
+- prijava pacienta s kodo QR s prijavnega listka,
 - bolničar odpre rehabilitacijo po predlogi,
 - dnevni pregled stanja po predlogi, z zaslonom »Pokličite 112«,
 - nadzorna plošča s semaforjem in pojasnjenimi opozorili,

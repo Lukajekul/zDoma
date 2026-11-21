@@ -62,7 +62,7 @@ Merge a feature branch by rebasing on `main`, checking that `npm run lint` and `
 ## 3a. Tests: only the must-haves
 
 Tests cost time and tokens, so keep them minimal.
-- **Write tests only for pure logic where a bug is dangerous:** triage rules and status (`src/lib/triage/`), the davčna številka check digit, temporary-password generation, medicine days-left (`src/lib/erecept/`), and a check that every template in `src/lib/templates/` is valid. A few cases each: one normal, one red flag, one edge case.
+- **Write tests only for pure logic where a bug is dangerous:** triage rules and status (`src/lib/triage/`), the davčna številka check digit, medicine days-left (`src/lib/erecept/`), and a check that every template in `src/lib/templates/` is valid. A few cases each: one normal, one red flag, one edge case.
 - **No other tests:** no UI or component tests, no snapshots, no end-to-end tests, no tests for Supabase calls or simple pages.
 - Use Vitest, added by the first task that needs it (T-04). Run it quietly: `npx vitest run --reporter=dot 2>&1 | tail -15`.
 - Don't add tests beyond these unless the task says so.
@@ -80,7 +80,7 @@ Tests cost time and tokens, so keep them minimal.
 |---|---|
 | App | Next.js (App Router) + TypeScript, single app |
 | UI | Tailwind CSS + shadcn/ui, mobile-first, Slovenian (see §7) |
-| Auth | Supabase Auth, davčna številka + password (see §6) |
+| Auth | Supabase Auth: patients by QR ticket, staff and family by davčna številka + password (see §6) |
 | Notifications | Daily check-in reminder as a Web Push notification in the first build (T-39); email and SMS reminders later |
 | Data | Supabase: Postgres, Realtime (live nurse dashboard), Storage (wound photos) |
 | Templates | One data file per patient group in `src/lib/templates/` (see §5a) |
@@ -154,22 +154,16 @@ The user types are defined in `README.md` (*Tipi uporabnikov*). Use exactly thes
 Odpuščenec and zadolženec aren't account types. They describe a person's relation to a patient, so one person can be both.
 
 ### Accounts
-- **Everyone has one permanent account**, logged in with **davčna številka + password** (a 6-digit PIN is allowed).
-- **Patients don't register.** At the first discharge, the bolničar creates the account (davčna številka + name), and the server generates a **temporary password**. It's printed on the separate **prijavni listek**, never on the odpustnica.
-- **First login forces a new password.** The patient logs in with the temporary one and must set their own before they see anything else. The temporary password then stops working.
-- Temporary passwords: generated on the server with `crypto.randomInt`, 8 characters from an alphabet without look-alikes (no 0/O, 1/I/l), shown as `KM7P-4XQ2`. They expire after 7 days if unused. The bolničar can issue a new one ("Novo začasno geslo") if it's lost or expired.
-- If the patient **already has an account** from an earlier rehabilitacija, no new password is issued. The new rehabilitacija simply appears in their account.
-- **Family members (zadolženci) register themselves** with davčna številka + name + password, because no bolničar creates accounts for them. Their account shows nothing until a patient approves their request.
-- The davčna številka is not secret, so it never logs anyone in on its own. A password is always required.
+- **Everyone has one permanent account.** Users stay logged in on their device, so most people log in once.
+- **Patients log in with a QR ticket, nothing else.** At the first discharge the bolničar creates the account (davčna številka + name) and prints the **prijavni listek**: the patient's name and a large QR code, never on the odpustnica. The patient (or the patronažna sestra at the first visit) scans it with the phone camera and is logged in. No password, no PIN, no first-login steps.
+  - The QR holds a random token (at least 128 bits, `crypto.randomBytes`, base64url) in the URL fragment (`/prijava/qr#<token>`), so it never reaches server logs. The page reads the fragment and signs in with Supabase Auth using `<davcna>@zdoma.local` + the token as the password. Supabase stores only the hash; no extra table is needed.
+  - The same QR can also be shown on a screen: the patronažna sestra's phone (patient detail → "Pokaži QR za prijavo") or the zadolženec's phone ("Skrbim za" → "QR za prijavo").
+  - **A lost ticket opens the account**, so: "Nova koda QR" (bolničar, or the patient in settings) sets a new token, signs out every device and reprints the listek; the old QR stops working at once. Written to audit_log. The listek says "Hranite kot ključ. Če ga izgubite, pokličite patronažno sestro."
+  - If the patient **already has an account** from an earlier rehabilitacija, the new rehabilitacija simply appears in it. The bolničar reprints the same listek only if asked.
+- **Bolničarji and zadolženci log in with davčna številka + password.** Bolničar accounts are created by seed data or an admin and marked as staff, never self-registered. **Family members (zadolženci) register themselves** with davčna številka + name + password; their account shows nothing until a patient approves their request.
+- The davčna številka is not secret, so it never logs anyone in on its own.
 - Validate the format before sending: 8 digits. The last digit is a check digit: multiply the first 7 digits by 8, 7, 6, 5, 4, 3, 2 and add the results. Then take `11 − (sum mod 11)`: a result of 10 means the check digit is 0, and a result of 11 means the number is invalid.
 - Supabase Auth only knows email and phone, so map the davčna številka to an internal email, `<davcna>@zdoma.local`. Never show that email to users.
-- Users stay logged in on their device. Most people log in once.
-- **QR login for patients.** The QR code on the prijavni listek is the patient's permanent personal login QR. Scanning it with the phone camera opens zDoma with the davčna številka already filled in, so the patient only types their PIN. The temporary password works only for the first login; after that, QR + PIN. **The QR never logs in on its own: the PIN is always required**, because a lost paper must not open someone's health data.
-  - Options to get the QR: the printed prijavni listek (default), or shown on a screen: the patronažna sestra's phone (patient detail → "Pokaži QR za prijavo"), or the zadolženec's phone ("Skrbim za" → "QR za prijavo"). The same QR in all three places; showing it gives the nurse or family no access to the account.
-  - The QR holds a random token (at least 128 bits, `crypto.randomBytes`), stored only as a hash, in the URL fragment (`/prijava/qr#<token>`) so it doesn't end up in server logs.
-  - "Nova koda QR" (bolničar, or the patient in settings) issues a new token and a reprinted prijavni listek; the old QR stops working at once. Written to audit_log.
-  - 5 wrong PINs → login locked for 15 minutes, and the screen says "Pokličite svojo patronažno sestro" if it keeps happening.
-- **Bolničar accounts are not self-registered.** They're created by seed data or an admin and marked as staff.
 - Seed and demo users get made-up davčne številke that pass the check-digit test. Never use a real person's number.
 
 ### Rehabilitacije
@@ -209,7 +203,7 @@ Many users are elderly. Every screen must be usable by someone who is 80, has po
 ```
 src/
   app/
-    prijava/        login, first-login password change, family registration
+    prijava/        QR login, staff/family login, family registration
     patient/        odpuščenec: my rehabilitacije, check-in, pills, rehab, family access
     carer/          zadolženec: "Skrbim za" tab, marking tasks with the patient
     nurse/          bolničar: dashboard, patient detail, care plan
