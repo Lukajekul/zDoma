@@ -105,7 +105,7 @@ export interface PraviloZaporedno extends PraviloOsnova {
   dni: number;
 }
 
-/** Answer moved further down the option list on each of `dni` days in a row (pain rising). */
+/** On `dni` days in a row (today included), each answer is further down the option list than the day before (pain rising). */
 export interface PraviloNarasca extends PraviloOsnova {
   tip: "narascaVDneh";
   dni: number;
