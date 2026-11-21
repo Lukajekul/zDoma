@@ -51,8 +51,10 @@ Each group is one **template**: a hand-written data file with check-in questions
 Odpuščenec and zadolženec describe a relationship to a patient, not an account type. One person can be both.
 
 ### Patient app
-- **Daily check-in (about 60 s)** with the template's questions, one per screen.
+- **Daily check-in (about 30 s):** at most 5 questions, one per screen, **one tap per answer**. The questions are chosen for this patient by the bolničar and use their own values ("Ali tehtate več kot 72 kg?"), not a generic form.
 - **Pill reminders** with a "Vzeto" button. Missed doses feed into triage.
+- **Pharmacy pick-up (eRecept, mocked):** each medicine shows whether it was collected. Not collected after discharge → reminder to the patient, then the family, then an alert for staff ("Furosemid ni prevzet 3 dni po odpustu"). In production from eRecept via CEZIH.
+- **Before medicines run out:** days left = pack size from the pick-up ÷ daily dose. "Zdravila vam bodo zmanjkala čez 5 dni. Pokličite osebnega zdravnika za nov recept."
 - **Rehab plan:** exercises with a picture or video, then "Opravljeno?" and "Bolečina 0–10?".
 - **My recovery:** discharge information in plain language, own trends, and the same green/yellow/red status staff see.
 - **Family access:** approve or reject requests, remove access any time.
@@ -61,7 +63,7 @@ Odpuščenec and zadolženec describe a relationship to a patient, not an accoun
 ### Family (zadolženec)
 - Registers with their own davčna številka and password, never using the patient's account.
 - Requests access with the patient's davčna številka. The app always answers "Prošnja poslana", so nobody can find out who uses zDoma.
-- Gets a read-only **"Skrbim za"** tab: pills taken or missed, exercises done or skipped, check-ins, current status.
+- Gets a read-only **"Skrbim za"** tab: medicines not picked up at the pharmacy (shown as a warning), pills taken or missed, exercises done or skipped, check-ins, current status.
 - Later: opt-in email/SMS notifications for that patient, with no diagnosis or medicine names in the messages.
 
 ### Staff (bolničar): as little work as possible
@@ -144,6 +146,7 @@ Next.js + TypeScript, Tailwind + shadcn/ui, Supabase (Postgres, Realtime, Storag
 - [ ] Find a Slovenian heart-failure readmission or cost figure (NIJZ, ZZZS)
 - [ ] Check the red-flag thresholds with someone who has medical knowledge (e.g. 2 kg in 2 or 3 days)
 - [ ] Verify every number in the original papers before it goes on a slide
+- [ ] Confirm after how many days an uncollected prescription should alert (default 2) with Ixtlan / someone with medical knowledge
 - [ ] Choose exercises and videos for all six groups from reputable sources
 - [x] Pick the tech stack
 - [x] Decide how family members connect to the patient

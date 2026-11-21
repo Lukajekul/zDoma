@@ -50,7 +50,7 @@ Merge a feature branch by rebasing on `main`, checking that `npm run lint` and `
 ## 3a. Tests: only the must-haves
 
 Tests cost time and tokens, so keep them minimal.
-- **Write tests only for pure logic where a bug is dangerous:** triage rules and status (`src/lib/triage/`), the davčna številka check digit, temporary-password generation, and a check that every template in `src/lib/templates/` is valid. A few cases each: one normal, one red flag, one edge case.
+- **Write tests only for pure logic where a bug is dangerous:** triage rules and status (`src/lib/triage/`), the davčna številka check digit, temporary-password generation, medicine days-left (`src/lib/erecept/`), and a check that every template in `src/lib/templates/` is valid. A few cases each: one normal, one red flag, one edge case.
 - **No other tests:** no UI or component tests, no snapshots, no end-to-end tests, no tests for Supabase calls or simple pages.
 - Use Vitest, added by the first task that needs it (T-04). Run it quietly: `npx vitest run --reporter=dot 2>&1 | tail -15`.
 - Don't add tests beyond these unless the task says so.
@@ -99,6 +99,16 @@ Background and sources: `docs/research.md`. Six templates, heart failure is the 
 - **Emergency answers go to 112 first.** Chest pain, sudden severe breathlessness, fainting or stroke signs show a full-screen "Pokličite 112" before anything is saved or sent. For cancer, fever ≥38 °C shows the ward's phone number. zDoma is never presented as an emergency service.
 - **Decision support, not diagnosis.** The app never tells a patient what they have or to change a dose. It tells them to call, and it tells staff who to look at.
 - Thresholds come from `docs/research.md`. Don't invent medical rules. If one is missing, add a task to check it.
+
+### Check-in: simple and specific to the patient
+- **One tap per answer.** Big buttons only: no typing, no sliders, no free text. Weight is a row of buttons around the patient's last weight, with "Drugo" for a number field.
+- **Short.** At most 5 questions a day, one per screen.
+- **Specific to this patient, not general.** The template lists the possible questions. The bolničar ticks which ones this patient gets at discharge, and questions use the patient's own values (dry weight, their medicine names), e.g. "Ali tehtate več kot 72 kg?" instead of "Kakšna je vaša teža?".
+
+### Medicines picked up (eRecept)
+- Every medicine shows whether it was picked up at the pharmacy. For the hackathon the source is a mock in `src/lib/erecept/`; in production it comes from eRecept via CEZIH.
+- Not picked up → reminder to the patient, then the zadolženec is alerted, then the bolničar gets an alert with a reason ("Furosemid ni prevzet 3 dni po odpustu").
+- Days left = pack size from the pick-up ÷ daily dose. A few days before they run out, the patient sees "Zdravila vam bodo zmanjkala čez 5 dni. Pokličite osebnega zdravnika za nov recept." It never suggests changing a dose.
 
 ### Keep the bolničar's work minimal
 - Opening a rehabilitacija takes about a minute: template + davčna številka + changes. Everything else is pre-filled from the template.

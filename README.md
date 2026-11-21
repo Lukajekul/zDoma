@@ -62,11 +62,18 @@ Ima dostop do vseh svojih podatkov:
 
 Ob vsakem zdravilu in vaji označi, da je opravljeno. Sam odobri ali zavrne prošnje svojcev za dostop in jim dostop kadar koli odvzame.
 
+### Pregled stanja in zdravila
+
+- **Pregled stanja je kratek in ves z enim dotikom:** največ 5 vprašanj, eno na zaslon, odgovori so veliki gumbi (brez tipkanja). Teža je vrsta gumbov okoli zadnje teže.
+- **Vprašanja so prilagojena pacientu:** bolničar ob odpustu izbere, katera vprašanja iz predloge dobi, in vpiše njegove vrednosti. Pacient ne vidi splošnega obrazca, ampak npr. »Ali tehtate več kot 72 kg?«.
+- **Prevzem zdravil (eRecept):** pri vsakem zdravilu je vidno, ali ga je pacient prevzel v lekarni. Če ga ne prevzame, aplikacija najprej opomni pacienta, nato obvesti zadolženca in šele nato bolničarja (»Furosemid ni prevzet 3 dni po odpustu«). Na hackathonu podatke simuliramo, v praksi bi prišli iz eRecepta prek CEZIH.
+- **Opomnik, preden zdravila zmanjka:** iz velikosti prevzetega pakiranja in dnevnega odmerka aplikacija izračuna, koliko dni še zadošča, in pacientu pravočasno napiše: »Zdravila vam bodo zmanjkala čez 5 dni. Pokličite osebnega zdravnika za nov recept.« Odmerkov nikoli ne spreminja.
+
 ### Zadolženec
 
 - **Prijava:** se registrira sam, s svojo davčno številko in geslom, v svoj račun (nikoli v pacientovega).
 - **Dostop:** pod »Zaprosi za dostop« vpiše davčno številko pacienta. Aplikacija vedno odgovori »Prošnja poslana«, da nihče ne more ugotoviti, kdo uporablja zDoma. Dostop začne veljati, ko ga pacient odobri.
-- **Zavihek »Skrbim za«:** samo za branje. Vidi, katera zdravila so bila vzeta ali izpuščena, katere vaje opravljene ali izpuščene, ali je bil opravljen pregled stanja in kakšen je trenutni status.
+- **Zavihek »Skrbim za«:** samo za branje. Na vrhu vidi opozorilo, če pacient zdravil še ni prevzel v lekarni. Vidi, katera zdravila so bila vzeta ali izpuščena, katere vaje opravljene ali izpuščene, ali je bil opravljen pregled stanja in kakšen je trenutni status.
 - **Obvestila (kasneje):** za vsakega pacienta lahko vklopi »Prejemaj obvestila« (privzeto izklopljeno) in izbere e-pošto, SMS ali oboje. Prejema iste opomnike kot pacient ter sporočilo, ko pacient kaj izpusti ali njegov status postane rumen ali rdeč. Sporočila ne vsebujejo diagnoze ali imen zdravil.
 
 ### Bolničar
@@ -168,6 +175,7 @@ Pravila za razvijalce in agente: [AGENTS.md](AGENTS.md). Naloge: [TASKS.md](TASK
 - [ ] Najti slovenski podatek o ponovnih sprejemih ali stroških pri srčnem popuščanju (NIJZ, ZZZS)
 - [ ] Preveriti mejne vrednosti opozoril z nekom z medicinskim znanjem (npr. 2 kg v 2 ali 3 dneh)
 - [ ] Preveriti vse številke v izvirnih člankih, preden gredo na prosojnice
+- [ ] Potrditi, po koliko dneh neprevzeto zdravilo sproži opozorilo (privzeto 2), z Ixtlanom ali nekom z medicinskim znanjem
 - [ ] Izbrati vaje in videe za vseh šest skupin iz zanesljivih virov
 - [x] Izbrati tehnološki sklad
 - [x] Določiti, kako se zadolženec poveže z odpuščencem (prošnja z davčno številko, pacient potrdi)
