@@ -4,7 +4,7 @@ Stitch gives the best results one screen (or a small group of screens) per promp
 
 1. Create one Stitch project. Paste the **Design brief** as the first prompt, together with screen 1.
 2. Then paste each screen prompt below on its own. Start every later prompt with "Same zDoma design system as before." if Stitch drifts.
-3. Patient and family screens: **Mobile** mode. Staff screens marked *(Web)*: **Web** mode; the ones marked *(Mobile)* are the patronažna sestra on her phone.
+3. Patient and family screens: **Mobile** mode. Staff screens: run each one in **both Web and Mobile** mode (the bolničar works at a PC, the patronažna sestra on her phone).
 4. Export the screens the team agrees on and attach them to the UI tasks in `TASKS.md`. Stitch output is a visual reference only; the real app is built in this repo.
 
 ---
@@ -24,7 +24,7 @@ Look and feel:
 - Every icon has a visible text label.
 - Status is never colour alone, always colour + word in a pill badge: green "Zeleno – vse v redu", yellow "Rumeno – spremljamo", red "Rdeče – potrebna pozornost".
 - Confirmations are big and obvious: "Shranjeno ✓".
-- Mobile first at 390 px wide. On desktop, patient screens sit in a centred column (max ~480 px); staff screens use the full width.
+- Mobile first at 390 px wide. On desktop, patient screens sit in a centred column (max ~480 px). Staff screens are designed twice, for desktop (1440 px, full width) and for mobile (390 px), with the same content.
 - Rounded corners 12–16 px, subtle 1 px borders instead of heavy shadows. Font: a highly legible sans-serif such as Atkinson Hyperlegible or Inter.
 
 Recurring people (made-up): patient Janez Novak (78, srčno popuščanje / heart failure, target weight 72 kg), his daughter Ana Novak (family member), community nurse "Sestra Mojca Kovač" (patronažna sestra, area Šentjur), hospital nurse "Maja Kos" (bolničar).
@@ -153,65 +153,81 @@ Heading "Zaprosi za dostop". Field "Davčna številka bolnika", primary button "
 
 ---
 
-## Staff: bolničar and patronažna sestra
+## Staff: bolničar and patronažna sestra (Web + Mobile)
 
-**19. Nadzorna plošča (Web)**
-```
-Desktop dashboard for nurses. Left: logo "zDoma" and a labelled vertical nav: "Bolniki", "Danes obiščite", "Nova rehabilitacija", "Nadomeščanje". Header: "3 bolniki potrebujejo pozornost", search field "Išči po imenu ali davčni številki".
-A row of big filter chips with counts: "Moji pacienti (24)" (active), "Rdeče (3)", "Rumeno (5)", "Zeleno – skrito", "Občina", "Skupina", "Brez pregleda danes (2)", "Zdravila niso prevzeta (1)", "Nedodeljeni (2)", and a text button "Počisti filtre".
-A clean table: Ime, Kraj, Skupina, Stanje (badge with word), Razlog, Odprto. Example rows: "Janez Novak · Šentjur · Srčno popuščanje · Rdeče · Teža +2,5 kg v 3 dneh, otekli gležnji · 2 h"; "Marija Zupan · Slovenske Konjice · KOPB · Rumeno · Ni opravila pregleda 2 dni"; "Franc Horvat · Šentjur · Nov kolk ali koleno · Rumeno · Furosemid ni prevzet 3 dni po odpustu". One "Nedodeljeni" row with a "Prevzemi" button. Toggle "Pokaži tudi zelene (16)". Primary button top right "Odpri novo rehabilitacijo".
-```
+Every staff screen is needed on **both** a PC and a phone: the hospital bolničar mostly works at a desktop, the patronažna sestra mostly on her phone. Run each prompt below **twice in the same project: once in Web mode, once in Mobile mode.** Each prompt says how the layout changes between the two.
 
-**20. Moji pacienti (Mobile)**
+Shared staff layout (add to the first staff prompt):
 ```
-The same patient list on the community nurse's phone at 390 px. Search field on top, then horizontally wrapping big filter chips (same labels and counts as the desktop version), then patient cards instead of a table: name, kraj, status badge with word, one-line reason, "Odprto 2 h". A row "Ni nameščeno" tag for a patient whose first home visit is still to do.
+Staff app layout, same zDoma design system. Desktop (1440 px): left sidebar with logo "zDoma" and labelled nav items "Bolniki", "Danes obiščite", "Nova rehabilitacija", "Nadomeščanje", and the signed-in user "Maja Kos · bolničar" at the bottom; content uses the full width with multi-column grids. Mobile (390 px): no sidebar and no hamburger menu; a bottom tab bar with the same four items as labelled icons; content in a single column; tables become stacked cards; side panels move below the main content; primary action buttons are full width and sticky at the bottom. Same text, same data, same components on both.
 ```
 
-**21. Danes obiščite (Mobile)**
+**19. Bolniki – seznam (Web + Mobile)**
 ```
-Community nurse's day plan. Heading "Danes obiščite · 6 bolnikov". Grouped by občina headers ("Šentjur", "Dobrna"), inside each ordered by status. Cards show name, address, status badge with word, reason, and two buttons "Pokliči" and "Prvi obisk" (the latter only on new patients).
-```
-
-**22. Bolnik – podrobnosti (Web)**
-```
-Patient detail page. Header: "Janez Novak, 78 · Srčno popuščanje · Šentjur", badge "Rdeče – potrebna pozornost", "Patronažna sestra: Mojca Kovač".
-Red-bordered "Razlogi" card listing: "Teža +2,5 kg v 3 dneh", "Otekli gležnji 2 dni zapored", "Izpuščen Furosemid včeraj".
-Grid of cards: 7-day weight line chart with dry-weight 72 kg reference line; breathlessness yes/no strip; "Zdravila" table with taken/missed per day and pharmacy pick-up status; "Vaje" done/skipped; "Sodelovanje 85 %" with a small progress ring; short plain-text summary paragraph.
-Action bar with three big one-tap buttons: "Poklicano – vse v redu", "Naročen pregled", "Obveščen osebni zdravnik".
-Side box "Rehabilitacija: aktivna do 21. 12. 2026" with "Podaljšaj" (chips "+14 dni", "+30 dni", "+60 dni"), "Pokaži QR za prijavo", "Novo začasno geslo".
-Bottom: "Dnevnik sprememb" list (who, when, what), e.g. "Maja Kos · 18. 11. 2026 10:12 · Odprla rehabilitacijo".
+Patient list for nurses. Header "3 bolniki potrebujejo pozornost", search field "Išči po imenu ali davčni številki", primary button "Odpri novo rehabilitacijo".
+Big filter chips with counts: "Moji pacienti (24)" (active), "Rdeče (3)", "Rumeno (5)", "Zeleno – skrito", "Občina", "Skupina", "Brez pregleda danes (2)", "Zdravila niso prevzeta (1)", "Nedodeljeni (2)", and a text button "Počisti filtre". Toggle "Pokaži tudi zelene (16)".
+Patients: "Janez Novak · Šentjur · Srčno popuščanje · Rdeče – potrebna pozornost · Teža +2,5 kg v 3 dneh, otekli gležnji · odprto 2 h"; "Marija Zupan · Slovenske Konjice · KOPB · Rumeno – spremljamo · Ni opravila pregleda 2 dni"; "Franc Horvat · Šentjur · Nov kolk ali koleno · Rumeno – spremljamo · Furosemid ni prevzet 3 dni po odpustu"; one "Nedodeljeni" patient with a "Prevzemi" button; one patient tagged "Ni nameščeno" (first home visit still to do).
+Desktop: chips in one wrapping row, a clean table with columns Ime, Kraj, Skupina, Stanje, Razlog, Odprto.
+Mobile: search on top, chips wrapping over several lines, each patient as a full-width card (name, kraj, status badge with word, one-line reason, "Odprto 2 h"); "Odpri novo rehabilitacijo" as a sticky bottom button.
 ```
 
-**23. Nova rehabilitacija – wizard (Web)**
+**20. Danes obiščite (Web + Mobile)**
 ```
-Discharge wizard with a step indicator "1 Skupina · 2 Bolnik · 3 Zdravila · 4 Vprašanja in sestra · 5 Potrdi". Generate one frame per step:
+Community nurse's day plan. Heading "Danes obiščite · 6 bolnikov". Grouped under občina headers ("Šentjur", "Dobrna"), inside each ordered by status. Each patient: name, address, status badge with word, reason, buttons "Pokliči" and "Prvi obisk" (the latter only on new patients).
+Desktop: občine as side-by-side columns of cards.
+Mobile: one column, občina headers sticky while scrolling, big full-width buttons.
+```
+
+**21. Bolnik – podrobnosti (Web + Mobile)**
+```
+Patient detail. Header: "Janez Novak, 78 · Srčno popuščanje · Šentjur", badge "Rdeče – potrebna pozornost", "Patronažna sestra: Mojca Kovač".
+Red-bordered "Razlogi" card: "Teža +2,5 kg v 3 dneh", "Otekli gležnji 2 dni zapored", "Izpuščen Furosemid včeraj".
+Three big one-tap actions: "Poklicano – vse v redu", "Naročen pregled", "Obveščen osebni zdravnik".
+Cards: 7-day weight line chart with dry-weight 72 kg reference line; breathlessness yes/no strip; "Zdravila" taken/missed per day with pharmacy pick-up status; "Vaje" done/skipped; "Sodelovanje 85 %" with a small progress ring; short plain-text summary paragraph.
+Box "Rehabilitacija: aktivna do 21. 12. 2026" with "Podaljšaj" (chips "+14 dni", "+30 dni", "+60 dni"), "Pokaži QR za prijavo", "Novo začasno geslo".
+"Dnevnik sprememb" (who, when, what), e.g. "Maja Kos · 18. 11. 2026 10:12 · Odprla rehabilitacijo".
+Desktop: reasons and actions across the top, a 2–3 column grid of cards, the rehabilitacija box in a right side column, log at the bottom.
+Mobile: order is header → Razlogi → action buttons stacked full width → charts one per card (full width, simplified axes) → rehabilitacija box → log collapsed under "Pokaži dnevnik sprememb". Medicine table becomes a list per medicine.
+```
+
+**22. Nova rehabilitacija – čarovnik (Web + Mobile)**
+```
+Discharge wizard with a step indicator "1 Skupina · 2 Bolnik · 3 Zdravila · 4 Vprašanja in sestra · 5 Potrdi". One frame per step:
 Step 1: six big template cards with labelled icons: "Srčno popuščanje", "Po infarktu ali operaciji srca", "Nov kolk ali koleno", "KOPB", "Možganska kap", "Rak na sistemskem zdravljenju".
 Step 2: "Davčna številka bolnika", "Ime in priimek" (marked "samo za novega bolnika"), "Suha teža (kg)" = 72.
-Step 3: medicines as cards, each with a tick box, name, plain-language purpose and big dose chips: "Furosemid" [20 mg][40 mg][80 mg] + [zjutraj][zvečer]; "Bisoprolol" [1,25 mg][2,5 mg][5 mg]; "Ramipril"; "Spironolakton"; "Dapagliflozin". A tag "Že jemlje (eRecept)" on pre-filled ones, a small "Uredi" and "Odstrani" link per card, and "+ Dodaj zdravilo" with a search field.
+Step 3: medicines as cards, each with a tick box, name, plain-language purpose and big dose chips: "Furosemid" [20 mg][40 mg][80 mg] + [zjutraj][zvečer]; "Bisoprolol" [1,25 mg][2,5 mg][5 mg]; "Ramipril"; "Spironolakton"; "Dapagliflozin". Tag "Že jemlje (eRecept)" on pre-filled ones, small "Uredi" and "Odstrani" links per card, "+ Dodaj zdravilo" with a search field.
 Step 4: ticked check-in questions using the patient's values ("Ali tehtate več kot 72 kg?", "Ali imate otekle gležnje?"...), suggested nurse "Patronažna sestra: Mojca Kovač (Šentjur)" with "Potrdi" / "Zamenjaj", end date pre-filled "Konec: 21. 12. 2026 (30 dni)".
 Step 5: summary and primary button "Odpri rehabilitacijo".
+Desktop: template cards in a 3×2 grid, medicine cards in 2 columns, a summary panel on the right that fills in as steps are completed, "Nazaj" / "Naprej" at the bottom right.
+Mobile: step indicator as "Korak 3 od 5" with a thin bar, everything in one column, template cards stacked, dose chips wrapping, sticky full-width "Naprej" at the bottom and "‹ Nazaj" at top left.
 ```
 
-**24. Prijavni listek (print)**
+**23. Prijavni listek (Web + Mobile)**
 ```
-A printable A5 sheet, black on white, no colour needed. Title "zDoma – prijavni listek". "Janez Novak", "Davčna številka: 1234 5679", a large QR code, "Začasno geslo: KM7P-4XQ2" in a big monospace font, "Velja do: 28. 11. 2026". Three numbered steps: "Skenirajte kodo QR s telefonom.", "Vpišite začasno geslo.", "Nastavite svoj PIN." Boxed note: "Hranite ločeno od odpustnice." Patronažna sestra name and phone at the bottom. Next to the sheet (screen only): buttons "Natisni" and "Novo začasno geslo".
-```
-
-**25. Prvi obisk (Mobile)**
-```
-Community nurse's checklist for the first home visit. Heading "Prvi obisk · Janez Novak". Big checklist rows with tick boxes and short helper text: "Prijava na bolnikovem telefonu", "Nastavljen PIN", "zDoma dodan na začetni zaslon", "Dovoljena obvestila", "Prvi pregled stanja opravljen skupaj". Secondary button "Pokaži QR za prijavo". Primary button at the bottom "Nameščeno ✓".
+A printable A5 sheet, black on white. Title "zDoma – prijavni listek". "Janez Novak", "Davčna številka: 1234 5679", a large QR code, "Začasno geslo: KM7P-4XQ2" in a big monospace font, "Velja do: 28. 11. 2026". Three numbered steps: "Skenirajte kodo QR s telefonom.", "Vpišite začasno geslo.", "Nastavite svoj PIN." Boxed note: "Hranite ločeno od odpustnice." Patronažna sestra name and phone at the bottom.
+Desktop: the sheet as a print preview in the centre, buttons "Natisni" and "Novo začasno geslo" beside it.
+Mobile: the sheet scaled to the screen width, the QR large enough to scan from the phone, buttons stacked below.
 ```
 
-**26. Nadomeščanje (Web)**
+**24. Prvi obisk (Web + Mobile)**
 ```
-Hand over a nurse's patients while she is away. Heading "Nadomeščanje". "Sestra: Mojca Kovač (24 bolnikov)", "Nadomešča: [izberi sestro]" dropdown with "Ana Kralj", "Do: 5. 12. 2026" date field. Note "Bolniki se po tem datumu samodejno vrnejo." Primary button "Potrdi nadomeščanje". Below, list of current handovers with "Prekliči".
+Checklist for the first home visit. Heading "Prvi obisk · Janez Novak". Big checklist rows with tick boxes and short helper text: "Prijava na bolnikovem telefonu", "Nastavljen PIN", "zDoma dodan na začetni zaslon", "Dovoljena obvestila", "Prvi pregled stanja opravljen skupaj". Secondary button "Pokaži QR za prijavo". Primary button "Nameščeno ✓".
+Mobile (main use, at the patient's home): single column, sticky "Nameščeno ✓" at the bottom.
+Desktop: checklist on the left, the patient's login QR shown large on the right.
+```
+
+**25. Nadomeščanje (Web + Mobile)**
+```
+Hand over a nurse's patients while she is away. Heading "Nadomeščanje". "Sestra: Mojca Kovač (24 bolnikov)", "Nadomešča" picker with "Ana Kralj", "Do: 5. 12. 2026" date field. Note "Bolniki se po tem datumu samodejno vrnejo." Primary button "Potrdi nadomeščanje". List of current handovers with "Prekliči".
+Desktop: form on the left, current handovers as a table on the right.
+Mobile: form on top, handovers as cards below, full-width buttons.
 ```
 
 ---
 
 ## Optional
 
-**27. Pregled po SMS (Mobile)**
+**26. Pregled po SMS (Mobile)**
 ```
 Mock of an SMS conversation on a basic phone screen for patients without a smartphone. Incoming: "zDoma: Dobro jutro, Janez. Koliko tehtate danes? Odgovorite s številko, npr. 72,5". Reply "72,4". Incoming: "Ali imate otekle gležnje? Odgovorite DA ali NE." Reply "NE". Incoming: "Hvala. Shranjeno. Jutri ob 8:00 spet."
 ```
