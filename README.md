@@ -97,6 +97,7 @@ Cilj: **čim manj dela za osebje.**
 - **Nadzorna plošča prikaže samo težave.** Zeleni bolniki so privzeto skriti. Vsako opozorilo pove, zakaj se je sprožilo.
 - **Patronažna sestra se dodeli po naslovu:** vsaka pokriva svoj teren (občina, naselja). Ob odpustu aplikacija predlaga pravo sestro, bolničar potrdi z enim dotikom. Brez ujemanja gre pacient med »Nedodeljene«, kjer ga lahko katera koli sestra prevzame (»Prevzemi«). Med dopustom »Nadomeščanje« preda paciente sodelavki do določenega datuma.
 - **Primerna za patronažno sestro z veliko pacienti:** tudi na telefonu lahko išče po imenu ali davčni številki in filtrira po »Moji pacienti« (privzeto vklopljeno), statusu, občini, predlogi, izpuščenem pregledu stanja in neprevzetih zdravilih.
+- **Vsak dan opomnik, ne glede na vse.** Dokler je rehabilitacija aktivna, pacient vsak dan ob svoji uri (privzeto ob 8:00) dobi obvestilo na telefon: »Dobro jutro, Janez. Čas je za današnji pregled. Traja 30 sekund.« Tudi ko je več dni vse v redu. Uro lahko spremeni, izklopiti ga ne more. Če je pregled že opravil, opomnika tisti dan ni.
 - **Aplikacija opominja pacienta, ne sestre.** Izpuščen pregled stanja → opomnik pacientu, nato svojcu, šele nato osebju.
 - **Hitra dejanja z enim dotikom:** »Poklicano – vse v redu«, »Naročen pregled«, »Obveščen osebni zdravnik«.
 - **Dnevnik sprememb:** vsaka sprememba načrta, podaljšanje ali dejanje se zapiše samodejno.
@@ -148,13 +149,14 @@ Uporabljajo ga tudi starejši, zato:
 - **Tehnologije:** Next.js in TypeScript, Tailwind CSS in shadcn/ui za videz, Supabase (podatkovna baza Postgres, sprotne posodobitve, shramba fotografij in prijava), gostovanje na Cloudflare Workers. Brez velikih jezikovnih modelov.
 - **Ocena tveganja:** LACE indeks ob odpustu in pravila iz predloge. Tedenski povzetek je sestavljen po predlogi iz podatkov (brez umetne inteligence).
 - **Izmišljeni pacienti** (na primer iz orodja Synthea, v zapisu FHIR, ki ga uporabljajo bolnišnice).
-- **Obvestila:** e-pošta in SMS, kasneje.
+- **Obvestila:** dnevni opomnik kot obvestilo na telefonu (spletna potisna obvestila) že v prvi različici; e-pošta in SMS kasneje.
 
 Pravila za razvijalce in agente umetne inteligence: [AGENTS.md](AGENTS.md). Naloge: [TASKS.md](TASKS.md). Raziskave: [docs/research.md](docs/research.md).
 
 ## Obseg za 24 ur
 
 **Mora delovati na predstavitvi**
+- dnevni opomnik za pregled stanja na telefonu,
 - prijava z začasnim geslom in nastavitev svojega gesla,
 - bolničar odpre rehabilitacijo po predlogi,
 - dnevni pregled stanja po predlogi, z zaslonom »Pokličite 112«,

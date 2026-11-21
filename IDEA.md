@@ -83,6 +83,7 @@ Odpuščenec and zadolženec describe a relationship to a patient, not an accoun
 - **The dashboard shows only problems.** Green patients are hidden, and every alert says why it fired.
 - **Patronažna sestra assigned by address:** each covers a teren (občina, villages). At discharge the app suggests the right one, the bolničar confirms with one tap. No match → "Nedodeljeni" on the dashboard, nobody gets lost. "Nadomeščanje" covers leave.
 - **Built for the patronažna sestra with many patients:** on her phone she searches and filters by "Moji pacienti", status, občina, template, missed check-in and medicines not picked up.
+- **A daily reminder, every day:** "Dobro jutro, Janez. Čas je za današnji pregled." at the patient's time (default 8:00), even when all has been fine. The patient can move it but not switch it off.
 - **The app chases the patient, not the nurse:** a missed check-in reminds the patient, then the family, and only then reaches staff.
 - **One-tap actions:** "Poklicano – vse v redu", "Naročen pregled", "Obveščen osebni zdravnik".
 - **Extend the rehabilitacija** with one button.
@@ -125,6 +126,7 @@ Next.js + TypeScript, Tailwind + shadcn/ui, Supabase (Postgres, Realtime, Storag
 ## Scope for 24h
 
 **Must work in the demo**
+- Daily check-in notification (Web Push)
 - Login with the temporary password and setting your own
 - Bolničar opens a rehabilitacija from a template
 - Daily check-in from the template, with the "Pokličite 112" screen

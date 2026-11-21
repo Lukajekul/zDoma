@@ -69,7 +69,7 @@ Tests cost time and tokens, so keep them minimal.
 | App | Next.js (App Router) + TypeScript, single app |
 | UI | Tailwind CSS + shadcn/ui, mobile-first, Slovenian (see §7) |
 | Auth | Supabase Auth, davčna številka + password (see §6) |
-| Notifications | Later: email and SMS reminders (not in the first build) |
+| Notifications | Daily check-in reminder as a Web Push notification in the first build (T-39); email and SMS reminders later |
 | Data | Supabase: Postgres, Realtime (live nurse dashboard), Storage (wound photos) |
 | Templates | One data file per patient group in `src/lib/templates/` (see §5a) |
 | Triage | Pure TypeScript in `src/lib/triage/`: LACE score, evaluates a template's rules, alert reasons, template summaries |
@@ -124,7 +124,8 @@ Background and sources: `docs/research.md`. Six templates, heart failure is the 
 - The dashboard shows only patients who need action. Green patients are hidden by default.
 - **Patronažne sestre are assigned by address, not by hand.** Each one covers tereni (občina, optionally naselja). At discharge the app suggests the nurse whose teren covers the patient's address; the bolničar confirms with one tap. No match → "Nedodeljeni", which any nurse can take with "Prevzemi". "Nadomeščanje" hands her patients to a colleague until a date. The hospital nurse who opens the rehabilitacija is not the default.
 - A patronažna (travelling) sestra may follow many patients, so the list must be easy to filter on her phone: search, "Moji pacienti" on by default, status, občina/kraj, template, missed check-in, medicines not picked up. Filters are big labelled chips, kept in the URL, with "Počisti filtre".
-- The app chases the patient, not the nurse: a missed check-in reminds the patient, then the zadolženec, and only then reaches staff.
+- **A daily reminder every day, no matter what.** While a rehabilitacija is active, the patient gets a check-in notification every day at their time (default 8:00, `Europe/Ljubljana`), even when everything has been fine for days. The patient can change the time but can't turn it off; only a check-in done that day skips it. Text without diagnosis or medicine names: "Dobro jutro, Janez. Čas je za današnji pregled. Traja 30 sekund."
+- The app chases the patient, not the nurse: a missed check-in reminds the patient again, then the zadolženec, and only then reaches staff.
 - Actions are one tap ("Poklicano – vse v redu", "Naročen pregled", "Obveščen osebni zdravnik") and write the audit log automatically.
 
 ## 6. Users and login
