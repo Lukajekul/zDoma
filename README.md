@@ -125,7 +125,7 @@ Računi bolničarjev se ne registrirajo sami. Ustvari jih skrbnik.
 
 Davčna številka ni skrivnost, zato se brez gesla nikoli ni mogoče prijaviti.
 
-**Prijavna kartica s kodo QR:** vsak pacient dobi kartico z osebno kodo QR. Ko jo skenira s kamero telefona, se odpre zDoma z že vpisanimi podatki in pacient vpiše samo svoj PIN. Koda QR sama nikoli ne prijavi, zato izgubljena kartica ni nevarna. Bolničar lahko izda novo kartico, stara takoj preneha delovati. Po 5 napačnih PIN-ih se kartica za 15 minut zaklene.
+**Prijava s kodo QR:** koda QR na prijavnem listku je pacientova stalna osebna koda za prijavo. Ko jo skenira s kamero telefona, se odpre zDoma z že vpisanimi podatki in pacient vpiše samo svoj PIN. Začasno geslo velja le za prvo prijavo, nato zadoščata koda QR in PIN. Kodo QR lahko dobi na tri načine: natisnjeno na prijavnem listku, na telefonu patronažne sestre ali na telefonu zadolženca (»QR za prijavo«), ki s tem ne dobi dostopa do pacientovega računa. Koda QR sama nikoli ne prijavi, zato izgubljen listek ni nevaren. Bolničar lahko izda novo kodo, stara takoj preneha delovati. Po 5 napačnih PIN-ih se prijava za 15 minut zaklene.
 
 ## Varnost
 

@@ -150,11 +150,11 @@ Odpuščenec and zadolženec aren't account types. They describe a person's rela
 - Validate the format before sending: 8 digits. The last digit is a check digit: multiply the first 7 digits by 8, 7, 6, 5, 4, 3, 2 and add the results. Then take `11 − (sum mod 11)`: a result of 10 means the check digit is 0, and a result of 11 means the number is invalid.
 - Supabase Auth only knows email and phone, so map the davčna številka to an internal email, `<davcna>@zdoma.local`. Never show that email to users.
 - Users stay logged in on their device. Most people log in once.
-- **QR login card (prijavna kartica) for patients.** Every patient gets a card with a personal QR code (printed with the prijavni listek, reprinted any time). Scanning it with the phone camera opens zDoma with the davčna številka already filled in, so the patient only types their PIN. **The QR never logs in on its own: the PIN is always required**, because a lost card must not open someone's health data.
+- **QR login for patients.** The QR code on the prijavni listek is the patient's permanent personal login QR. Scanning it with the phone camera opens zDoma with the davčna številka already filled in, so the patient only types their PIN. The temporary password works only for the first login; after that, QR + PIN. **The QR never logs in on its own: the PIN is always required**, because a lost paper must not open someone's health data.
+  - Options to get the QR: the printed prijavni listek (default), or shown on a screen: the patronažna sestra's phone (patient detail → "Pokaži QR za prijavo"), or the zadolženec's phone ("Skrbim za" → "QR za prijavo"). The same QR in all three places; showing it gives the nurse or family no access to the account.
   - The QR holds a random token (at least 128 bits, `crypto.randomBytes`), stored only as a hash, in the URL fragment (`/prijava/qr#<token>`) so it doesn't end up in server logs.
-  - "Nova prijavna kartica" (bolničar, or the patient in settings) issues a new token; the old card stops working at once. Written to audit_log.
-  - 5 wrong PINs → the card is locked for 15 minutes and the screen says "Pokličite svojo patronažno sestro" if it keeps happening.
-  - On the first login, the QR + temporary password leads straight to setting the PIN.
+  - "Nova koda QR" (bolničar, or the patient in settings) issues a new token and a reprinted prijavni listek; the old QR stops working at once. Written to audit_log.
+  - 5 wrong PINs → login locked for 15 minutes, and the screen says "Pokličite svojo patronažno sestro" if it keeps happening.
 - **Bolničar accounts are not self-registered.** They're created by seed data or an admin and marked as staff.
 - Seed and demo users get made-up davčne številke that pass the check-digit test. Never use a real person's number.
 
