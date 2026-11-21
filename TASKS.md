@@ -75,7 +75,7 @@ Cut: T-13 "Moje okrevanje" (own trend moved to the T-05 end screen) and T-15 emo
 
 ## Pitch and content
 
-- [ ] **T-16** Find a real readmission rate or cost figure for Slovenia/EU, with source → `docs/pitch.md`.
+- [~] **T-16** Find a real readmission rate or cost figure for Slovenia/EU, with source → `docs/pitch.md`. — *Žan Luka Tušar (Claude), main (docs only)*
 - [x] **T-37** Medicine content → `docs/medicines.md`: for each of the six templates, the medicines guidelines usually recommend after discharge (e.g. heart failure: diuretic, ACE inhibitor/ARNI, beta blocker, MRA, SGLT2 inhibitor), each with 2–4 usual dose options and times of day, a plain-language Slovenian "what it's for", and the source (ESC/GOLD/NICE guideline or SmPC). Mark anything to confirm with someone with medical knowledge. T-29 copies this into the templates. *Done: sourced medicine options for all six templates in `docs/medicines.md`, with clinical review items for T-29.*
 - [x] **T-17** Rehab content → `docs/rehab-content.md`: 3–5 exercises per template (walking plan for heart groups, breathing exercises for KOPB, physio for kolk/koleno, mobility for kap, light activity for rak), each with Slovenian title, 3–4 short steps, repetitions, a picture and an optional embeddable video, plus the source and its licence. *Done: 18 sourced exercises for all six templates and MIT-licensed illustrations in `docs/rehab-content.md`.*
 - [ ] **T-30** Pitch slides with evidence: one slide per patient group with its key paper, from `docs/research.md`. Verify each number against the full paper before it goes on a slide.
