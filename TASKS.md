@@ -45,7 +45,7 @@ Each team member owns one lane, and their agents take that lane's tasks **in the
 
 ## Zadolženec (family)
 
-- [~] **T-26** Family access requests: "Zaprosi za dostop" by the patient's davčna številka (always replies "Prošnja poslana"), patient approves/rejects, patient's list of who has access with "Odstrani". Deps: T-19 — *Žan Luka Tušar (Claude), feat/T-26-family-access*
+- [x] **T-26** Family access requests: "Zaprosi za dostop" by the patient's davčna številka (always replies "Prošnja poslana"), patient approves/rejects, patient's list of who has access with "Odstrani". Deps: T-19 *Done: `/carer/zaprosi` (davčna + relation chips, always "Prošnja poslana"), `/patient/dostop` (Dovoli / Zavrni, list with Odstrani + confirm), minimal `/carer` list; helpers in `src/lib/family-access.ts`. Checked end to end at 390 px and desktop.*
 - [ ] **T-20** "Skrbim za" tab: per patient view of pills taken/missed, **medicines not yet picked up at the pharmacy (T-31), shown at the top as a warning**, exercises done/skipped, check-ins done, current status. **The zadolženec can mark tasks done when doing them with the patient**: "Vzeto", "Opravljeno", and the check-in (reuses T-05/T-06/T-07 screens), saved with `entered_by` and shown as "Označila: Ana (hčerka)" to the patient and staff. Can't change the plan. Only shown with approved access. Deps: T-06, T-07, T-26, T-05
 
 ## Bolničar (staff)
