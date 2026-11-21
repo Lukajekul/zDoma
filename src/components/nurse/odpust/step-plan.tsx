@@ -1,15 +1,15 @@
 "use client";
 
 import { BigButton } from "@/components/shell";
-import { seznamPredlog, vstaviVrednosti, type Predloga } from "@/lib/templates";
+import { vstaviVrednosti, type Predloga } from "@/lib/templates";
 import { dailyCount } from "@/app/nurse/odpust/_lib/plan";
 import { Field } from "./ui";
 
 /** Step 2: which patient group (template). */
-export function StepTemplate({ value, onPick }: { value: string; onPick: (id: string) => void }) {
+export function StepTemplate({ templates, value, onPick }: { templates: Predloga[]; value: string; onPick: (id: string) => void }) {
   return (
     <div className="flex flex-col gap-3">
-      {seznamPredlog.map((p) => (
+      {templates.map((p) => (
         <button
           key={p.id}
           type="button"

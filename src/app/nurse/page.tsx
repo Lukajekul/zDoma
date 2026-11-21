@@ -29,10 +29,11 @@ async function Dashboard() {
 
   return (
     <>
-      <div className="mb-4 grid gap-3 sm:grid-cols-3">
+      <div className="mb-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <BigButton href="/nurse/odpust" icon={<Plus />}>Nova rehabilitacija</BigButton>
         <BigButton href="/nurse/danes" variant="secondary">Danes obiščite</BigButton>
         <BigButton href="/nurse/nadomescanje" variant="secondary">Nadomeščanje</BigButton>
+        <BigButton href="/nurse/predloge" variant="secondary">Predloge</BigButton>
       </div>
       {visits && visits.todo.length > 0 && (
         <Link href="/nurse/danes" className="mb-4 block rounded-xl border-2 border-primary p-4 text-lg font-semibold">

@@ -6,7 +6,7 @@ import { isValidDavcna, normalizeDavcna } from "@/lib/davcna";
 import { erecept, type ZdraviloPrej } from "@/lib/erecept";
 import { ensurePatientAccount } from "@/lib/qr/accounts";
 import { createClient } from "@/lib/supabase/server";
-import { getPredloga } from "@/lib/templates";
+import { getPrilagojenaPredloga } from "@/lib/templates/server";
 import { TIME_ORDER } from "@/app/patient/_lib/schedule";
 import type { PatientValues } from "@/lib/types";
 import { dailyCount, medicineChange, type MedLine } from "./_lib/plan";
@@ -78,7 +78,7 @@ const isDate = (s: string) => /^\d{4}-\d{2}-\d{2}$/.test(s) && !Number.isNaN(Dat
 /** Last step: account (if new), rehabilitacija, medicines, exercises, audit log. Redirects to the done page. */
 export async function openRehab(input: OpenRehabInput): Promise<{ error: string }> {
   const staff = await requireStaff();
-  const predloga = getPredloga(input.templateId);
+  const predloga = await getPrilagojenaPredloga(input.templateId);
   const davcna = normalizeDavcna(input.davcna);
   if (!predloga) return { error: "Izberite skupino pacientov." };
   if (!isValidDavcna(davcna)) return { error: "Davčna številka ni pravilna." };

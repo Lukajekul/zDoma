@@ -2,7 +2,7 @@
 
 import { useMemo, useState, useTransition } from "react";
 import { ArrowLeft } from "lucide-react";
-import { getPredloga, type Zdravilo } from "@/lib/templates";
+import type { Predloga, Zdravilo } from "@/lib/templates";
 import type { Nadomescanje } from "@/lib/types";
 import { openRehab } from "@/app/nurse/odpust/actions";
 import {
@@ -16,10 +16,10 @@ import { ErrorText, StepTitle } from "./ui";
 
 const TITLES = ["Pacient", "Skupina pacientov", "Vrednosti in vprašanja", "Zdravila", "Vaje in trajanje", "Patronažna sestra", "Potrditev"];
 
-type Props = { today: string; nurses: NurseOption[]; subs: Pick<Nadomescanje, "nurse_id" | "substitute_id" | "until_date">[]; catalogue: Zdravilo[] };
+type Props = { today: string; nurses: NurseOption[]; subs: Pick<Nadomescanje, "nurse_id" | "substitute_id" | "until_date">[]; catalogue: Zdravilo[]; /** Templates with staff defaults applied (T-24). */ templates: Predloga[] };
 
 /** Opening a rehabilitacija at discharge, one step per screen (T-21). */
-export function DischargeWizard({ today, nurses, subs, catalogue }: Props) {
+export function DischargeWizard({ today, nurses, subs, catalogue, templates }: Props) {
   const [step, setStep] = useState(0);
   const [patient, setPatient] = useState<PatientState>({ davcna: "", found: null, firstName: "", lastName: "", address: "", obcina: "", naselje: "" });
   const [templateId, setTemplateId] = useState("");
@@ -32,18 +32,18 @@ export function DischargeWizard({ today, nurses, subs, catalogue }: Props) {
   const [error, setError] = useState<string>();
   const [saving, start] = useTransition();
 
-  const predloga = getPredloga(templateId);
+  const predloga = templates.find((t) => t.id === templateId);
   const suggestion = useMemo(() => suggestNurse(patient.obcina, patient.naselje, nurses, subs, today), [patient.obcina, patient.naselje, nurses, subs, today]);
   const next = () => setStep((s) => s + 1);
 
   function pickTemplate(id: string) {
-    const p = getPredloga(id);
+    const p = templates.find((t) => t.id === id);
     if (!p) return;
     setTemplateId(id);
     setValues(defaultValues(p));
     setQuestions(defaultQuestions(p));
     setMeds(mergeMedicines(p, patient.found?.previous ?? []));
-    setExercises(p.vaje.map((v) => v.id));
+    setExercises(p.vaje.filter((v) => v.privzetoIzbrano !== false).map((v) => v.id));
     setEnd(defaultEndDate(p, today));
     next();
   }
@@ -72,7 +72,7 @@ export function DischargeWizard({ today, nurses, subs, catalogue }: Props) {
       <StepTitle n={step + 1} total={TITLES.length}>{TITLES[step]}</StepTitle>
 
       {step === 0 && <StepPatient value={patient} onChange={setPatient} onNext={next} />}
-      {step === 1 && <StepTemplate value={templateId} onPick={pickTemplate} />}
+      {step === 1 && <StepTemplate templates={templates} value={templateId} onPick={pickTemplate} />}
       {step === 2 && predloga && (
         <StepValues predloga={predloga} values={values} questions={questions} onValues={setValues} onQuestions={setQuestions} onNext={next} />
       )}

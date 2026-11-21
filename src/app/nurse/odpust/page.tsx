@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import { DischargeWizard } from "@/components/nurse/odpust/wizard";
 import { AppShell } from "@/components/shell";
 import { requireStaff } from "@/lib/auth";
+import { getPrilagojenePredloge } from "@/lib/templates/server";
 import { todayLjubljana } from "@/lib/types";
 import { getNurseData, medicineCatalogue } from "./_lib/data";
 
@@ -20,6 +21,6 @@ export default function DischargePage() {
 
 async function Wizard() {
   await requireStaff();
-  const { nurses, subs } = await getNurseData();
-  return <DischargeWizard today={todayLjubljana()} nurses={nurses} subs={subs} catalogue={medicineCatalogue()} />;
+  const [{ nurses, subs }, templates] = await Promise.all([getNurseData(), getPrilagojenePredloge()]);
+  return <DischargeWizard today={todayLjubljana()} nurses={nurses} subs={subs} catalogue={medicineCatalogue()} templates={templates} />;
 }

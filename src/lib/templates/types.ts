@@ -159,6 +159,8 @@ export interface Vaja {
   /** Alt text for the picture. */
   slikaOpis?: string;
   video?: string;
+  /** Pre-ticked at discharge (default true). Staff can change it in the template editor (T-24). */
+  privzetoIzbrano?: boolean;
   vir: Vir;
 }
 
