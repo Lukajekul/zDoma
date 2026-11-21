@@ -1,10 +1,9 @@
 import "server-only";
 
 import { createClient } from "@/lib/supabase/server";
-import type { DoseLog } from "@/lib/types";
 
-/** Names of family members who logged doses, e.g. { <id>: "Ana (hčerka)" }. */
-export async function getMarkerNames(patientId: string, logs: DoseLog[]) {
+/** Names of family members who made log entries, e.g. { <id>: "Ana (hčerka)" }. */
+export async function getMarkerNames(patientId: string, logs: { entered_by: string }[]) {
   const ids = [...new Set(logs.map((l) => l.entered_by).filter((id) => id !== patientId))];
   if (!ids.length) return {} as Record<string, string>;
 

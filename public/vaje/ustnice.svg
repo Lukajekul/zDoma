@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="224" viewBox="0 0 360 224" role="img" aria-labelledby="title desc">
+  <title id="title">Izdih skozi priprte ustnice</title>
+  <desc id="desc">Ob ustih je daljša puščica za počasni izdih. Krajša puščica ob nosu kaže vdih.</desc>
+  <defs>
+    <marker id="tip" viewBox="0 0 8 8" refX="6.5" refY="4" markerWidth="4" markerHeight="4" orient="auto">
+      <path d="M0 0L8 4L0 8Z" fill="#086953"/>
+    </marker>
+  </defs>
+  <style>
+    .body,.head,.shirt,.far,.fixture,.arrow,.highlight { stroke-linecap: round; stroke-linejoin: round; }
+    .body,.head,.shirt { stroke: #142f35; stroke-width: 7; }
+    .body,.far,.fixture,.arrow,.highlight { fill: none; }
+    .head { fill: #f8ece0; stroke-width: 5; }
+    .shirt { fill: #b7ded4; stroke-width: 5; }
+    .far { stroke: #526f71; stroke-width: 6; }
+    .fixture { stroke: #70888a; stroke-width: 4; }
+    .arrow { stroke: #086953; stroke-width: 4.5; marker-end: url(#tip); }
+    .highlight { stroke: #086953; stroke-width: 5; }
+    .joint { fill: #086953; stroke: #fff; stroke-width: 2; }
+  </style>
+  <rect x="2" y="2" width="356" height="220" rx="20" fill="#f4faf8" stroke="#d5e6e3" stroke-width="2"/>
+  <path class="fixture" d="M158 169Q117 190 93 205M191 148Q188 183 233 205"/>
+  <path class="shirt" d="M161 41C115 37 105 72 115 106Q119 126 137 140L143 169L186 163L184 145Q206 147 212 136L211 123L221 118L212 112L213 105L225 101L212 78Q210 50 185 43Z"/>
+  <path class="fixture" d="M185 78L194 78"/>
+  <path class="arrow" d="M256 69Q244 86 228 91"/>
+  <path class="arrow" d="M227 118Q267 117 292 132"/>
+  <path class="body" d="M143 168Q166 174 189 161"/>
+</svg>

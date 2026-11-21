@@ -8,7 +8,7 @@ import { isRehabActive, todayLjubljana, type DoseLog, type Medication } from "@/
 import { getMedsAndLogs, logMissedDoses } from "../../_lib/doses";
 import { getMyRehab } from "../../_lib/rehabs";
 import { addDays, dosesOn, TIME_LABEL } from "../../_lib/schedule";
-import { getMarkerNames } from "./marker-names";
+import { getMarkerNames } from "../../_lib/marker-names";
 import { markTaken, undoTaken } from "./actions";
 
 export const metadata = { title: "Zdravila – zDoma" };

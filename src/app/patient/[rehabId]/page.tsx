@@ -50,6 +50,9 @@ async function Rehab({ params }: Pick<PageProps<"/patient/[rehabId]">, "params">
         <BigButton href={`/patient/${rehab.id}/zdravila`} variant="secondary">
           Zdravila danes
         </BigButton>
+        <BigButton href={`/patient/${rehab.id}/vaje`} variant="secondary">
+          Vaje danes
+        </BigButton>
       </AppShell>
     );
   }
