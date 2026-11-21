@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="224" viewBox="0 0 360 224" role="img" aria-labelledby="title desc">
+  <title id="title">Dvig kolena sede</title>
+  <desc id="desc">Oseba sedi na stolu. Eno stopalo je na tleh, drugo koleno se pomakne navzgor.</desc>
+  <defs>
+    <marker id="tip" viewBox="0 0 8 8" refX="6.5" refY="4" markerWidth="4" markerHeight="4" orient="auto">
+      <path d="M0 0L8 4L0 8Z" fill="#086953"/>
+    </marker>
+  </defs>
+  <style>
+    .body,.head,.shirt,.far,.fixture,.arrow,.highlight { stroke-linecap: round; stroke-linejoin: round; }
+    .body,.head,.shirt { stroke: #142f35; stroke-width: 7; }
+    .body,.far,.fixture,.arrow,.highlight { fill: none; }
+    .head { fill: #f8ece0; stroke-width: 5; }
+    .shirt { fill: #b7ded4; stroke-width: 5; }
+    .far { stroke: #526f71; stroke-width: 6; }
+    .fixture { stroke: #70888a; stroke-width: 4; }
+    .arrow { stroke: #086953; stroke-width: 4.5; marker-end: url(#tip); }
+    .highlight { stroke: #086953; stroke-width: 5; }
+    .joint { fill: #086953; stroke: #fff; stroke-width: 2; }
+  </style>
+  <rect x="2" y="2" width="356" height="220" rx="20" fill="#f4faf8" stroke="#d5e6e3" stroke-width="2"/>
+  <path class="fixture" d="M38 193H322"/>
+  <path class="fixture" d="M105 75V132H174M111 132V190M165 132V190"/>
+  <circle class="head" cx="143" cy="61" r="15"/>
+  <path class="shirt" d="M139 77Q129 80 128 99L132 124L151 126L156 104L153 83Z"/>
+  <path class="body" d="M146 90L161 116L172 118"/>
+  <path class="far" d="M145 125L172 134L177 183L195 188"/>
+  <path class="body" d="M145 125L191 112L199 152L215 158"/>
+  <circle class="joint" cx="191" cy="112" r="6"/>
+  <path class="arrow" d="M231 149Q235 123 222 104"/>
+</svg>

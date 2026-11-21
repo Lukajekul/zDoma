@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="224" viewBox="0 0 360 224" role="img" aria-labelledby="title desc">
+  <title id="title">Položaj z oporo na kolenih</title>
+  <desc id="desc">Oseba sedi, stopali sta na tleh. Zgornji del telesa je nagnjen naprej, komolca počivata na stegnih.</desc>
+  <defs>
+    <marker id="tip" viewBox="0 0 8 8" refX="6.5" refY="4" markerWidth="4" markerHeight="4" orient="auto">
+      <path d="M0 0L8 4L0 8Z" fill="#086953"/>
+    </marker>
+  </defs>
+  <style>
+    .body,.head,.shirt,.far,.fixture,.arrow,.highlight { stroke-linecap: round; stroke-linejoin: round; }
+    .body,.head,.shirt { stroke: #142f35; stroke-width: 7; }
+    .body,.far,.fixture,.arrow,.highlight { fill: none; }
+    .head { fill: #f8ece0; stroke-width: 5; }
+    .shirt { fill: #b7ded4; stroke-width: 5; }
+    .far { stroke: #526f71; stroke-width: 6; }
+    .fixture { stroke: #70888a; stroke-width: 4; }
+    .arrow { stroke: #086953; stroke-width: 4.5; marker-end: url(#tip); }
+    .highlight { stroke: #086953; stroke-width: 5; }
+    .joint { fill: #086953; stroke: #fff; stroke-width: 2; }
+  </style>
+  <rect x="2" y="2" width="356" height="220" rx="20" fill="#f4faf8" stroke="#d5e6e3" stroke-width="2"/>
+  <path class="fixture" d="M38 193H322"/>
+  <path class="fixture" d="M105 75V132H174M111 132V190M165 132V190"/>
+  <circle class="head" cx="196" cy="69" r="15"/>
+  <path class="shirt" d="M181 77Q171 75 164 84L131 117L144 131L181 105L195 84Z"/>
+  <path class="far" d="M146 128L197 132L207 187L225 188M139 130L172 136L178 186L195 187"/>
+  <path class="body" d="M181 92L193 131L225 124"/>
+  <circle class="joint" cx="193" cy="131" r="6"/>
+</svg>

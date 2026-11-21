@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="224" viewBox="0 0 360 224" role="img" aria-labelledby="title desc">
+  <title id="title">Dvig in spust ramen</title>
+  <desc id="desc">Oseba sedi vzravnano. Puščici ob ramenih kažeta dvig.</desc>
+  <defs>
+    <marker id="tip" viewBox="0 0 8 8" refX="6.5" refY="4" markerWidth="4" markerHeight="4" orient="auto">
+      <path d="M0 0L8 4L0 8Z" fill="#086953"/>
+    </marker>
+  </defs>
+  <style>
+    .body,.head,.shirt,.far,.fixture,.arrow,.highlight { stroke-linecap: round; stroke-linejoin: round; }
+    .body,.head,.shirt { stroke: #142f35; stroke-width: 7; }
+    .body,.far,.fixture,.arrow,.highlight { fill: none; }
+    .head { fill: #f8ece0; stroke-width: 5; }
+    .shirt { fill: #b7ded4; stroke-width: 5; }
+    .far { stroke: #526f71; stroke-width: 6; }
+    .fixture { stroke: #70888a; stroke-width: 4; }
+    .arrow { stroke: #086953; stroke-width: 4.5; marker-end: url(#tip); }
+    .highlight { stroke: #086953; stroke-width: 5; }
+    .joint { fill: #086953; stroke: #fff; stroke-width: 2; }
+  </style>
+  <rect x="2" y="2" width="356" height="220" rx="20" fill="#f4faf8" stroke="#d5e6e3" stroke-width="2"/>
+  <path class="fixture" d="M38 193H322"/>
+  <path class="fixture" d="M112 137H248M123 138V190M237 138V190"/>
+  <circle class="head" cx="180" cy="59" r="15"/>
+  <path class="shirt" d="M166 77L149 83L153 128H208L212 83L195 77Z"/>
+  <path class="body" d="M150 86L145 122L154 143M210 86L215 122L206 143M165 129L166 177L153 187M195 129L194 177L207 187"/>
+  <path class="arrow" d="M124 96V69"/>
+  <path class="arrow" d="M237 96V69"/>
+</svg>
