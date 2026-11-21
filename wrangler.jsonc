@@ -1,7 +1,7 @@
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"name": "zdoma",
-	"main": ".open-next/worker.js",
+	"main": "worker.mjs",
 	"compatibility_date": "2026-11-01",
 	"compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
 	"assets": {
@@ -10,8 +10,12 @@
 	},
 	"observability": {
 		"enabled": true
+	},
+	// T-39: daily check-in reminders (worker.mjs → /api/cron/opomniki).
+	"triggers": {
+		"crons": ["*/15 * * * *"]
 	}
 	// NEXT_PUBLIC_* values are inlined at build time from .env.local.
 	// Server-only secrets are Worker secrets, never in this file:
-	//   npx wrangler secret put SUPABASE_SERVICE_ROLE_KEY
+	//   npx wrangler secret put SUPABASE_SERVICE_ROLE_KEY | VAPID_PRIVATE_KEY | CRON_SECRET
 }

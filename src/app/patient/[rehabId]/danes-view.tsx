@@ -109,6 +109,7 @@ export async function DanesView({ ctx, profile, back }: { ctx: Ctx; profile: Pro
         <Link href={`${base}/vaje`} className={smallLink}>Vaje</Link>
         {changes.any && <Link href={`${base}/spremembe`} className={smallLink}>Spremembe zdravil</Link>}
         <Link href="/patient/dostop" className={smallLink}>Družina</Link>
+        <Link href="/patient/opomnik" className={smallLink}>Opomnik</Link>
       </nav>
     </AppShell>
   );
