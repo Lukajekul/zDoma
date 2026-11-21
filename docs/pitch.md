@@ -1,7 +1,7 @@
 # Pitch: numbers and sources
 
-Figures for the pitch, each checked against the source it cites. ✅ = read in the full text. ⚠️ = not read in the original, don't put it on a slide yet.
-Other evidence per patient group: `docs/research.md`. Slides with one paper per group: T-30.
+Figures for the pitch, each checked against the source it cites. ✅ = read in the full text. 📄 = read in the official abstract (Cochrane full texts are paywalled). ⚠️ = not read in the original, don't put it on a slide yet.
+Other evidence per patient group: `docs/research.md`. The slide-by-slide text is under "Slides (T-30)" below.
 
 ## Headline (Slovenia, heart failure)
 
@@ -45,3 +45,61 @@ Citation: Darbà J, Ascanio M, Rodríguez A, et al. *Economic burden of heart fa
 ## Secondary sources (context only, not for slides)
 - Društvo za zdravje srca in ožilja Slovenije: about 20 % of heart-failure patients are rehospitalised within a year (consistent with Omersa). [zasrce.si](https://zasrce.si/clanek/izjava-za-javnost-in-video-spletne-novinarske-konference-srcno-popuscanje-pot-bolnika/)
 - UKC Maribor bulletin 2024: 20–50 % rehospitalised within 3 months, without a source. [PDF](https://www.ukc-mb.si/media/files/uploads/zborniki/UKC_Kronicno_srcno_popuscanje_2024_BILTEN_1.pdf)
+
+## Slides (T-30)
+
+One slide per patient group with its key paper. Every number below was checked in the paper (✅ full text, 📄 abstract). Slide text is Slovenian; notes for the speaker are in English.
+
+The deck (10 slides, speaker notes hold the caveats): https://claude.ai/artifact/MPK9Qw3CWDV8SHCvNpCjj1 (private until its owner shares it from the Share menu). Change numbers here first, then on the deck.
+
+### 1. Naslov
+**zDoma – okrevanje doma, z nekom, ki pazi.** Vsak dan 30 sekund: bolnik odgovori, sestra vidi samo tiste, ki potrebujejo pomoč.
+
+### 2. Problem (Slovenija)
+**Vsak peti bolnik s srčnim popuščanjem se v enem letu vrne v bolnišnico. Vsak deseti že v 30 dneh.** ✅
+Omersa et al., ESC Heart Fail 2019 (see "Headline" above).
+- Note: heart-failure readmissions only, national data 2008–2012.
+
+### 3. Strošek (Evropa)
+**Bolnišnične obravnave so do 92 % vseh stroškov srčnega popuščanja.** ✅
+Darbà et al., ESC Heart Fail 2025 (see "Cost" above).
+
+### 4. Srčno popuščanje
+**Spremljanje doma: 20 % manj smrti in 29 % manj sprejemov zaradi srčnega popuščanja.** 📄
+- 41 randomised trials. Non-invasive telemonitoring: all-cause mortality RR 0.80 (95% CI 0.68–0.94; 17 studies, 3,740 people); heart-failure hospitalisations RR 0.71 (0.60–0.83; 8 studies, 2,148 people). Moderate-quality evidence.
+- Structured telephone support also worked: mortality RR 0.87 (0.77–0.98), heart-failure hospitalisations RR 0.85 (0.77–0.93).
+- **Say honestly:** neither reduced all-cause hospitalisations (RR 0.95, very low-quality evidence). Claim fewer heart-failure admissions and deaths, not fewer admissions overall.
+- Inglis SC, Clark RA, Dierckx R, Prieto-Merino D, Cleland JG. *Structured telephone support or non-invasive telemonitoring for patients with heart failure.* Cochrane Database Syst Rev 2015;(10):CD007228. doi:10.1002/14651858.CD007228.pub3
+
+### 5. Po infarktu ali operaciji srca
+**Rehabilitacija doma deluje enako dobro kot v centru – tudi z aplikacijo.** 📄
+- 24 trials, 3,046 people; four used digital/telehealth support. No difference from centre-based rehab in mortality (RR 1.19, 0.65–2.16, low certainty), exercise capacity up to 12 months (SMD −0.10, −0.24 to 0.04) or quality of life; completion similar (RR 1.03); cost per patient similar.
+- **Say honestly:** the claim is "as good as", not "better than". It means the rehab can move home.
+- McDonagh STJ, Dalal H, Moore S, et al. *Home-based versus centre-based cardiac rehabilitation.* Cochrane Database Syst Rev 2023;(10):CD007130. doi:10.1002/14651858.CD007130.pub5
+
+### 6. Nov kolk ali koleno
+**Tri od štirih vrnitev v bolnišnico niso zaradi kolka, ampak zaradi drugih bolezni.** 📄
+- 8,893 hip replacements: 5.6% readmitted within 90 days; medical causes 4.2%, orthopaedic 1.4% (75% medical). US, single centre. Khan ST et al. *Predictive modeling of medical- and orthopaedic-related 90-day readmissions following primary total hip arthroplasty.* J Arthroplasty 2024;39(11):2812–2819.e2. doi:10.1016/j.arth.2024.05.058
+- Wound photos by smartphone: 3.7× higher odds of finding a wound infection within 7 days (OR 3.71, 95% CI 1.02–13.51, post hoc) and fewer community care visits (11.2% vs 18.2%; OR 0.57). The primary outcome, time to diagnosis, was not significant; 32% never used the tool. ✅ McLean KA et al. *Remote diagnosis of surgical-site infection using a mobile digital intervention: a randomised controlled trial in emergency surgery patients.* npj Digit Med 2021;4:160. doi:10.1038/s41746-021-00526-0
+- Not used: "59% of readmission costs" (not in the abstract of PubMed 30755375; that paper reports 6.1% readmitted, mean $8,588 per readmission, 79.1% medical, hip and knee, US).
+
+### 7. KOPB
+**Več kot tretjina se vrne v 90 dneh. Spremljanje doma: 26 % manj ponovnih sprejemov zaradi poslabšanja.** ✅ / 📄
+- 17 RCTs, 3,001 people with a past exacerbation: exacerbation-related readmissions RR 0.74 (0.60–0.92; 7 RCTs, I² 73%); mortality OR 0.71 (0.54–0.93; 11 studies); fewer ER visits. All-cause hospitalisation not significant (RR 0.92). Monitoring for 12 months or longer worked better. ✅ Lu JW et al. *Effectiveness of telemonitoring for reducing exacerbation occurrence in COPD patients with past exacerbation history: a systematic review and meta-analysis.* Front Med 2021;8:720019. doi:10.3389/fmed.2021.720019
+- "More than a third of patients hospitalised for acute exacerbation of COPD are readmitted to hospital within 90 days." 📄 Kong CW, Wilkinson TMA. *Predicting and preventing hospital readmission for exacerbations of COPD.* ERJ Open Res 2020;6:00325-2019. doi:10.1183/23120541.00325-2019
+- Not used: "35.1% in 90 days" from the European COPD Audit (Hartl et al., Eur Respir J 2016;47:113–121): the number is not in the abstract.
+
+### 8. Možganska kap
+**Okrevanje doma z ekipo: 5 manj slabih izidov na 100 bolnikov, 5 dni manj v bolnišnici.** 📄
+- Early supported discharge, 17 trials (2,422 people). Death or dependency OR 0.80 (0.67–0.95; 16 trials, 2,359 people; moderate) = five fewer adverse outcomes per 100; hospital stay −5.5 days (−3 to −8; moderate); readmissions similar (OR 1.09, 0.79–1.51, low).
+- **Say honestly:** this is a coordinated team at home, not an app. zDoma supports that team; it doesn't replace it.
+- Langhorne P, Baylan S; Early Supported Discharge Trialists. *Early supported discharge services for people with acute stroke.* Cochrane Database Syst Rev 2017;(7):CD000443. doi:10.1002/14651858.CD000443.pub4
+
+### 9. Rak na sistemskem zdravljenju
+**Ko bolnik sporoča simptome od doma: manj obiskov urgence, boljše počutje, daljše preživetje.** 📄 (JCO 2016) / ✅ (JAMA 2017)
+- RCT, 766 patients: ER visits 34% vs 41% (P = .02); quality of life improved in 34% vs 18%; hospitalisation 45% vs 49% (P = .08, not significant); alive at 1 year 75% vs 69% (P = .05). Basch E et al. *Symptom monitoring with patient-reported outcomes during routine cancer treatment: a randomized controlled trial.* J Clin Oncol 2016;34(6):557–565. doi:10.1200/JCO.2015.63.0830
+- Median overall survival 31.2 vs 26.0 months (P = .03; adjusted HR 0.83, 0.70–0.99). Basch E et al. *Overall survival results of a trial assessing patient-reported outcomes for symptom monitoring during routine cancer treatment.* JAMA 2017;318(2):197–198. doi:10.1001/jama.2017.7156
+- **Say honestly:** single centre; the survival analysis was post hoc. "Promising", not "proven".
+
+### 10. Zakaj bo delovalo
+From `docs/research.md` "What failed before": 30-second check-in, family sees missed check-ins, no end date, staff see only patients who need action, a bathroom scale instead of devices.
