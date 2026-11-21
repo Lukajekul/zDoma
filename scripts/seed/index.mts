@@ -57,7 +57,8 @@ const usedNames = new Set(["Janez Novak"]);
 async function addPatient(person: Person, obcina: string, specs: Omit<RehabSpec, "patientId" | "createdBy" | "nurseId" | "today" | "r">[]) {
   const o = OBCINE.find((x) => x.obcina === obcina)!;
   const address = `${r.pick(o.ulice)} ${r.int(1, 60)}, ${o.posta}`;
-  const id = await createAccount(admin, person, { address, obcina });
+  // Demo patients get the shared demo password (shown in docs/demo-accounts.md), not a QR starting password.
+  const id = await createAccount(admin, person, { password, address, obcina });
   let rehabId = "";
   for (const s of specs) {
     const built = buildRehab({ ...s, patientId: id, createdBy: r.pick([staff.tina, staff.marko]), nurseId: nurseFor(obcina), today, r }, rows);

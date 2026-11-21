@@ -46,7 +46,7 @@ export interface Person {
   last: string;
 }
 
-/** Creates a seed account. Patients get a QR token as password (stored for the listek); others get `password`. */
+/** Creates a seed account. With `password` that is the login; without it a QR starting password is stored for the listek. */
 export async function createAccount(
   admin: Admin,
   p: Person,

@@ -48,6 +48,7 @@ Each team member owns one lane, and their agents take that lane's tasks **in the
 - [x] **T-53** Rebuild the UI to match design v3: content as white borderless cards on the grey canvas (no wrapping panel), patient "Danes" with greeting band + overlapping ring card, nurse dashboard with greeting band, stat tiles and attention rows, branded login, full-screen red 112 screen. Deps: T-50, T-52 *Done: cards on canvas, responsive shell, Danes + dashboard + login + 112 rebuilt; checked at 390 and 1440 px.*
 - [x] **T-54** Patient login: QR ticket = one-time starting password; right after the first scan the patient must set their own password (then the QR stops working; later logins with davčna številka + password; lost password → "Nova koda QR"). Separate patient login page `/prijava/pacient`. Update AGENTS.md §6 and README. Deps: T-53 *Done: forced password after the first QR scan, QR deleted on save, `/prijava/pacient`; checked end to end.*
 - [x] **T-55** Progress ring centre shows the share of the whole rehabilitacija answered (matches the green part of the ring), not only of the days so far. Deps: T-40 *Done: centre shows `overallShare`, matches the green part; nurse "Sodelovanje" unchanged.*
+- [x] **T-56** Demo patients log in with the plaintext demo password (not QR links) in `docs/demo-accounts.md`; seed gives patients `SEED_PASSWORD`. Deps: T-54 *Done: 46 seeded patients updated on the shared project (password set, QR token removed), doc rewritten, `docs/demo-qr/` removed; checked live.*
 
 ## Zadolženec (family)
 
