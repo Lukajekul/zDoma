@@ -60,7 +60,7 @@ Each team member owns one lane, and their agents take that lane's tasks **in the
 
 - [ ] **T-10** Seed data: about 40 patients (enough that filtering matters) spread over a few občine and 2–3 patronažne sestre with their tereni, a couple of "Nedodeljeni" patients, one nurse on nadomeščanje, across all six templates, mostly heart failure, incl. the demo story patient (heart failure, dry weight 72 kg → 74.5 kg, swollen ankles, one missed diuretic), one patient with two rehabilitacije (one finished), one patient who hasn't picked up a new medicine (T-31), approved zadolženci, and the bolničarji (incl. the patronažne sestre), all with made-up valid davčne številke. Deps: T-03, T-04, T-29
 - [ ] **T-11** QR demo entry (`/demo`): creates a fresh heart-failure patient with an active rehabilitacija for the judge and logs them in (same as scanning a QR ticket), then opens their "Danes" screen (T-33). Deps: T-05
-- [ ] **T-12** Deploy to Cloudflare Workers with `@opennextjs/cloudflare`. Deps: T-02
+- [~] **T-12** Deploy to Cloudflare Workers with `@opennextjs/cloudflare`. Deps: T-02 — *Tian Istenič (Claude), feat/T-12-deploy*
 
 ## Mock-ups (clickable, no real logic)
 
