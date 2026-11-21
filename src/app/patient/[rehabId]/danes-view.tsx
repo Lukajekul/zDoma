@@ -1,5 +1,6 @@
 import { cookies } from "next/headers";
 import Link from "next/link";
+import { QuietLogout } from "@/components/auth/quiet-logout";
 import { NextActionCard } from "@/components/patient/danes/next-action-card";
 import { NurseUpdateCard } from "@/components/patient/danes/nurse-update-card";
 import { ProgressRing } from "@/components/patient/progress-ring";
@@ -145,6 +146,7 @@ export async function DanesView({ ctx, profile, back }: { ctx: Ctx; profile: Pro
           </Link>
         ))}
       </nav>
+      <QuietLogout />
     </AppShell>
   );
 }

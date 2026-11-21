@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import { redirect } from "next/navigation";
+import { QuietLogout } from "@/components/auth/quiet-logout";
 import { RehabList } from "@/components/patient/rehab-list";
 import { AppShell } from "@/components/shell";
 import { requireProfile } from "@/lib/auth";
@@ -29,5 +30,10 @@ async function PatientHome({ searchParams }: Pick<PageProps<"/patient">, "search
 
   if (active.length === 1 && !seznam) redirect(`/patient/${active[0].id}`);
 
-  return <RehabList firstName={profile.first_name} active={active} past={past} today={todayLjubljana()} />;
+  return (
+    <>
+      <RehabList firstName={profile.first_name} active={active} past={past} today={todayLjubljana()} />
+      <QuietLogout />
+    </>
+  );
 }
