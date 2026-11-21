@@ -13,7 +13,7 @@ export const metadata = { title: "Prvi obisk – zDoma" };
 /** T-36 (b): first home visit checklist, ends with "Nameščeno ✓". */
 export default function FirstVisitPage({ params }: PageProps<"/nurse/prvi-obisk/[rehabId]">) {
   return (
-    <AppShell title="Prvi obisk" back="/nurse/danes">
+    <AppShell title="Prvi obisk" back="/nurse/danes" width="medium">
       <Suspense fallback={<p className="text-xl">Nalagam …</p>}>
         <FirstVisit params={params} />
       </Suspense>

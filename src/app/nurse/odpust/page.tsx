@@ -11,7 +11,7 @@ export const metadata = { title: "Nova rehabilitacija – zDoma" };
 /** T-21: open a rehabilitacija at discharge. */
 export default function DischargePage() {
   return (
-    <AppShell title="Nova rehabilitacija" back="/nurse">
+    <AppShell title="Nova rehabilitacija" back="/nurse" width="medium">
       <Suspense fallback={<p className="text-xl">Nalagam …</p>}>
         <Wizard />
       </Suspense>

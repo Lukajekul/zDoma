@@ -12,7 +12,7 @@ export const metadata = { title: "Danes obiščite – zDoma" };
 /** T-36 (a): the patronažna sestra's patients by status, grouped by občina. */
 export default function VisitsPage() {
   return (
-    <AppShell title="Danes obiščite" back="/nurse">
+    <AppShell title="Danes obiščite" back="/nurse" wide>
       <Suspense fallback={<p className="text-xl">Nalagam …</p>}>
         <Visits />
       </Suspense>
@@ -50,7 +50,7 @@ async function Visits() {
       {groups.map(([obcina, rows]) => (
         <section key={obcina} className="flex flex-col gap-2">
           <h2 className="mt-2 text-2xl font-bold">{obcina} ({rows.length})</h2>
-          <ul className="flex flex-col gap-2">{rows.map((r) => <VisitRowCard key={r.rehabId} r={r} />)}</ul>
+          <ul className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">{rows.map((r) => <VisitRowCard key={r.rehabId} r={r} />)}</ul>
         </section>
       ))}
     </>

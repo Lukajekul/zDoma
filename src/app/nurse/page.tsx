@@ -29,7 +29,8 @@ async function Dashboard() {
 
   return (
     <>
-      <div className="mb-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      {/* On large screens the sidebar (NurseNav) has these links and "Odjava". */}
+      <div className="mb-4 grid gap-3 sm:grid-cols-2 lg:hidden">
         <BigButton href="/nurse/odpust" icon={<Plus />}>Nova rehabilitacija</BigButton>
         <BigButton href="/nurse/danes" variant="secondary">Danes obiščite</BigButton>
         <BigButton href="/nurse/nadomescanje" variant="secondary">Nadomeščanje</BigButton>
@@ -47,7 +48,7 @@ async function Dashboard() {
           Seznama pacientov ni bilo mogoče naložiti. Osvežite stran in poskusite znova.
         </p>
       )}
-      <div className="mt-4 self-start">
+      <div className="mt-4 self-start lg:hidden">
         <LogoutButton />
       </div>
     </>

@@ -124,7 +124,7 @@ export function NurseDashboard({ rows, nurseId, covering = [], templates }: {
             templates={templates}
           />
         </details>
-        <section aria-labelledby="seznam-pacientov" className="min-w-0 space-y-3">
+        <section aria-labelledby="seznam-pacientov" className="@container min-w-0 space-y-3">
           <h2 aria-live="polite" className="scroll-mt-4 text-xl font-bold" id="seznam-pacientov">Seznam pacientov ({filtered.length})</h2>
           {feedback && (
             <p role={feedback === "claimed" ? "status" : "alert"} className="rounded-xl border bg-muted px-4 py-3 font-medium">
@@ -136,10 +136,10 @@ export function NurseDashboard({ rows, nurseId, covering = [], templates }: {
               Za izbrane filtre ni pacientov. Poskusite z drugimi filtri.
             </p>
           ) : (
-            <ul className="space-y-3">
+            <ul className="grid gap-3 @xl:grid-cols-2">
               {filtered.map((row) => (
-                <li key={row.id}>
-                  <article className="grid gap-3 rounded-2xl border bg-background p-4 sm:grid-cols-[minmax(0,1fr)_auto]">
+                <li key={row.id} className="flex">
+                  <article className="grid flex-1 content-start gap-3 rounded-2xl border bg-background p-4 sm:grid-cols-[minmax(0,1fr)_auto]">
                     <div className="min-w-0 space-y-1 wrap-break-word">
                       <h3 className="text-xl leading-snug font-bold">
                         <Link

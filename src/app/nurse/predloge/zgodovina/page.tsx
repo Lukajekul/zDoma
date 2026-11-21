@@ -11,7 +11,7 @@ export const metadata = { title: "Zgodovina sprememb predlog – zDoma" };
 /** T-24: audit log of template edits (who, when, what changed). */
 export default function TemplateHistoryPage() {
   return (
-    <AppShell title="Zgodovina sprememb" back="/nurse/predloge">
+    <AppShell title="Zgodovina sprememb" back="/nurse/predloge" wide>
       <Suspense fallback={<p className="text-xl">Nalagam …</p>}>
         <History />
       </Suspense>

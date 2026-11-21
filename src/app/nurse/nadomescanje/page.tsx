@@ -13,7 +13,7 @@ export const metadata = { title: "Nadomeščanje – zDoma" };
 /** T-36 (c): hand a nurse's patients to a colleague until a date. */
 export default function SubstitutionPage() {
   return (
-    <AppShell title="Nadomeščanje" back="/nurse">
+    <AppShell title="Nadomeščanje" back="/nurse" width="medium">
       <Suspense fallback={<p className="text-xl">Nalagam …</p>}>
         <Substitution />
       </Suspense>

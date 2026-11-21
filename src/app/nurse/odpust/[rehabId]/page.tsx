@@ -14,7 +14,7 @@ export const metadata = { title: "Rehabilitacija – zDoma" };
 /** After opening (T-21): listek for a new patient, "Podaljšaj", "Nova koda QR". */
 export default function RehabAdminPage({ params, searchParams }: PageProps<"/nurse/odpust/[rehabId]">) {
   return (
-    <AppShell title="Rehabilitacija" back="/nurse">
+    <AppShell title="Rehabilitacija" back="/nurse" width="medium">
       <Suspense fallback={<p className="text-xl">Nalagam …</p>}>
         <RehabAdmin params={params} searchParams={searchParams} />
       </Suspense>

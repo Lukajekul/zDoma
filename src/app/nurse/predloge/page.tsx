@@ -12,7 +12,7 @@ export const metadata = { title: "Predloge – zDoma" };
 /** T-24: the six templates; staff can change each one's plan defaults. */
 export default function TemplatesPage() {
   return (
-    <AppShell title="Predloge" back="/nurse">
+    <AppShell title="Predloge" back="/nurse" wide>
       <p className="text-lg">
         Tukaj spremenite privzeto trajanje, privzeta vprašanja in vaje za nove rehabilitacije. Opozorilna pravila,
         pragovi in zdravila so zaklenjeni, ker izhajajo iz smernic.
@@ -31,7 +31,7 @@ async function List() {
   await requireStaff();
   const prilagoditve = await getPrilagoditve();
   return (
-    <ul className="grid gap-3 sm:grid-cols-2">
+    <ul className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
       {seznamPredlog.map((p) => {
         const o = prilagoditve[p.id];
         const spremenjena = !!o && !jePrazna(p, o.prilagoditev);

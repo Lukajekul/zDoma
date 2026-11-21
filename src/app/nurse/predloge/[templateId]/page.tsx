@@ -15,7 +15,7 @@ export default function EditTemplatePage({ params }: PageProps<"/nurse/predloge/
   return (
     <Suspense
       fallback={
-        <AppShell title="Uredi predlogo" back="/nurse/predloge">
+        <AppShell title="Uredi predlogo" back="/nurse/predloge" width="medium">
           <p className="text-xl">Nalagam …</p>
         </AppShell>
       }
@@ -43,7 +43,7 @@ async function Editor({ params }: Pick<PageProps<"/nurse/predloge/[templateId]">
   }
 
   return (
-    <AppShell title={p.ime} back="/nurse/predloge">
+    <AppShell title={p.ime} back="/nurse/predloge" width="medium">
       {shranjena && (
         <p className="text-lg text-muted-foreground">
           Zadnja sprememba: {formatDate(shranjena.updatedAt)} ob {formatTime(shranjena.updatedAt)}
