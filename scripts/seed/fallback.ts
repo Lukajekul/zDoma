@@ -8,7 +8,7 @@ const VIR = { opis: "docs/medicines.md (T-37)", potrjeno: false };
 const VIR_VAJE = { opis: "docs/rehab-content.md (T-17)", potrjeno: false };
 
 const z = (ime: string, ucinkovina: string, odmerki: string[], casi: Zdravilo["casi"], zaKaj: string): Zdravilo => ({
-  ime, ucinkovina, odmerki, casi, zaKaj, vir: VIR,
+  ime, ucinkovina, odmerki, nacin: "skozi usta", casi, urnik: casi.join(", "), zaKaj, kdaj: "Samo za testne podatke.", vir: VIR,
 });
 const v = (id: string, naslov: string, ponovitve: string): Vaja => ({ id, naslov, koraki: [], ponovitve, vir: VIR_VAJE });
 

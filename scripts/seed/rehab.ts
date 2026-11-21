@@ -24,7 +24,7 @@ export const emptyRows = (): Rows => ({
   rehabilitacije: [], medications: [], rehab_exercises: [], checkins: [], alerts: [], dose_logs: [], rehab_logs: [],
 });
 
-const CAS: Record<CasDneva, TimeOfDay> = { zjutraj: "zjutraj", opoldne: "opoldne", zvecer: "zvecer", "pred spanjem": "ponoci" };
+const CAS: Record<CasDneva, TimeOfDay> = { zjutraj: "zjutraj", opoldne: "opoldne", zvecer: "zvecer", ponoci: "ponoci" };
 
 export interface RehabSpec {
   predloga: Predloga;
