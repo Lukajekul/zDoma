@@ -801,6 +801,7 @@ export type Database = {
     Functions: {
       can_log_rehab: { Args: { p_rehab: string }; Returns: boolean }
       can_read_rehab: { Args: { p_rehab: string }; Returns: boolean }
+      claim_rehab: { Args: { p_rehab_id: string }; Returns: boolean }
       is_carer_of: { Args: { p_patient: string }; Returns: boolean }
       is_staff: { Args: never; Returns: boolean }
       request_family_access: {
