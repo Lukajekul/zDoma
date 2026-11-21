@@ -25,7 +25,8 @@ export function QrLogin() {
       .auth.signInWithPassword({ email: davcnaEmail(parsed.davcna), password: parsed.token })
       .then(({ error }) => {
         if (error) setState("failed");
-        else window.location.replace("/patient");
+        // First login: the patient sets their own password straight away (T-54).
+        else window.location.replace("/prijava/geslo");
       });
   }, []);
 
@@ -41,15 +42,15 @@ export function QrLogin() {
     <>
       <p role="alert" className="rounded-3xl border-2 border-status-rdece bg-status-rdece/10 p-4 text-xl font-semibold">
         {state === "failed"
-          ? "Ta koda QR ne deluje več. Morda je bila zamenjana z novo."
+          ? "Ta koda QR ne deluje več."
           : "Kode QR ni bilo mogoče prebrati."}
       </p>
       <p className="text-xl">
         {state === "failed"
-          ? "Pokličite patronažno sestro ali oddelek, da vam natisnejo nov prijavni listek."
+          ? "Če ste si že nastavili geslo, se prijavite z davčno številko in geslom. Sicer pokličite patronažno sestro za nov listek."
           : "Poskusite jo skenirati znova s kamero telefona."}
       </p>
-      <BigButton href="/prijava" variant="secondary">
+      <BigButton href="/prijava/pacient" variant="secondary">
         Na prijavo
       </BigButton>
     </>

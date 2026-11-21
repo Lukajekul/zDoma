@@ -1,8 +1,9 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { getCurrentProfile, homePathFor, LOGIN_PATH } from "@/lib/auth";
+import { getCurrentProfile, homePathFor, LOGIN_PATH, PATIENT_LOGIN_PATH } from "@/lib/auth";
 import { isValidDavcna, normalizeDavcna } from "@/lib/davcna";
+import { setOwnPassword } from "@/lib/qr/accounts";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 import { davcnaEmail } from "@/lib/types";
@@ -27,7 +28,7 @@ async function goHome(): Promise<never> {
   redirect(profile ? await homePathFor(profile) : LOGIN_PATH);
 }
 
-/** Bolničar and zadolženec login: davčna številka + password. */
+/** Login with davčna številka + password: staff, family, and patients who already set their own password. */
 export async function login(_prev: FormState, formData: FormData): Promise<FormState> {
   const davcna = normalizeDavcna(text(formData, "davcna"));
   const password = String(formData.get("password") ?? "");
@@ -77,6 +78,25 @@ export async function register(_prev: FormState, formData: FormData): Promise<Fo
   const supabase = await createClient();
   const { error } = await supabase.auth.signInWithPassword({ email: davcnaEmail(davcna), password });
   if (error) return { error: "Račun je ustvarjen. Prijavite se z davčno številko in geslom.", values };
+  return goHome();
+}
+
+/** First login with the QR: the patient replaces the starting password with their own (T-54). */
+export async function setPassword(_prev: FormState, formData: FormData): Promise<FormState> {
+  const profile = await getCurrentProfile();
+  if (!profile) redirect(PATIENT_LOGIN_PATH);
+  const password = String(formData.get("password") ?? "");
+  const repeat = String(formData.get("password_repeat") ?? "");
+
+  if (password.length < MIN_PASSWORD) return { error: `Geslo naj ima vsaj ${MIN_PASSWORD} znakov.` };
+  if (password !== repeat) return { error: "Gesli nista enaki. Vpišite isto geslo dvakrat." };
+  if (password.includes(profile.davcna)) return { error: "Geslo naj ne vsebuje vaše davčne številke. Izberite drugo." };
+
+  try {
+    await setOwnPassword(profile.id, password);
+  } catch {
+    return { error: "Gesla ni bilo mogoče shraniti. Poskusite znova čez minuto." };
+  }
   return goHome();
 }
 

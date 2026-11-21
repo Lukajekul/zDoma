@@ -7,7 +7,8 @@ Seed data from `npm run seed` (T-10) on the shared zDoma project. **All people a
 - **Bolničarji and zadolženci:** `/prijava` with the davčna številka below and the demo password **`zdoma-eupRh0qTB1SQ`** (same for every seeded staff and family account; it is `SEED_PASSWORD` in `.env.local`).
 - This repo is public, so anyone can use this password on the live site. Data is synthetic. To change it: set a new `SEED_PASSWORD` in `.env.local`, run `npm run seed`, and update this line.
 - **Patients (odpuščenci):** no password, they log in with the QR on their prijavni listek. Each patient below has their **QR** (scan it with a phone camera) and the same login as a **prijava** link (open it on the phone). Staff can also show it at `/prijava/listek/<patientId>`.
-- QR codes and links stop working when the seed is re-run or someone presses "Nova koda QR": then regenerate this file and `docs/demo-qr/`.
+- **A patient QR works only until the patient sets their own password** (asked right after the first scan, T-54). After that, log in at `/prijava/pacient` with the davčna številka + that password, or press "Nova koda QR" (or re-run the seed) for a fresh QR.
+- QR codes and links also stop working when the seed is re-run or someone presses "Nova koda QR": then regenerate this file and `docs/demo-qr/`.
 - Re-running `npm run seed` recreates everything with the same names and numbers. If the seed itself changes (e.g. more patients), numbers can shift: update this file from the list the seed prints at the end.
 
 ## Demo story

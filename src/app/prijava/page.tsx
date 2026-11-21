@@ -49,8 +49,9 @@ async function LoginOrAccount() {
             <h2 className="text-xl font-bold">Ste pacient?</h2>
           </div>
           <p className="text-lg">
-            Gesla ne potrebujete. S kamero telefona skenirajte kodo QR na prijavnem listku, ki ste ga dobili ob odpustu.
+            Prvič se prijavite s kodo QR na prijavnem listku, nato s svojim geslom.
           </p>
+          <BigButton href="/prijava/pacient">Prijava za paciente</BigButton>
         </Card>
         <Card>
           <div className="flex items-center gap-4">

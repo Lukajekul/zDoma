@@ -16,7 +16,8 @@ export async function LoginQr({ patientId, caption = true }: { patientId: Uuid; 
   if (!qr) {
     return (
       <p className="text-xl">
-        Ta pacient še nima kode QR. Bolničar jo naredi z gumbom »Nova koda QR«.
+        Kode QR ni: pacient si je že nastavil svoje geslo (ali kode še nima). Če je geslo pozabil, pritisnite
+        »Nova koda QR«.
       </p>
     );
   }

@@ -48,14 +48,14 @@ export function DavcnaField({ defaultValue }: { defaultValue?: string }) {
 }
 
 /** Password with a labelled "Pokaži geslo" toggle (no icon-only button). */
-export function PasswordField({ label = "Geslo", autoComplete, hint }: { label?: string; autoComplete: string; hint?: string }) {
+export function PasswordField({ label = "Geslo", name = "password", autoComplete, hint }: { label?: string; name?: string; autoComplete: string; hint?: string }) {
   const [visible, setVisible] = useState(false);
   return (
     <div className="flex flex-col gap-2">
       <Field
         label={label}
         hint={hint}
-        name="password"
+        name={name}
         type={visible ? "text" : "password"}
         autoComplete={autoComplete}
         required

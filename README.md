@@ -126,14 +126,14 @@ Računi bolničarjev se ne registrirajo sami. Ustvari jih skrbnik.
 ## Prijava in rehabilitacija
 
 1. **Ob prvem odpustu** bolničar ustvari pacientov račun (davčna številka in ime) in natisne **prijavni listek** s kodo QR, nikoli na odpustnico.
-2. **Prijava:** pacient (ali patronažna sestra ob prvem obisku) skenira kodo QR s kamero telefona in je prijavljen. Brez gesla, brez PIN-a. Telefon si prijavo zapomni.
+2. **Prva prijava:** pacient (ali patronažna sestra ob prvem obisku) skenira kodo QR s kamero telefona in si takoj nastavi svoje geslo. Nato se prijavlja z davčno številko in geslom (`/prijava/pacient`). Telefon si prijavo zapomni.
 3. **Rehabilitacija** je eno obdobje okrevanja. Odpre jo bolničar po predlogi in določi datum konca. Dokler je **aktivna**, tečejo pregledi stanja, opomniki in opozorila. Ko poteče, je **zaključena**: vse ostane na voljo za branje.
 4. Pacient, ki že ima račun, uporablja isti listek. Nova rehabilitacija se mu samo prikaže.
 5. Po prijavi: če je aktivna ena rehabilitacija, se odpre takoj. Če jih je več, so prikazane kot velike kartice.
 
 Davčna številka ni skrivnost, zato sama nikoli ne prijavi. Bolničarji in svojci se prijavijo z davčno številko in geslom.
 
-**Prijavni listek je kot ključ:** kdor ima kodo QR, lahko odpre račun. Isto kodo lahko pokaže tudi telefon patronažne sestre ali zadolženca (»QR za prijavo«). Če se listek izgubi, bolničar ali pacient izda novo kodo (»Nova koda QR«): stara takoj preneha delovati, vse naprave se odjavijo.
+**Prijavni listek velja samo do prve prijave:** ko si pacient nastavi geslo, koda QR preneha delovati. Do takrat jo lahko pokaže tudi telefon patronažne sestre ali zadolženca (»QR za prijavo«). Če pacient pozabi geslo ali izgubi listek, bolničar izda novo kodo (»Nova koda QR«): stara takoj preneha delovati, vse naprave se odjavijo, pacient si ob skeniranju nastavi novo geslo.
 
 ## Varnost
 

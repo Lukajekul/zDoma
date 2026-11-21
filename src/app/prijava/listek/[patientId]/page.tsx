@@ -33,7 +33,7 @@ async function Listek({ params }: { params: Promise<{ patientId: string }> }) {
         <p className="text-2xl font-bold">zDoma – prijavni listek</p>
         <LoginQr patientId={patientId} />
         <p className="text-xl font-semibold">
-          Hranite kot ključ. Če ga izgubite, pokličite patronažno sestro.
+          Ob prvi prijavi si nastavite svoje geslo. Nato ta listek ne deluje več. Do takrat ga hranite kot ključ.
         </p>
       </section>
       {who && (

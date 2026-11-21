@@ -76,7 +76,7 @@ export async function createDemoPatient(): Promise<{ email: string; token: strin
   if (!userId) throw new Error("could not create demo user");
 
   await admin.from("profiles").update({ obcina: OBCINA, address: `Mestni trg 1, 3230 ${OBCINA}` }).eq("id", userId);
-  await admin.from("patient_qr_tokens").insert({ patient_id: userId, token });
+  // No QR token stored: the judge demo skips "Nastavite svoje geslo" (T-54) and opens "Danes" straight away.
   const { data: teren } = await admin.from("tereni").select("nurse_id").eq("obcina", OBCINA).limit(1).maybeSingle();
   const nurse = teren?.nurse_id ?? null;
 

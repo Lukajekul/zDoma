@@ -133,3 +133,32 @@ async function siteOrigin(): Promise<string> {
   const proto = h.get("x-forwarded-proto") ?? (host.startsWith("localhost") ? "http" : "https");
   return `${proto}://${host}`;
 }
+
+/**
+ * True while the account still has its starting password (the QR token): the
+ * patient must set their own password before using the app (T-54).
+ */
+export async function hasStartingPassword(userId: Uuid): Promise<boolean> {
+  const admin = createAdminClient();
+  const { data } = await admin.from("patient_qr_tokens").select("patient_id").eq("patient_id", userId).maybeSingle();
+  return Boolean(data);
+}
+
+/**
+ * The patient's own password replaces the starting one. The QR token is
+ * deleted, so the printed listek stops working and can't be reprinted;
+ * "Nova koda QR" makes a new starting password. Written to audit_log.
+ */
+export async function setOwnPassword(userId: Uuid, password: string): Promise<void> {
+  const admin = createAdminClient();
+  const { error } = await admin.auth.admin.updateUserById(userId, { password });
+  if (error) throw new Error(`update password failed: ${error.message}`);
+  const { error: deleteError } = await admin.from("patient_qr_tokens").delete().eq("patient_id", userId);
+  if (deleteError) throw new Error(`delete token failed: ${deleteError.message}`);
+  await admin.from("audit_log").insert({
+    actor_id: userId,
+    action: "password.set",
+    entity: "profiles",
+    entity_id: userId,
+  });
+}

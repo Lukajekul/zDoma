@@ -8,7 +8,7 @@ export default function RegistracijaPage() {
         Z računom lahko spremljate okrevanje svojca. Ko ga ustvarite, svojca zaprosite za dostop. Podatke vidite
         šele, ko vam ga odobri.
       </p>
-      <p className="text-lg text-muted-foreground">Pacienti računa ne potrebujejo: prijavijo se s kodo QR.</p>
+      <p className="text-lg text-muted-foreground">Pacienti dobijo račun ob odpustu: prvič se prijavijo s kodo QR na prijavnem listku.</p>
       <RegisterForm />
     </AppShell>
   );

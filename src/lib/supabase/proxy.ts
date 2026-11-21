@@ -52,7 +52,8 @@ export async function updateSession(request: NextRequest) {
 
   if (!loggedIn && isProtected) {
     const loginUrl = request.nextUrl.clone();
-    loginUrl.pathname = "/prijava";
+    // Patients get their own login page (QR first time, then their own password).
+    loginUrl.pathname = path === "/patient" || path.startsWith("/patient/") ? "/prijava/pacient" : "/prijava";
     loginUrl.search = "";
     const redirect = NextResponse.redirect(loginUrl);
     // Keep any refreshed or cleared auth cookies.
