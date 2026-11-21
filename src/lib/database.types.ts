@@ -806,6 +806,42 @@ export type Database = {
           },
         ]
       }
+      template_overrides: {
+        Row: {
+          data: Json
+          template_id: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          data?: Json
+          template_id: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          data?: Json
+          template_id?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "template_overrides_updated_by_fkey"
+            columns: ["updated_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "template_overrides_updated_by_fkey"
+            columns: ["updated_by"]
+            isOneToOne: false
+            referencedRelation: "staff_directory"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       tereni: {
         Row: {
           id: string
