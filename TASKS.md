@@ -4,6 +4,22 @@ Status: `[ ]` open · `[~]` claimed (name, branch) · `[x]` done (one-line note)
 Rules are in `AGENTS.md`. Pick one open task whose dependencies are all `[x]`.
 User types (odpuščenec, zadolženec, bolničar) and UI rules: `AGENTS.md` §6–7.
 
+## Team split (4 lanes)
+
+Each team member owns one lane, and their agents take that lane's tasks **in the order listed** (the first open one whose deps are `[x]`). If your lane is blocked, help with a lane's open task only after asking its owner. Lanes are split by folder so they rarely touch the same files.
+
+| Lane | Owner | Area and folders | Tasks, in order |
+|---|---|---|---|
+| **A – Platforma in prijava** | _(ime)_ | `src/lib/supabase/`, `supabase/`, `src/lib/types.ts`, `src/app/prijava/`, `src/lib/erecept/`, deploy | T-02 → T-03 → T-19 → T-38 → T-12 → T-31 → T-10 → T-11 → T-39 |
+| **B – Predloge in triaža** | _(ime)_ | `src/lib/templates/`, `src/lib/triage/`, `src/app/carer/`, `src/components/carer/`, `docs/pitch.md` | T-29 → T-04 → T-26 → T-32 → T-20 → T-16 → T-30 (+ T-42 with a medic) |
+| **C – Odpuščenec** | _(ime)_ | `src/components/ui/`, app shell, `src/app/patient/`, `src/components/patient/` | T-01 → T-14 → T-25 → T-06 → T-07 → T-05 → T-33 → T-40 → T-35 |
+| **D – Bolničar** | _(ime)_ | `docs/medicines.md`, `docs/rehab-content.md`, `src/app/nurse/`, `src/components/nurse/` | T-37 → T-17 → T-08 → T-09 → T-21 → T-34 → T-36 |
+
+- **Start now (no deps):** A T-02, B T-29, C T-01, D T-37 and T-17 (content B and C need later).
+- **Critical path:** T-02 → T-03 → T-19 → T-25 → T-05/T-06/T-07 → T-33. Lane A does these first and pushes as soon as each is done; C and D are waiting on them.
+- **Hand-offs:** B's T-29 fills in medicines and exercises once D's T-37/T-17 land. C's T-01 (shell, badge, "Nazaj") is used by everyone: keep the API small and note it in `progress/T-01.md`. T-03's `types.ts` is the shared contract: read `progress/T-03.md` before building on it.
+- **Later tasks** (T-22, T-23, T-28, T-24, T-18) and T-27 stay unassigned until the demo works.
+
 ## Foundation
 
 - [x] **T-00** Scaffold Next.js + TS + Tailwind, folder layout, AGENTS.md. *Done: project skeleton in place.*
