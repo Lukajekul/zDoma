@@ -71,6 +71,8 @@ async function addPatient(person: Person, obcina: string, specs: Omit<RehabSpec,
 }
 
 // Demo story: heart failure, dry weight 72 kg → 74,5 kg, swollen ankles, one missed diuretic.
+// The diuretic is the heart-failure template's first medicine (e.g. Lasix / furosemid).
+const DIURETIK = tpl("srcno-popuscanje").zdravila[0].ime;
 const demoStart = addDays(today, -6);
 const weights = [71.8, 71.9, 71.7, 72.0, 72.8, 73.6, 74.5];
 const demoFixed: Record<string, CheckinAnswers> = Object.fromEntries(
@@ -78,7 +80,7 @@ const demoFixed: Record<string, CheckinAnswers> = Object.fromEntries(
 );
 const demo = await addPatient({ davcna: nextDavcna(), first: "Janez", last: "Novak" }, "Šentjur", [
   { predloga: tpl("srcno-popuscanje"), start: demoStart, profil: "zeleno", fixed: demoFixed,
-    values: { suhaTeza: 72, zdraviloZaVodo: "Furosemid", ciljniTlak: "130/80" } },
+    values: { suhaTeza: 72, zdraviloZaVodo: DIURETIK, ciljniTlak: "130/80" } },
 ]);
 summary.push(`DEMO      ${patients[0].person.davcna}  Janez Novak (srčno popuščanje, rdeče)`);
 
@@ -133,7 +135,7 @@ await addCarer({ davcna: nextDavcna(), first: r.pick(IMENA_M), last: patients[9]
 
 // Demo: Ana marked the evening pills; yesterday's morning diuretic was missed.
 const demoMeds = rows.medications.filter((m) => m.rehab_id === demo.rehabId);
-const diuretic = demoMeds.find((m) => m.name === "Furosemid");
+const diuretic = demoMeds.find((m) => m.name === DIURETIK);
 for (const l of rows.dose_logs.filter((l) => l.rehab_id === demo.rehabId)) {
   if (l.time_of_day === "zvecer") l.entered_by = ana;
   if (l.medication_id === diuretic?.id && l.scheduled_date === addDays(today, -1)) l.status = "izpusceno";
