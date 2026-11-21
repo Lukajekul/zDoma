@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState, useTransition } from "react";
 import type { FormEvent } from "react";
@@ -25,6 +26,7 @@ export function NurseDashboard({ rows, nurseId, templates }: {
   templates: TemplateOption[];
 }) {
   const params = useSearchParams();
+  const listQuery = params.toString();
   const query = params.get("q") ?? "";
   const filters = readFilters(params);
   const router = useRouter();
@@ -136,7 +138,15 @@ export function NurseDashboard({ rows, nurseId, templates }: {
                 <li key={row.id}>
                   <article className="grid gap-3 rounded-2xl border bg-background p-4 sm:grid-cols-[minmax(0,1fr)_auto]">
                     <div className="min-w-0 space-y-1 wrap-break-word">
-                      <h3 className="text-xl leading-snug font-bold">{row.name}</h3>
+                      <h3 className="text-xl leading-snug font-bold">
+                        <Link
+                          className="inline-flex min-h-12 items-center text-primary underline underline-offset-4"
+                          prefetch={false}
+                          href={{ pathname: `/nurse/${row.id}`, query: listQuery ? { seznam: listQuery } : undefined }}
+                        >
+                          {row.name}
+                        </Link>
+                      </h3>
                       <p>{[row.place, row.municipality === row.place ? null : row.municipality].filter(Boolean).join(", ") || "Kraj ni vpisan"}</p>
                       <p className="text-muted-foreground">{row.templateLabel} · Od odpusta {dniBesedilo(row.daysSinceDischarge)}</p>
                     </div>
