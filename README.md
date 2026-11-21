@@ -62,9 +62,19 @@ Ima dostop do vseh svojih podatkov:
 
 Ob vsakem zdravilu in vaji označi, da je opravljeno. Sam odobri ali zavrne prošnje svojcev za dostop in jim dostop kadar koli odvzame.
 
+### Po čem se zDoma razlikuje
+
+*Aplikacija pokaže samo, kaj se je danes spremenilo: pri teži in pri zdravilih. Za ostalo poskrbita patronažna sestra in družina.*
+
+1. **»Danes« namesto menijev:** aplikacija se odpre na naslednjem današnjem opravilu in konča s »Končano za danes ✓«. Običajen dan so 3–4 dotiki.
+2. **»Enako kot včeraj«:** če se ni nič spremenilo, en dotik. Več vpraša le, ko je kaj drugače.
+3. **Vsak dan nekaj nazaj:** lastne številke (»72,4 kg – blizu vaše ciljne teže ✓«, »Dan 6 od 30«) in ime sestre, ko ukrepa (»Sestra Mojca vas bo poklicala danes do 12:00«).
+4. **Zdravila od začetka do konca:** kaj se je ob odpustu spremenilo (Novo / Spremenjeno / Ukinjeno, s fotografijo škatlice), ali so prevzeta (eRecept) in opomnik, preden zmanjka.
+5. **Namestitev ob prvem patronažnem obisku:** patronažna sestra aplikacijo namesti na pacientov telefon in z njim opravi prvi pregled stanja.
+
 ### Pregled stanja in zdravila
 
-- **Pregled stanja je kratek in ves z enim dotikom:** največ 5 vprašanj, eno na zaslon, odgovori so veliki gumbi (brez tipkanja). Teža je vrsta gumbov okoli zadnje teže.
+- **Pregled stanja je kratek in ves z enim dotikom:** največ 5 vprašanj, eno na zaslon, odgovori so veliki gumbi (brez tipkanja). Teža je vrsta gumbov okoli zadnje teže. Če je bil včeraj zelen, gumb »Enako kot včeraj« z enim dotikom odgovori na vse razen ključnih vprašanj (npr. teža).
 - **Vprašanja so prilagojena pacientu:** bolničar ob odpustu izbere, katera vprašanja iz predloge dobi, in vpiše njegove vrednosti. Pacient ne vidi splošnega obrazca, ampak npr. »Ali tehtate več kot 72 kg?«.
 - **Prevzem zdravil (eRecept):** pri vsakem zdravilu je vidno, ali ga je pacient prevzel v lekarni. Če ga ne prevzame, aplikacija najprej opomni pacienta, nato obvesti zadolženca in šele nato bolničarja (»Furosemid ni prevzet 3 dni po odpustu«). Na hackathonu podatke simuliramo, v praksi bi prišli iz eRecepta prek CEZIH.
 - **Opomnik, preden zdravila zmanjka:** iz velikosti prevzetega pakiranja in dnevnega odmerka aplikacija izračuna, koliko dni še zadošča, in pacientu pravočasno napiše: »Zdravila vam bodo zmanjkala čez 5 dni. Pokličite osebnega zdravnika za nov recept.« Odmerkov nikoli ne spreminja.
@@ -149,9 +159,7 @@ Pravila za razvijalce in agente: [AGENTS.md](AGENTS.md). Naloge: [TASKS.md](TASK
 - demo v živo s kodo QR.
 
 **Samo klikljivi prototipi**
-- celoten pogled »Moje okrevanje«,
-- poročanje prek telefona/SMS,
-- zaslon za čustveno podporo.
+- poročanje prek telefona/SMS.
 
 **Kasneje**
 - opomniki po e-pošti in SMS, tudi za svojce,
@@ -161,7 +169,8 @@ Pravila za razvijalce in agente: [AGENTS.md](AGENTS.md). Naloge: [TASKS.md](TASK
 **Izpuščeno**
 - naročanje na preglede (to že pokrivata zVEM in eNaročanje),
 - odprt klepet z zdravnikom (ni skalabilno),
-- snemanje lastnih videov vaj (vgradimo obstoječe videe fizioterapevtov).
+- snemanje lastnih videov vaj (vgradimo obstoječe videe fizioterapevtov),
+- ločen pogled »Moje okrevanje« in zaslon za čustveno podporo (preveč splošno; lasten trend je na koncu pregleda stanja).
 
 ## Demo
 

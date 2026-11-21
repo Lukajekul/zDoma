@@ -50,13 +50,23 @@ Each group is one **template**: a hand-written data file with check-in questions
 
 Odpuščenec and zadolženec describe a relationship to a patient, not an account type. One person can be both.
 
+### What makes zDoma different
+
+*The app shows only what changed today: in your weight and in your medicines. The rest is handled by the patronažna sestra and the family.*
+
+1. **"Danes", not menus:** the app opens on today's next action and ends with "Končano za danes ✓". A normal day is 3–4 taps.
+2. **"Enako kot včeraj":** if nothing changed, one tap. The app asks more only when something is different.
+3. **Something back every day:** own numbers ("72,4 kg – blizu vaše ciljne teže ✓", "Dan 6 od 30"), and the nurse's name when she acts ("Sestra Mojca vas bo poklicala danes do 12:00").
+4. **Medicines, end to end:** what changed at discharge (Novo / Spremenjeno / Ukinjeno, with a photo of each box), whether it was picked up (eRecept), and a reminder before it runs out.
+5. **Set up at the first patronaža visit:** the patronažna sestra installs it on the patient's phone and does the first check-in with them, so nobody aged 80 has to set up an app alone.
+
 ### Patient app
 - **Daily check-in (about 30 s):** at most 5 questions, one per screen, **one tap per answer**. The questions are chosen for this patient by the bolničar and use their own values ("Ali tehtate več kot 72 kg?"), not a generic form.
 - **Pill reminders** with a "Vzeto" button. Missed doses feed into triage.
 - **Pharmacy pick-up (eRecept, mocked):** each medicine shows whether it was collected. Not collected after discharge → reminder to the patient, then the family, then an alert for staff ("Furosemid ni prevzet 3 dni po odpustu"). In production from eRecept via CEZIH.
 - **Before medicines run out:** days left = pack size from the pick-up ÷ daily dose. "Zdravila vam bodo zmanjkala čez 5 dni. Pokličite osebnega zdravnika za nov recept."
 - **Rehab plan:** exercises with a picture or video, then "Opravljeno?" and "Bolečina 0–10?".
-- **My recovery:** discharge information in plain language, own trends, and the same green/yellow/red status staff see.
+- **Discharge information** in plain language and the warning signs, one tap away from "Danes".
 - **Family access:** approve or reject requests, remove access any time.
 - **Escalation instead of open chat:** when the status turns red, a nurse calls.
 
@@ -119,9 +129,7 @@ Next.js + TypeScript, Tailwind + shadcn/ui, Supabase (Postgres, Realtime, Storag
 - Live QR demo
 
 **Clickable mock-ups only**
-- Full "Moje okrevanje" view
 - Phone/SMS check-in
-- Emotional support screen
 
 **Later**
 - Email and SMS reminders, including for family
@@ -133,6 +141,7 @@ Next.js + TypeScript, Tailwind + shadcn/ui, Supabase (Postgres, Realtime, Storag
 - Appointment booking (zVEM / eNaročanje already does this)
 - Open doctor chat (doesn't scale)
 - Filming our own rehab videos (embed existing physio videos instead)
+- Separate "Moje okrevanje" view and emotional support screen (too generic; own trend is on the check-in end screen)
 
 ## Pitch
 

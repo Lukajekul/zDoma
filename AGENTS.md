@@ -100,9 +100,17 @@ Background and sources: `docs/research.md`. Six templates, heart failure is the 
 - **Decision support, not diagnosis.** The app never tells a patient what they have or to change a dose. It tells them to call, and it tells staff who to look at.
 - Thresholds come from `docs/research.md`. Don't invent medical rules. If one is missing, add a task to check it.
 
+### What makes a patient keep using it
+- **"Danes", not menus.** The patient's home is today's next action, one at a time, ending with "Končano za danes ✓".
+- **Give something back every day,** against the patient's own numbers ("72,4 kg – blizu vaše ciljne teže ✓", "Dan 6 od 30"), never a diagnosis.
+- **A real person behind it.** When a nurse acts, the patient sees her name and what happens next ("Sestra Mojca vas bo poklicala danes do 12:00").
+- **Medicine changes first.** At discharge the pill list shows Novo / Spremenjeno / Ukinjeno against the medicines before admission, with a photo of each box.
+- **Set up at the first home visit.** The patronažna sestra logs the patient in on their phone and does the first check-in with them.
+
 ### Check-in: simple and specific to the patient
 - **One tap per answer.** Big buttons only: no typing, no sliders, no free text. Weight is a row of buttons around the patient's last weight, with "Drugo" for a number field.
 - **Short.** At most 5 questions a day, one per screen.
+- **"Enako kot včeraj".** When yesterday was green, one tap answers everything the same as yesterday, except questions the template marks `vednoVprasaj` (e.g. weight for heart failure).
 - **Specific to this patient, not general.** The template lists the possible questions. The bolničar ticks which ones this patient gets at discharge, and questions use the patient's own values (dry weight, their medicine names), e.g. "Ali tehtate več kot 72 kg?" instead of "Kakšna je vaša teža?".
 
 ### Medicines picked up (eRecept)

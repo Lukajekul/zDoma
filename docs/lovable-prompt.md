@@ -30,59 +30,57 @@ SCREENS
 
 PATIENT (Pacient: Janez Novak, 78, heart failure)
 
-3. Domov (home, today's tasks)
-- Greeting "Dober dan, Janez". Status badge. Rehabilitation card: "Srčno popuščanje · aktivna do 21. 12. 2026".
-- Today's list as big tappable cards with done/not done state:
-  - "Jutranji pregled stanja" (button "Začni")
-  - "Zdravila ob 8:00" (Furosemid 40 mg, Bisoprolol 5 mg)
-  - "Zdravila ob 20:00"
-  - "Vaja: hoja 10 minut"
-- Bottom links: "Moje okrevanje", "Svojci z dostopom".
+3. Danes (home = today's next action, not a menu)
+- Greeting "Dober dan, Janez". Status badge. Small line "Srčno popuščanje · Dan 6 od 30".
+- If a nurse acted: card with her photo "Sestra Mojca vas bo poklicala danes do 12:00".
+- ONE big card with the next action, e.g. "Stopite na tehtnico" (button "Začni"). After it, the next one appears: tablets at 8:00, then "Vaja: hoja 10 minut".
+- When all is done: "Končano za danes ✓ Jutri ob 8:00."
+- Small links below: "Vsa zdravila", "Vaje", "Svojci z dostopom".
 
-4. Pregled stanja (daily check-in), one question per screen with a progress indicator "1 / 4":
-- "Koliko tehtate danes zjutraj?" large number input with "kg" and +/- buttons.
-- "Ali imate otekle gležnje?" big "Da" / "Ne" buttons.
+4. Pregled stanja (daily check-in), one question per screen, every answer ONE tap:
+- First screen: huge button "Enako kot včeraj" (only weight is still asked) and smaller "Nekaj je drugače".
+- "Koliko tehtate danes zjutraj?" as a row of big buttons 72,0 / 72,5 / 73,0 / 73,5 / 74,0 kg around yesterday's weight, plus "Drugo".
+- "Ali imate otekle gležnje?" big "Da" / "Ne".
 - "Ali težje dihate kot včeraj?" big "Da" / "Ne".
 - "Ali imate bolečino v prsih?" big "Da" / "Ne". If "Da", go to screen 5.
-- Finish: "Hvala! Pregled je shranjen ✓" with today's status.
+- End: "Shranjeno ✓", "72,4 kg – blizu vaše ciljne teže 72 kg ✓", a small 7-day weight line with the 72 kg target, "Jutri ob 8:00 spet".
 
 5. Nujno (emergency, full screen, red)
 - Huge text "Pokličite 112", subtext "Bolečina v prsih je lahko nujno stanje. Ne čakajte." Huge button "Pokliči 112" (tel:112) and a smaller "Nazaj".
 
 6. Zdravila (pills)
-- Times of day with medicine name, dose, what it's for in plain words ("Furosemid 40 mg – odvaja odvečno vodo"). Big button "Vzeto" per dose; taken doses show "Vzeto ob 8:05 ✓".
+- On the first open after discharge: "Kaj se je spremenilo" with three groups: "Novo" (Spironolakton 25 mg), "Spremenjeno" (Furosemid 20 mg → 40 mg), "Ukinjeno – tega ne jemljite več" (Ibuprofen). Each with a photo of the box. Button "Razumem".
+- Then times of day with box photo, name, dose, what it's for in plain words ("Furosemid 40 mg – odvaja odvečno vodo"), and "Prevzeto v lekarni ✓" or "Še ni prevzeto". Big button "Vzeto" per dose; taken doses show "Vzeto ob 8:05 ✓".
+- Warning card when close to running out: "Zdravila vam bodo zmanjkala čez 5 dni. Pokličite osebnega zdravnika za nov recept."
 
 7. Vaje (rehab)
 - Exercise cards with a placeholder image, title, 3 short steps, repetitions, button "Opravljeno". After it: "Bolečina 0–10?" as 11 large number buttons.
 
-8. Moje okrevanje
-- Plain-language discharge summary, "Opozorilni znaki" (when to call), and a simple weight chart for the last 7 days with the dry weight line at 72 kg.
-
-9. Svojci z dostopom
+8. Svojci z dostopom
 - Pending request card: "Ana Novak želi spremljati vaše okrevanje" with "Dovoli" / "Zavrni".
 - List of approved family members with "Odstrani".
 
 FAMILY (Svojec: Ana Novak, the daughter)
 
-10. Skrbim za (read-only)
+9. Skrbim za (read-only)
 - Card for "Janez Novak" with status badge and today: which pills were taken or missed, check-in done or not, exercises done or skipped. Clearly marked "Samo za ogled".
 - Button "Zaprosi za dostop" opens a field "Davčna številka bolnika" and always replies "Prošnja poslana".
 - Switch "Prejemaj obvestila" (off by default) with options "E-pošta" / "SMS" (prototype only).
 
 STAFF (Bolničar: med. sestra Maja Kos). Desktop-first but still works on mobile.
 
-11. Nadzorna plošča (dashboard)
+10. Nadzorna plošča (dashboard)
 - Headline "3 bolniki potrebujejo pozornost". Only red and yellow patients are shown; toggle "Pokaži vse (24)".
 - Each row: name, age, template, status badge, and the reason in one sentence, e.g. "Teža +2,5 kg v 3 dneh, otekli gležnji, izpuščen diuretik".
 - Button "Odpri novo rehabilitacijo".
 
-12. Bolnik (patient detail)
+11. Bolnik (patient detail)
 - Alert reasons, 7-day trends (weight, breathlessness), pills taken/missed, rehab done, a short summary paragraph.
 - One-tap actions: "Poklicano – vse v redu", "Naročen pregled", "Obveščen osebni zdravnik".
 - Rehabilitation box: "Aktivna do 21. 12. 2026" with button "Podaljšaj" (choose +14 / +30 / +60 dni).
 - Small "Dnevnik sprememb" list (who, when, what).
 
-13. Nova rehabilitacija (open at discharge), short form in steps:
+12. Nova rehabilitacija (open at discharge), short form in steps:
 - Choose a template (6 big cards): "Srčno popuščanje", "Po infarktu ali operaciji srca", "Nov kolk ali koleno", "KOPB", "Možganska kap", "Rak na sistemskem zdravljenju".
 - "Davčna številka bolnika", "Ime in priimek" (only if new), editable list of medicines pre-filled from the template, end date pre-filled (e.g. +30 dni).
 - Button "Odpri rehabilitacijo", then show the printable "Prijavni listek": davčna številka, "Začasno geslo: KM7P-4XQ2", "Velja do: 28. 11. 2026", a QR placeholder, and the note "Hranite ločeno od odpustnice." Buttons "Natisni" and "Novo začasno geslo".
