@@ -38,8 +38,17 @@ Source: systematic review of 49 European studies (published 2000–2024) ✅
 
 Citation: Darbà J, Ascanio M, Rodríguez A, et al. *Economic burden of heart failure in Europe: a systematic review of costs and cost-effectiveness.* ESC Heart Fail 2025;12(6):4055–4068. doi:10.1002/ehf2.70017. [PMC12719840](https://pmc.ncbi.nlm.nih.gov/articles/PMC12719840/)
 
+## Cost of a hospital stay in Slovenia (partly found, T-46)
+
+ZZZS pays an acute hospital stay as **SPP weight × price of one weight**.
+
+- **Price of one SPP weight in 2026: 1.912,17 €** ✅ (read in the official table). Row "Z0034 Bol – Akutna bolnišnična obravnava SPP", unit "utež", normative 1.000 weights = 1.912.172,89 €. It excludes expensive medicines (LZM) and add-ons; tertiary hospitals get a supplement on top. Source: Ministrstvo za zdravje, *Priloga 1 – Kalkulacije in cene zdravstvenih storitev*, Uredba o programih storitev OZZ za leto 2026 (Uradni list RS 32/2026, 17. 4. 2026). [PDF](https://www.gov.si/assets/ministrstva/MZ/DOKUMENTI/2-NOVICE/2026-04-17_Uredba-2026/Priloga-1.pdf)
+- So **a stay with weight 1,0 costs ZZZS about 1.900 €**. Usable on a slide as "povprečna hospitalizacija (utež 1) stane ZZZS okoli 1.900 €", not as a heart-failure figure.
+- ⚠️ **The heart-failure weight (SPP F62A/F62B) is still missing.** New Slovenian weights apply from 1. 1. 2026, but no public table with F62 was found (not in the decree's readable text, not indexed). Likely source: ZZZS code lists (partner.zzzs.si → Šifranti, Excel/ZIP) or the ZZZS SPP list for providers. → T-46.
+- The Uredba was amended on 27. 8. 2026 (Uradni list RS 137/2026); a search snippet shows the same Z0034 row, but I did not check whether the price changed.
+
 ## Not found yet
-- **Cost of one heart-failure hospitalisation in Slovenia.** It would come from the ZZZS SPP (DRG) weight for heart failure (F62) × the price of one weight. Neither the review nor Omersa gives a Slovenian euro figure. A 2004 Slovenian cost study exists but is in tolars and too old to quote. → T-46.
+- Heart-failure SPP weight, see above (T-46). A 2004 Slovenian cost study exists but is in tolars and too old to quote.
 - Slovenian patient groups other than heart failure: use the European figures in `docs/research.md`.
 
 ## Secondary sources (context only, not for slides)
