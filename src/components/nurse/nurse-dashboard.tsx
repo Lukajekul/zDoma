@@ -136,7 +136,7 @@ export function NurseDashboard({ rows, nurseId, covering = [], templates }: {
               Za izbrane filtre ni pacientov. Poskusite z drugimi filtri.
             </p>
           ) : (
-            <ul className="grid gap-3 @xl:grid-cols-2">
+            <ul className="grid gap-3 @lg:grid-cols-2">
               {filtered.map((row) => (
                 <li key={row.id} className="flex">
                   <article className="grid flex-1 content-start gap-3 rounded-2xl border bg-background p-4 sm:grid-cols-[minmax(0,1fr)_auto]">
