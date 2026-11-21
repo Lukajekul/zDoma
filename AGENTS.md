@@ -248,6 +248,7 @@ Each task owns its own folder or files. Stay out of folders that another `[~]` t
   ```
 - If the CLI says you're not logged in, ask the human to run `supabase login` (it opens a browser). If the `zDoma` project isn't in `supabase projects list`, the human needs an invite to the `zDoma` organization. Never guess keys, invent placeholder values or take them from another project.
 - `SUPABASE_SERVICE_ROLE_KEY` bypasses all security rules. Add it only when your task needs it (seeding, admin scripts), by appending it the same way (`select(.name=="service_role")`, written as `SUPABASE_SERVICE_ROLE_KEY=...` with `>>`). Keep it out of any `NEXT_PUBLIC_` variable and never use it in browser code.
+- **Production (Cloudflare Worker):** `npm run deploy` builds, strips server secrets from the bundle (`scripts/strip-bundle-secrets.mjs`) and deploys. Server secrets live only as Worker secrets: `npx wrangler secret put SUPABASE_SERVICE_ROLE_KEY`. A new server secret must be added to `SECRETS` in that script.
 - **`.env.local` must never be committed or pushed.** It's gitignored. Before every commit, run `git status` and make sure no `.env*` file is staged except `.env.example`.
 - Never print key values in chat, logs, commit messages or code. List only variable *names* in `.env.example`.
 - If a key was ever committed or pushed, tell the human immediately so they can rotate it in the dashboard.
