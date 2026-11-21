@@ -532,6 +532,48 @@ export type Database = {
         }
         Relationships: []
       }
+      push_subscriptions: {
+        Row: {
+          auth: string
+          created_at: string
+          endpoint: string
+          id: string
+          p256dh: string
+          user_id: string
+        }
+        Insert: {
+          auth: string
+          created_at?: string
+          endpoint: string
+          id?: string
+          p256dh: string
+          user_id?: string
+        }
+        Update: {
+          auth?: string
+          created_at?: string
+          endpoint?: string
+          id?: string
+          p256dh?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "push_subscriptions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "push_subscriptions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "staff_directory"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       rehab_exercises: {
         Row: {
           active: boolean
@@ -731,6 +773,35 @@ export type Database = {
             columns: ["patient_id"]
             isOneToOne: false
             referencedRelation: "staff_directory"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      reminders_sent: {
+        Row: {
+          day: string
+          kind: string
+          rehab_id: string
+          sent_at: string
+        }
+        Insert: {
+          day: string
+          kind: string
+          rehab_id: string
+          sent_at?: string
+        }
+        Update: {
+          day?: string
+          kind?: string
+          rehab_id?: string
+          sent_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reminders_sent_rehab_id_fkey"
+            columns: ["rehab_id"]
+            isOneToOne: false
+            referencedRelation: "rehabilitacije"
             referencedColumns: ["id"]
           },
         ]
