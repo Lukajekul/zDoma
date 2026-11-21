@@ -46,9 +46,10 @@ function pick<T extends string>(choices: readonly T[], value: string | null): T 
   return choices.find((choice) => choice === value) ?? null;
 }
 
-export function readFilters(params: Pick<URLSearchParams, "get">): Filters {
+/** `defaultScope`: "moji" for a patronažna sestra, "vsi" for hospital staff, who have no patients of their own (T-57). */
+export function readFilters(params: Pick<URLSearchParams, "get">, defaultScope: Scope = "moji"): Filters {
   return {
-    scope: pick(scopes, params.get("prikaz")) ?? "moji",
+    scope: pick(scopes, params.get("prikaz")) ?? defaultScope,
     status: pick(statuses, params.get("stanje")),
     municipality: params.get("obcina") || null,
     place: params.get("kraj") || null,

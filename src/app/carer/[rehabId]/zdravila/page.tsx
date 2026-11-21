@@ -5,18 +5,18 @@ import { getMarkerNames } from "@/app/patient/_lib/marker-names";
 import { dosesOn, TIME_LABEL } from "@/app/patient/_lib/schedule";
 import { DoseCard } from "@/components/patient/dose-card";
 import { AppShell } from "@/components/shell";
-import { getCarerRehab, patientName } from "../../_lib/access";
+import { type RehabParams, getCarerRehab, patientName } from "../../_lib/access";
 import { carerMarkTaken, carerUndoTaken } from "../actions";
 import { TogetherNote } from "../together-note";
 
 export const metadata = { title: "Zdravila – Skrbim za – zDoma" };
 
 /** Zadolženec marks today's pills "Vzeto" when taken together with the patient. */
-export default function CarerPillsPage({ params }: PageProps<"/carer/[rehabId]/zdravila">) {
+export default function CarerPillsPage({ params }: RehabParams) {
   return (
     <Suspense
       fallback={
-        <AppShell title="Zdravila danes" back="/carer">
+        <AppShell title="Zdravila danes">
           <p className="text-xl">Nalagam …</p>
         </AppShell>
       }
@@ -26,11 +26,11 @@ export default function CarerPillsPage({ params }: PageProps<"/carer/[rehabId]/z
   );
 }
 
-async function Pills({ params }: Pick<PageProps<"/carer/[rehabId]/zdravila">, "params">) {
+async function Pills({ params }: RehabParams) {
   const { rehabId } = await params;
   const c = await getCarerRehab(rehabId);
   if (!c) notFound();
-  const back = `/carer/${c.rehab.id}`;
+  const back = c.base;
   if (!c.active) {
     return (
       <AppShell title="Zdravila danes" back={back}>

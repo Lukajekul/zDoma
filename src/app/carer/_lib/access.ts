@@ -38,9 +38,17 @@ export async function getCaredPatients(carerId: string) {
   });
 }
 
+/** Route params of the helper pages; shared by /carer/<id>/… and /nurse/obisk/<id>/…. */
+export type RehabParams = { params: Promise<{ rehabId: string }> };
+
+/** Who does tasks together with the patient: an approved zadolženec, or staff on a home visit (T-57). */
+export type Helper = "family" | "staff";
+
 /**
- * The logged-in zadolženec's view of one rehabilitacija, or null when they
- * have no approved access to its patient. Every carer page and action calls this.
+ * The helper's view of one rehabilitacija, or null without access: an approved
+ * zadolženec, or a bolničar (a patronažna sestra on a home visit). Every carer
+ * page and action calls this. `base` / `home` are where its links lead:
+ * "/carer/<id>" and "/carer" for family, "/nurse/obisk/<id>" and "/nurse/<id>" for staff.
  */
 export async function getCarerRehab(rehabId: string) {
   const profile = await requireProfile();
@@ -50,19 +58,31 @@ export async function getCarerRehab(rehabId: string) {
   if (!r || r.patient_id === profile.id) return null;
 
   const [{ data: access }, { data: patient }] = await Promise.all([
-    supabase
-      .from("family_access")
-      .select("id")
-      .eq("requester_id", profile.id)
-      .eq("patient_id", r.patient_id)
-      .eq("status", "approved")
-      .maybeSingle(),
+    profile.is_staff
+      ? Promise.resolve({ data: null })
+      : supabase
+          .from("family_access")
+          .select("id")
+          .eq("requester_id", profile.id)
+          .eq("patient_id", r.patient_id)
+          .eq("status", "approved")
+          .maybeSingle(),
     supabase.from("profiles").select("id, first_name, last_name").eq("id", r.patient_id).maybeSingle(),
   ]);
-  if (!access || !patient) return null;
+  if ((!access && !profile.is_staff) || !patient) return null;
 
+  const helper: Helper = profile.is_staff ? "staff" : "family";
   const today = todayLjubljana();
-  return { profile, rehab: r, patient: patient as CaredPatient, today, active: isRehabActive(r, today) };
+  return {
+    profile,
+    helper,
+    base: helper === "staff" ? `/nurse/obisk/${r.id}` : `/carer/${r.id}`,
+    home: helper === "staff" ? `/nurse/${r.id}` : "/carer",
+    rehab: r,
+    patient: patient as CaredPatient,
+    today,
+    active: isRehabActive(r, today),
+  };
 }
 
 export const patientName = (p: CaredPatient) => `${p.first_name} ${p.last_name}`.trim();

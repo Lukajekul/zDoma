@@ -4,18 +4,18 @@ import { getExercisesForDay } from "@/app/patient/_lib/exercises";
 import { getMarkerNames } from "@/app/patient/_lib/marker-names";
 import { ExerciseCard } from "@/components/patient/exercise-card";
 import { AppShell } from "@/components/shell";
-import { getCarerRehab, patientName } from "../../_lib/access";
+import { type RehabParams, getCarerRehab, patientName } from "../../_lib/access";
 import { carerLogExercise, carerUndoExercise } from "../actions";
 import { TogetherNote } from "../together-note";
 
 export const metadata = { title: "Vaje – Skrbim za – zDoma" };
 
 /** Zadolženec marks exercises done (with pain 0–10) or skipped, together with the patient. */
-export default function CarerExercisesPage({ params }: PageProps<"/carer/[rehabId]/vaje">) {
+export default function CarerExercisesPage({ params }: RehabParams) {
   return (
     <Suspense
       fallback={
-        <AppShell title="Vaje danes" back="/carer">
+        <AppShell title="Vaje danes">
           <p className="text-xl">Nalagam …</p>
         </AppShell>
       }
@@ -25,11 +25,11 @@ export default function CarerExercisesPage({ params }: PageProps<"/carer/[rehabI
   );
 }
 
-async function Exercises({ params }: Pick<PageProps<"/carer/[rehabId]/vaje">, "params">) {
+async function Exercises({ params }: RehabParams) {
   const { rehabId } = await params;
   const c = await getCarerRehab(rehabId);
   if (!c) notFound();
-  const back = `/carer/${c.rehab.id}`;
+  const back = c.base;
   if (!c.active) {
     return (
       <AppShell title="Vaje danes" back={back}>

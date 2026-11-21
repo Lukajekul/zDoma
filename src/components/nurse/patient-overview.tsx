@@ -26,6 +26,9 @@ export function PatientOverview({ detail, back }: { detail: PatientDetail; back:
           <StatusBadge short status={detail.status} />
         </div>
         <div className="grid max-w-md gap-2">
+          {detail.active && (
+            <BigButton href={`/nurse/obisk/${detail.rehabId}`}>Obisk: pregled, tablete, vaje</BigButton>
+          )}
           {callHref ? (
             <a className="inline-flex min-h-12 items-center justify-center rounded-xl border-2 border-primary px-4 py-2 font-semibold text-primary hover:bg-primary/10" href={callHref}>
               Pokliči pacienta

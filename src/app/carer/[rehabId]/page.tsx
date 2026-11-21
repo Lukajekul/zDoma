@@ -10,16 +10,16 @@ import { rehabDay, rehabTitle } from "@/components/patient/rehab-info";
 import { AppShell, BigButton, StatusBadge } from "@/components/shell";
 import { createClient } from "@/lib/supabase/server";
 import type { Checkin } from "@/lib/types";
-import { getCarerRehab, patientName } from "../_lib/access";
+import { type RehabParams, getCarerRehab, patientName } from "../_lib/access";
 
 export const metadata = { title: "Skrbim za – zDoma" };
 
 /** T-20: how one patient is following the plan today, and what the zadolženec can mark. */
-export default function CarerRehabPage({ params }: PageProps<"/carer/[rehabId]">) {
+export default function CarerRehabPage({ params }: RehabParams) {
   return (
     <Suspense
       fallback={
-        <AppShell title="Skrbim za" back="/carer">
+        <AppShell title="Skrbim za">
           <p className="text-xl">Nalagam …</p>
         </AppShell>
       }
@@ -29,12 +29,12 @@ export default function CarerRehabPage({ params }: PageProps<"/carer/[rehabId]">
   );
 }
 
-async function Overview({ params }: Pick<PageProps<"/carer/[rehabId]">, "params">) {
+async function Overview({ params }: RehabParams) {
   const { rehabId } = await params;
   const c = await getCarerRehab(rehabId);
   if (!c) notFound();
   const { rehab, patient, today, active } = c;
-  const base = `/carer/${rehab.id}`;
+  const base = c.base;
 
   const supabase = await createClient();
   const [{ data: checkinRows }, { meds, logs }, exercises] = await Promise.all([
@@ -70,8 +70,9 @@ async function Overview({ params }: Pick<PageProps<"/carer/[rehabId]">, "params"
   const by = (enteredBy: string) => (enteredBy !== patient.id ? names[enteredBy] : undefined);
 
   return (
-    <AppShell title={patientName(patient)} back="/carer">
+    <AppShell title={patientName(patient)} back={c.home}>
       <p className="text-xl">
+        {c.helper === "staff" && <strong className="block">Obisk pri pacientu</strong>}
         {rehabTitle(rehab)} · {active ? `Dan ${day} od ${total}` : "Zaključeno"}
       </p>
 
@@ -129,7 +130,8 @@ async function Overview({ params }: Pick<PageProps<"/carer/[rehabId]">, "params"
       </Card>
 
       <p className="text-lg text-muted-foreground">
-        Kar označite, se shrani z vašim imenom. Načrta, zdravil in datuma konca ne morete spreminjati.
+        Kar označite, se shrani z vašim imenom.
+        {c.helper === "family" ? " Načrta, zdravil in datuma konca ne morete spreminjati." : " Načrt in zdravila urejate v podrobnostih pacienta."}
       </p>
     </AppShell>
   );
@@ -137,7 +139,7 @@ async function Overview({ params }: Pick<PageProps<"/carer/[rehabId]">, "params"
 
 function Card({ icon, title, children }: { icon: React.ReactNode; title: string; children: React.ReactNode }) {
   return (
-    <section className="flex flex-col gap-3 rounded-3xl bg-card shadow-soft p-4">
+    <section className="flex flex-col gap-3 rounded-3xl bg-card shadow-soft p-5">
       <h2 className="flex items-center gap-2 text-2xl font-bold [&_svg]:size-7">
         <span aria-hidden>{icon}</span>
         {title}

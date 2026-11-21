@@ -7,6 +7,7 @@ import type { FormEvent } from "react";
 import { Activity, Bell, ClipboardX, Pill, Search, SlidersHorizontal } from "lucide-react";
 import { claimRehab } from "@/app/nurse/actions";
 import { IconTile, StatusBadge } from "@/components/shell";
+import type { StaffKind } from "@/lib/staff";
 import { dniBesedilo } from "@/lib/triage";
 import { DashboardControls } from "./dashboard-controls";
 import type { TemplateOption } from "./dashboard-controls";
@@ -21,7 +22,9 @@ const messages = {
   error: "Prevzem ni uspel. Osvežite stran in poskusite znova.",
 } as const;
 
-export function NurseDashboard({ rows, nurseId, covering = [], templates }: {
+export function NurseDashboard({ kind, rows, nurseId, covering = [], templates }: {
+  /** A patronažna sestra gets "Obisk" on each of her patients (T-57). */
+  kind: StaffKind;
   rows: DashboardRow[];
   nurseId: string;
   /** Nurses she substitutes for today (T-49). */
@@ -31,7 +34,7 @@ export function NurseDashboard({ rows, nurseId, covering = [], templates }: {
   const params = useSearchParams();
   const listQuery = params.toString();
   const query = params.get("q") ?? "";
-  const filters = readFilters(params);
+  const filters = readFilters(params, kind === "patronaza" ? "moji" : "vsi");
   const router = useRouter();
   const realtimeUnavailable = useDashboardRealtime();
   const searchForm = useRef<HTMLFormElement>(null);
@@ -182,6 +185,17 @@ export function NurseDashboard({ rows, nurseId, covering = [], templates }: {
                       {pending && claiming === row.id ? "Prevzemam …" : "Prevzemi"}
                     </button>
                   ) : (
+                    <span className="flex items-center gap-3">
+                    {kind === "patronaza" && (
+                      <Link
+                        prefetch={false}
+                        aria-label={`Obisk: ${row.name}`}
+                        href={`/nurse/obisk/${row.id}`}
+                        className="inline-flex min-h-12 items-center rounded-2xl bg-primary px-4 font-bold text-primary-foreground hover:bg-primary/90"
+                      >
+                        Obisk
+                      </Link>
+                    )}
                     <Link
                       prefetch={false}
                       aria-label={`Odpri: ${row.name}`}
@@ -190,6 +204,7 @@ export function NurseDashboard({ rows, nurseId, covering = [], templates }: {
                     >
                       Odpri
                     </Link>
+                    </span>
                   )}
                 </li>
               ))}
