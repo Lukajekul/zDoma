@@ -3,8 +3,8 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 
 const variants = {
-  primary: "bg-primary text-primary-foreground hover:bg-primary/90 border-primary",
-  secondary: "bg-background text-foreground hover:bg-muted border-border",
+  primary: "bg-primary text-primary-foreground hover:bg-primary/90 border-primary shadow-[0_6px_14px_-4px_var(--primary)]",
+  secondary: "bg-brand-soft text-brand-ink hover:bg-brand-soft/70 border-brand-soft",
   danger: "bg-status-rdece text-white hover:bg-status-rdece/90 border-status-rdece",
   success: "bg-status-zeleno text-white hover:bg-status-zeleno/90 border-status-zeleno",
 } as const;
@@ -14,7 +14,7 @@ export type BigButtonVariant = keyof typeof variants;
 /** Classes for a big tap target (min 64 px high, full width, large text). */
 export function bigButtonClass(variant: BigButtonVariant = "primary", className?: string) {
   return cn(
-    "flex min-h-16 w-full items-center justify-center gap-3 rounded-xl border-2 px-5 py-3 text-center text-xl font-semibold transition-colors select-none",
+    "flex min-h-16 w-full items-center justify-center gap-3 rounded-2xl border-2 px-5 py-3 text-center text-xl font-bold transition-colors select-none",
     "focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ring",
     "disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50",
     "[&_svg]:size-7 [&_svg]:shrink-0",

@@ -2,9 +2,9 @@ import { dniBesedilo } from "@/lib/triage";
 import type { RingData, RingPart } from "@/lib/progress-ring";
 
 const COLOR: Record<RingPart, string> = {
-  answered: "var(--status-zeleno)",
-  missed: "var(--status-rdece)",
-  future: "oklch(0.9 0 0)",
+  answered: "var(--brand)",
+  missed: "oklch(0.65 0.18 27)",
+  future: "oklch(0.92 0.008 240)",
 };
 
 const SIZE = 240;

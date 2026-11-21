@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { BackButton } from "./back-button";
+import { WaveBand } from "./wave-band";
 
 type AppShellProps = {
   /** Screen title, shown big at the top. */
@@ -15,21 +16,22 @@ type AppShellProps = {
   children: ReactNode;
 };
 
-/** Page frame: "Nazaj", title, centred column (max-w-xl, or max-w-6xl with `wide`). */
+/**
+ * Page frame: green wave band with "Nazaj" and the title, then a white panel that overlaps
+ * the band on the grey canvas. Centred column (max-w-xl, or max-w-6xl with `wide`).
+ */
 export function AppShell({ title, back, wide = false, children }: AppShellProps) {
+  const column = cn("mx-auto w-full px-4 sm:px-6", wide ? "max-w-6xl" : "max-w-xl");
   return (
-    <div className="flex flex-1 flex-col bg-muted/40">
-      <div
-        className={cn(
-          "mx-auto flex w-full flex-1 flex-col bg-background px-4 pt-4 pb-10 sm:my-6 sm:rounded-2xl sm:border sm:px-8 sm:shadow-sm",
-          wide ? "max-w-6xl" : "max-w-xl",
-        )}
-      >
-        <header className="mb-6 flex flex-col items-start gap-4">
+    <div className="flex flex-1 flex-col bg-canvas pb-10">
+      <WaveBand className="sm:mx-4 sm:mt-4 sm:rounded-4xl rounded-b-4xl">
+        <header className={cn(column, "flex flex-col items-start gap-4 pt-4 pb-20 sm:pt-6")}>
           {back !== false && <BackButton href={back} />}
           <h1 className="text-3xl leading-tight font-bold">{title}</h1>
         </header>
-        <main className="flex flex-1 flex-col gap-4">{children}</main>
+      </WaveBand>
+      <div className={cn(column, "relative -mt-14 flex flex-1 flex-col")}>
+        <main className="flex flex-1 flex-col gap-4 rounded-3xl bg-card p-5 shadow-lift sm:p-8">{children}</main>
       </div>
     </div>
   );

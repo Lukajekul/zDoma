@@ -7,8 +7,8 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-atkinson);
+  --font-mono: ui-monospace, monospace;
   --font-heading: var(--font-sans);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
@@ -39,6 +39,12 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
+  --color-canvas: var(--canvas);
+  --color-brand: var(--brand);
+  --color-brand-soft: var(--brand-soft);
+  --color-brand-ink: var(--brand-ink);
+  --shadow-soft: var(--shadow-soft);
+  --shadow-lift: var(--shadow-lift);
   --color-status-zeleno: var(--status-zeleno);
   --color-status-zeleno-bg: var(--status-zeleno-bg);
   --color-status-rumeno: var(--status-rumeno);
@@ -55,45 +61,56 @@
 }
 
 :root {
+  /* zDoma design system (T-50): warm green, grey-blue canvas, white panels. */
+  --canvas: oklch(0.97 0.006 240);
   --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
+  --foreground: oklch(0.27 0.03 255);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
+  --card-foreground: oklch(0.27 0.03 255);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.42 0.14 255);
+  --popover-foreground: oklch(0.27 0.03 255);
+  /* Deep green: buttons and links. White text on it stays readable. */
+  --primary: oklch(0.52 0.13 150);
   --primary-foreground: oklch(1 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.4 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.8 0 0);
-  --input: oklch(0.7 0 0);
-  --ring: oklch(0.45 0.15 255);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --radius: 0.75rem;
+  /* Bright green: wave bands, icon tiles, switches, the progress ring. Never behind body text. */
+  --brand: oklch(0.73 0.15 150);
+  --brand-soft: oklch(0.95 0.04 150);
+  --brand-ink: oklch(0.34 0.08 150);
+  --band-from: oklch(0.64 0.15 145);
+  --band-to: oklch(0.52 0.13 155);
+  --secondary: oklch(0.95 0.04 150);
+  --secondary-foreground: oklch(0.34 0.08 150);
+  --muted: oklch(0.965 0.006 240);
+  --muted-foreground: oklch(0.47 0.025 255);
+  --accent: oklch(0.95 0.04 150);
+  --accent-foreground: oklch(0.34 0.08 150);
+  --destructive: oklch(0.52 0.19 27);
+  --border: oklch(0.9 0.01 240);
+  --input: oklch(0.8 0.012 240);
+  --ring: oklch(0.6 0.15 150);
+  --chart-1: oklch(0.73 0.15 150);
+  --chart-2: oklch(0.52 0.13 150);
+  --chart-3: oklch(0.6 0.1 200);
+  --chart-4: oklch(0.75 0.14 80);
+  --chart-5: oklch(0.47 0.025 255);
+  --radius: 0.875rem;
+  --shadow-soft: 0 4px 12px oklch(0.3 0.03 255 / 0.06);
+  --shadow-lift: 0 12px 32px oklch(0.3 0.03 255 / 0.09);
   /* Status colours: always shown together with a word (AGENTS.md §7). */
-  --status-zeleno: oklch(0.42 0.12 150);
+  --status-zeleno: oklch(0.45 0.12 150);
   --status-zeleno-bg: oklch(0.94 0.06 150);
-  --status-rumeno: oklch(0.42 0.09 75);
-  --status-rumeno-bg: oklch(0.94 0.1 95);
-  --status-rdece: oklch(0.45 0.18 27);
-  --status-rdece-bg: oklch(0.93 0.05 27);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --status-rumeno: oklch(0.44 0.1 70);
+  --status-rumeno-bg: oklch(0.95 0.09 90);
+  --status-rdece: oklch(0.5 0.19 27);
+  --status-rdece-bg: oklch(0.94 0.04 27);
+  --sidebar: oklch(0.97 0.006 240);
+  --sidebar-foreground: oklch(0.27 0.03 255);
+  --sidebar-primary: oklch(0.52 0.13 150);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent: oklch(1 0 0);
+  --sidebar-accent-foreground: oklch(0.27 0.03 255);
+  --sidebar-border: oklch(0.9 0.01 240);
+  --sidebar-ring: oklch(0.6 0.15 150);
 }
 
 .dark {
@@ -135,7 +152,7 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-canvas text-foreground;
   }
   html {
     /* 112.5 % = 18 px: text-base is the minimum body size (AGENTS.md §7).

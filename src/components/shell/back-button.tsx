@@ -6,7 +6,7 @@ import { ArrowLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const backClass =
-  "inline-flex min-h-12 items-center gap-2 rounded-lg border-2 border-border bg-background px-4 text-lg font-semibold text-foreground hover:bg-muted focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ring";
+  "inline-flex min-h-12 items-center gap-2 rounded-xl bg-card px-4 text-lg font-semibold text-foreground shadow-soft hover:bg-muted focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ring";
 
 type BackButtonProps = {
   /** Where "Nazaj" goes. Prefer a fixed parent page; without it, the browser goes back. */
