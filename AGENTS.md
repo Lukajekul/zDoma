@@ -112,7 +112,7 @@ Background and sources: `docs/research.md`. Six templates, heart failure is the 
 - **One tap per answer.** Big buttons only: no typing, no sliders, no free text. Weight is a row of buttons around the patient's last weight, with "Drugo" for a number field.
 - **Short.** At most 5 questions a day, one per screen.
 - **"Enako kot včeraj".** When yesterday was green, one tap answers everything the same as yesterday, except questions the template marks `vednoVprasaj` (e.g. weight for heart failure).
-- **Specific to this patient, not general.** The template lists the possible questions. The bolničar ticks which ones this patient gets at discharge, and questions use the patient's own values (dry weight, their medicine names), e.g. "Ali tehtate več kot 72 kg?" instead of "Kakšna je vaša teža?".
+- **Specific to this patient, not general.** The template lists the possible questions. At discharge they come pre-ticked and the bolničar can untick any; questions use the patient's own values (dry weight, their medicine names), e.g. "Ali tehtate več kot 72 kg?" instead of "Kakšna je vaša teža?".
 
 ### Medicines picked up (eRecept)
 - Every medicine shows whether it was picked up at the pharmacy. For the hackathon the source is a mock in `src/lib/erecept/`; in production it comes from eRecept via CEZIH.
@@ -121,7 +121,7 @@ Background and sources: `docs/research.md`. Six templates, heart failure is the 
 
 ### Keep the bolničar's work minimal
 - **Medicines in a few taps.** At discharge the template's recommended medicines are listed, pre-filled with what the patient already takes (eRecept). The bolničar ticks a medicine and taps one of its usual doses (e.g. Furosemid 20 / 40 / 80 mg, zjutraj). "Uredi" changes dose, times or duration, "Dodaj zdravilo" adds any other medicine. These are suggestions for staff only; the patient never sees dose options. Usual doses come from `docs/medicines.md`, never invented.
-- Opening a rehabilitacija takes about a minute: template + davčna številka + changes. Everything else is pre-filled from the template.
+- Opening a rehabilitacija is three steps: template, davčna številka plus the patient's values (e.g. dry weight), confirm. Questions, medicines (template + eRecept), patronažna sestra and end date are pre-filled; changes are optional.
 - The dashboard shows only patients who need action. Green patients are hidden by default.
 - **Patronažne sestre are assigned by address, not by hand.** Each one covers tereni (občina, optionally naselja). At discharge the app suggests the nurse whose teren covers the patient's address; the bolničar confirms with one tap. No match → "Nedodeljeni", which any nurse can take with "Prevzemi". "Nadomeščanje" hands her patients to a colleague until a date. The hospital nurse who opens the rehabilitacija is not the default.
 - A patronažna (travelling) sestra may follow many patients, so the list must be easy to filter on her phone: search, "Moji pacienti" on by default, status, občina/kraj, template, missed check-in, medicines not picked up. Filters are big labelled chips, kept in the URL, with "Počisti filtre".

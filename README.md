@@ -4,7 +4,7 @@ ADAHack 2026, izziv 1 (ekipa Ixtlan): *Spremljanje pacientov na domu po odpustu 
 
 ## Na kratko
 
-Pacient po odpustu iz bolnišnice doma vsak dan opravi kratek pregled stanja, jemlje zdravila in dela vaje po navodilih. Sistem opazi zgodnje opozorilne znake in o njih obvesti osebje, preden zaplet pripelje do ponovnega sprejema v bolnišnico. Osebje vidi samo bolnike, ki potrebujejo pozornost.
+zDoma opazi težave, ki jih pacient po odpustu sam ne sporoči: zdravila, ki jih ni prevzel v lekarni, izpuščene tablete, težo, ki počasi narašča. Najprej jih skuša rešiti s pacientom in svojci, patronažna sestra pa vidi samo tisto, kar ostane, vedno z razlogom. Dnevni pregled stanja traja 30 sekund in je le eden od virov podatkov, ne bistvo aplikacije.
 
 ## Problem
 
@@ -17,7 +17,7 @@ Viri in podrobnosti: [docs/research.md](docs/research.md).
 
 ## Osnovna zanka
 
-**Pacient poroča → sistem označi → osebje ukrepa**
+**Pacient in lekarna (eRecept) dajo podatke → sistem označi → najprej opomni pacienta in svojce → šele nato ukrepa osebje**
 
 Vsaka funkcija mora podpirati to zanko. Če funkcija ne prinaša podatkov za razvrščanje pacientov ali ne pomaga osebju ukrepati, je dodatek.
 
@@ -64,19 +64,25 @@ Ob vsakem zdravilu in vaji označi, da je opravljeno. Sam odobri ali zavrne pro�
 
 ### Po čem se zDoma razlikuje
 
-*Aplikacija pokaže samo, kaj se je danes spremenilo: pri teži in pri zdravilih. Za ostalo poskrbita patronažna sestra in družina.*
+*Vprašalniki sprašujejo, kako se pacient počuti. zDoma ve tudi, ali je zdravila prevzel in vzel, in sestri pokaže samo tisto, česar pacient in družina nista rešila.*
+
+1. **Zdravila od lekarne do tablete:** 66 % škode po odpustu je povezane z zdravili. zDoma ve, ali je pacient zdravilo prevzel v lekarni (eRecept), ali ga jemlje in kdaj mu bo zmanjkalo, ne da bi pacient karkoli vpisal. Ob odpustu vidi, kaj se je spremenilo (Novo / Spremenjeno / Ukinjeno, s fotografijo škatlice). Na hekatonu podatke eRecepta simuliramo.
+2. **Vgrajena v patronažo, ne nov postopek:** pacienta po naslovu dobi patronažna sestra, ki ga že obiskuje. Aplikacijo namesti ob prvem obisku in z njim opravi prvi pregled stanja. Na telefonu vidi svoje paciente, urejene po tem, kdo jo potrebuje.
+3. **Aplikacija opominja pacienta, ne sestre:** izpuščen pregled stanja ali neprevzeto zdravilo → najprej opomnik pacientu, nato svojcu, šele nato osebju. Sestra vidi le, česar pacient in družina nista rešila.
+
+### Zakaj pacient vztraja
+
+Zgodnje raziskave so propadle, ker so pacienti nehali sodelovati. Zato:
 
 1. **»Danes« namesto menijev:** aplikacija se odpre na naslednjem današnjem opravilu in konča s »Končano za danes ✓«. Običajen dan so 3–4 dotiki.
 2. **»Enako kot včeraj«:** če se ni nič spremenilo, en dotik. Več vpraša le, ko je kaj drugače.
 3. **Krog napredka za celo okrevanje:** debel krog, ki se polni v nasprotni smeri urinega kazalca od vrha, en del za vsak dan rehabilitacije. **Zeleno**, ko je pacient odgovoril na vprašanja, **rdeče**, ko je dan izpustil, sivo za dneve, ki še pridejo. V sredini je odstotek (»75 %«), pod krogom pa vedno z besedami: »Opravljeno 18 dni · Izpuščeno 2 dni · Še 10 dni«. Če bolničar rehabilitacijo podaljša, krog dobi nove dele in pacient vidi nov datum konca. Isti krog vidi tudi zadolženec.
 4. **Vsak dan nekaj nazaj:** lastne številke (»72,4 kg – blizu vaše ciljne teže ✓«, »Dan 6 od 30«) in ime sestre, ko ukrepa (»Sestra Mojca vas bo poklicala danes do 12:00«).
-5. **Zdravila od začetka do konca:** kaj se je ob odpustu spremenilo (Novo / Spremenjeno / Ukinjeno, s fotografijo škatlice), ali so prevzeta (eRecept) in opomnik, preden zmanjka.
-6. **Namestitev ob prvem patronažnem obisku:** patronažna sestra aplikacijo namesti na pacientov telefon in z njim opravi prvi pregled stanja.
 
 ### Pregled stanja in zdravila
 
 - **Pregled stanja je kratek in ves z enim dotikom:** največ 5 vprašanj, eno na zaslon, odgovori so veliki gumbi (brez tipkanja). Teža je vrsta gumbov okoli zadnje teže. Če je bil včeraj zelen, gumb »Enako kot včeraj« z enim dotikom odgovori na vse razen ključnih vprašanj (npr. teža).
-- **Vprašanja so prilagojena pacientu:** bolničar ob odpustu izbere, katera vprašanja iz predloge dobi, in vpiše njegove vrednosti. Pacient ne vidi splošnega obrazca, ampak npr. »Ali tehtate več kot 72 kg?«.
+- **Vprašanja so prilagojena pacientu:** vprašanja iz predloge so že obkljukana (bolničar lahko katero odstrani), bolničar vpiše le pacientove vrednosti. Pacient ne vidi splošnega obrazca, ampak npr. »Ali tehtate več kot 72 kg?«.
 - **Prevzem zdravil (eRecept):** pri vsakem zdravilu je vidno, ali ga je pacient prevzel v lekarni. Če ga ne prevzame, aplikacija najprej opomni pacienta, nato obvesti zadolženca in šele nato bolničarja (»Furosemid ni prevzet 3 dni po odpustu«). Na hekatonu podatke simuliramo, v praksi bi prišli iz eRecepta prek CEZIH.
 - **Opomnik, preden zdravila zmanjka:** iz velikosti prevzetega pakiranja in dnevnega odmerka aplikacija izračuna, koliko dni še zadošča, in pacientu pravočasno napiše: »Zdravila vam bodo zmanjkala čez 5 dni. Pokličite osebnega zdravnika za nov recept.« Odmerkov nikoli ne spreminja.
 
@@ -92,7 +98,7 @@ Ob vsakem zdravilu in vaji označi, da je opravljeno. Sam odobri ali zavrne pro�
 
 Cilj: **čim manj dela za osebje.**
 
-- **Odpust v približno 1 minuti:** izbere predlogo, vpiše davčno številko pacienta, prilagodi zdravila in datum konca. Vse drugo pride iz predloge.
+- **Odpust v treh korakih:** izbere predlogo, vpiše davčno številko in pacientove vrednosti (npr. suho težo) ter potrdi. Vprašanja, zdravila (iz predloge in eRecepta), patronažna sestra in datum konca so že predizpolnjeni; spremeni jih le, če je treba.
 - **Zdravila z nekaj dotiki:** predloga priporoči zdravila, ki se pri tej bolezni običajno predpišejo, skupaj z zdravili, ki jih pacient že jemlje (eRecept). Bolničar zdravilo obkljuka in tapne enega od običajnih odmerkov (npr. Furosemid 20 / 40 / 80 mg, zjutraj). Z »Uredi« nastavi drugačen odmerek, čas ali trajanje, z »Dodaj zdravilo« doda katero koli drugo zdravilo. Odmerki so iz smernic, ne izmišljeni, in jih vidi samo osebje.
 - **Rehabilitacija traja do datuma, ki ga določi bolničar.** Lahko jo podaljša (»Podaljšaj«) ali na novo odpre kmalu po koncu.
 - **Nadzorna plošča prikaže samo težave.** Zeleni bolniki so privzeto skriti. Vsako opozorilo pove, zakaj se je sprožilo.
@@ -163,8 +169,11 @@ Pravila za razvijalce in agente umetne inteligence: [AGENTS.md](AGENTS.md). Nalo
 - dnevni pregled stanja po predlogi, z zaslonom »Pokličite 112«,
 - nadzorna plošča s semaforjem in pojasnjenimi opozorili,
 - opomniki za zdravila in vaje z beleženjem,
+- prevzem zdravil (simuliran eRecept) z opomniki: pacient → svojec → osebje,
 - zavihek »Skrbim za« za svojce,
 - predstavitev v živo s kodo QR.
+
+Vseh šest predlog je podatkovnih datotek, do konca izdelamo in predstavimo srčno popuščanje.
 
 **Samo klikljivi prototipi**
 - poročanje prek telefona/SMS.
@@ -184,7 +193,8 @@ Pravila za razvijalce in agente umetne inteligence: [AGENTS.md](AGENTS.md). Nalo
 
 1. Član žirije skenira kodo QR in na svojem telefonu opravi pregled stanja.
 2. Vpiše večjo težo in otekle gležnje.
-3. Na nadzorni plošči (na projektorju) njegova kartica postane rdeča, skupaj z razlogom.
+3. Na nadzorni plošči (na projektorju) njegova kartica postane rdeča, skupaj z razlogi: »Teža +2,5 kg v 3 dneh« in »Furosemid ni prevzet 3 dni po odpustu«.
+4. Pokažemo pot opozorila za neprevzeto zdravilo: najprej opomnik pacientu, nato hčerki, šele nato sestri.
 
 **Zgodba pacienta:** 78-letni gospod s srčnim popuščanjem, suha teža 72 kg. Od 3. do 5. dne po odpustu se mu teža dvigne na 74,5 kg, gležnji otečejo in enkrat izpusti diuretik. Hčerka, ki ima dostop kot zadolženka, vidi izpuščeno zdravilo. Ko ga obišče, z njim opravi pregled stanja in označi, da je vzel večerne tablete. Status postane rdeč z navedenimi razlogi, medicinska sestra ga pokliče in po telefonu prilagodi odmerek diuretika. Ponoven sprejem v bolnišnico je preprečen.
 
@@ -193,7 +203,7 @@ Pravila za razvijalce in agente umetne inteligence: [AGENTS.md](AGENTS.md). Nalo
 - [ ] Najti slovenski podatek o ponovnih sprejemih ali stroških pri srčnem popuščanju (NIJZ, ZZZS)
 - [ ] Preveriti mejne vrednosti opozoril z nekom z medicinskim znanjem (npr. 2 kg v 2 ali 3 dneh)
 - [ ] Preveriti vse številke v izvirnih člankih, preden gredo na prosojnice
-- [ ] Z Ixtlanom potrditi, kako dodelitev patronaže poteka v praksi (teren po naslovu, delovni nalog iz bolnišnice/od osebnega zdravnika)
+- [ ] Z Ixtlanom preveriti potek patronaže v praksi: ali in kdaj patronažna sestra pacienta po odpustu obišče (delovni nalog iz bolnišnice ali od osebnega zdravnika), ali se teren res dodeli po naslovu, ali bi aplikacijo namestila ob prvem obisku in ali bi ji seznam »kdo me potrebuje« prihranil delo (npr. namesto klicev vsem pacientom)
 - [ ] Potrditi, po koliko dneh neprevzeto zdravilo sproži opozorilo (privzeto 2), z Ixtlanom ali nekom z medicinskim znanjem
 - [ ] Izbrati vaje in videe za vseh šest skupin iz zanesljivih virov
 - [x] Izbrati tehnološki sklad
