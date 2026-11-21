@@ -121,6 +121,7 @@ Background and sources: `docs/research.md`. Six templates, heart failure is the 
 ### Keep the bolničar's work minimal
 - Opening a rehabilitacija takes about a minute: template + davčna številka + changes. Everything else is pre-filled from the template.
 - The dashboard shows only patients who need action. Green patients are hidden by default.
+- **Patronažne sestre are assigned by address, not by hand.** Each one covers tereni (občina, optionally naselja). At discharge the app suggests the nurse whose teren covers the patient's address; the bolničar confirms with one tap. No match → "Nedodeljeni", which any nurse can take with "Prevzemi". "Nadomeščanje" hands her patients to a colleague until a date. The hospital nurse who opens the rehabilitacija is not the default.
 - A patronažna (travelling) sestra may follow many patients, so the list must be easy to filter on her phone: search, "Moji pacienti" on by default, status, občina/kraj, template, missed check-in, medicines not picked up. Filters are big labelled chips, kept in the URL, with "Počisti filtre".
 - The app chases the patient, not the nurse: a missed check-in reminds the patient, then the zadolženec, and only then reaches staff.
 - Actions are one tap ("Poklicano – vse v redu", "Naročen pregled", "Obveščen osebni zdravnik") and write the audit log automatically.

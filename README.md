@@ -93,6 +93,7 @@ Cilj: **čim manj dela za osebje.**
 - **Odpust v približno 1 minuti:** izbere predlogo, vpiše davčno številko pacienta, prilagodi zdravila in datum konca. Vse drugo pride iz predloge.
 - **Rehabilitacija traja do datuma, ki ga določi bolničar.** Lahko jo podaljša (»Podaljšaj«) ali na novo odpre kmalu po koncu.
 - **Nadzorna plošča prikaže samo težave.** Zeleni bolniki so privzeto skriti. Vsako opozorilo pove, zakaj se je sprožilo.
+- **Patronažna sestra se dodeli po naslovu:** vsaka pokriva svoj teren (občina, naselja). Ob odpustu aplikacija predlaga pravo sestro, bolničar potrdi z enim dotikom. Brez ujemanja gre pacient med »Nedodeljene«, kjer ga lahko katera koli sestra prevzame (»Prevzemi«). Med dopustom »Nadomeščanje« preda paciente sodelavki do določenega datuma.
 - **Primerna za patronažno sestro z veliko pacienti:** tudi na telefonu lahko išče po imenu ali davčni številki in filtrira po »Moji pacienti« (privzeto vklopljeno), statusu, občini, predlogi, izpuščenem pregledu stanja in neprevzetih zdravilih.
 - **Aplikacija opominja pacienta, ne sestre.** Izpuščen pregled stanja → opomnik pacientu, nato svojcu, šele nato osebju.
 - **Hitra dejanja z enim dotikom:** »Poklicano – vse v redu«, »Naročen pregled«, »Obveščen osebni zdravnik«.
@@ -185,6 +186,7 @@ Pravila za razvijalce in agente: [AGENTS.md](AGENTS.md). Naloge: [TASKS.md](TASK
 - [ ] Najti slovenski podatek o ponovnih sprejemih ali stroških pri srčnem popuščanju (NIJZ, ZZZS)
 - [ ] Preveriti mejne vrednosti opozoril z nekom z medicinskim znanjem (npr. 2 kg v 2 ali 3 dneh)
 - [ ] Preveriti vse številke v izvirnih člankih, preden gredo na prosojnice
+- [ ] Z Ixtlanom potrditi, kako dodelitev patronaže poteka v praksi (teren po naslovu, delovni nalog iz bolnišnice/od osebnega zdravnika)
 - [ ] Potrditi, po koliko dneh neprevzeto zdravilo sproži opozorilo (privzeto 2), z Ixtlanom ali nekom z medicinskim znanjem
 - [ ] Izbrati vaje in videe za vseh šest skupin iz zanesljivih virov
 - [x] Izbrati tehnološki sklad

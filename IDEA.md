@@ -79,6 +79,7 @@ Odpuščenec and zadolženec describe a relationship to a patient, not an accoun
 ### Staff (bolničar): as little work as possible
 - **Discharge in about 1 minute:** pick a template, enter the patient's davčna številka, adjust medicines and the end date.
 - **The dashboard shows only problems.** Green patients are hidden, and every alert says why it fired.
+- **Patronažna sestra assigned by address:** each covers a teren (občina, villages). At discharge the app suggests the right one, the bolničar confirms with one tap. No match → "Nedodeljeni" on the dashboard, nobody gets lost. "Nadomeščanje" covers leave.
 - **Built for the patronažna sestra with many patients:** on her phone she searches and filters by "Moji pacienti", status, občina, template, missed check-in and medicines not picked up.
 - **The app chases the patient, not the nurse:** a missed check-in reminds the patient, then the family, and only then reaches staff.
 - **One-tap actions:** "Poklicano – vse v redu", "Naročen pregled", "Obveščen osebni zdravnik".
@@ -156,6 +157,7 @@ Next.js + TypeScript, Tailwind + shadcn/ui, Supabase (Postgres, Realtime, Storag
 - [ ] Find a Slovenian heart-failure readmission or cost figure (NIJZ, ZZZS)
 - [ ] Check the red-flag thresholds with someone who has medical knowledge (e.g. 2 kg in 2 or 3 days)
 - [ ] Verify every number in the original papers before it goes on a slide
+- [ ] Confirm with Ixtlan how patronaža assignment works in practice (teren by address, delovni nalog from hospital/GP)
 - [ ] Confirm after how many days an uncollected prescription should alert (default 2) with Ixtlan / someone with medical knowledge
 - [ ] Choose exercises and videos for all six groups from reputable sources
 - [x] Pick the tech stack
