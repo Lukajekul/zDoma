@@ -125,6 +125,8 @@ Računi bolničarjev se ne registrirajo sami. Ustvari jih skrbnik.
 
 Davčna številka ni skrivnost, zato se brez gesla nikoli ni mogoče prijaviti.
 
+**Prijavna kartica s kodo QR:** vsak pacient dobi kartico z osebno kodo QR. Ko jo skenira s kamero telefona, se odpre zDoma z že vpisanimi podatki in pacient vpiše samo svoj PIN. Koda QR sama nikoli ne prijavi, zato izgubljena kartica ni nevarna. Bolničar lahko izda novo kartico, stara takoj preneha delovati. Po 5 napačnih PIN-ih se kartica za 15 minut zaklene.
+
 ## Varnost
 
 - **zDoma ni služba za nujno pomoč.** Pri bolečini v prsih, nenadnem hudem težkem dihanju, omedlevici ali znakih kapi aplikacija najprej prikaže celozaslonsko »Pokličite 112«, šele nato obvesti osebje.

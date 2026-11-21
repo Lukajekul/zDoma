@@ -97,6 +97,8 @@ Odpuščenec and zadolženec describe a relationship to a patient, not an accoun
 
 The davčna številka isn't secret, so a password is always required.
 
+**QR login card:** every patient gets a card with a personal QR code. Scanning it with the phone camera opens zDoma with everything filled in except the PIN, so an 80-year-old types only 6 digits. The QR never logs in on its own, so a lost card is harmless, and the bolničar can issue a new one, which disables the old card.
+
 ## Safety
 
 - **zDoma is not an emergency service.** Chest pain, sudden severe breathlessness, fainting or stroke signs always show a full-screen "Pokličite 112" first.
