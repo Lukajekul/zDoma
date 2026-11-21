@@ -1,0 +1,144 @@
+// Srčno popuščanje (main template). Questions and rules: docs/checkin-questions.md §1.
+import { AGENTS_112, CILJNI_TLAK, DA_NE, NE_DA, PRAVILO_BREZ_MERILNIKA, vprasanjeTlak } from "./skupno";
+import type { Predloga, Vir } from "./types";
+
+const HFA: Vir = { opis: "HFA/ESC self-care, Jaarsma et al. Eur J Heart Fail 2021;23:157–174", potrjeno: true };
+const HFA_TEZA: Vir = {
+  opis: "HFA/ESC 2021: nenaden porast teže > 2 kg v 3 dneh; heartfailurematters.org (ESC)",
+  potrjeno: true,
+};
+
+export const srcnoPopuscanje: Predloga = {
+  id: "srcno-popuscanje",
+  ime: "Srčno popuščanje",
+  opis: "Po bolnišnici zaradi srčnega popuščanja",
+  // TODO(T-42): no source for the default length yet.
+  privzetoTrajanjeDni: 30,
+  trajanjeVir: { opis: "Privzeta dolžina, ni vira", potrjeno: false },
+  vrednostiPacienta: [
+    { kljuc: "suhaTeza", oznaka: "Suha teža", tip: "stevilo", enota: "kg" },
+    { kljuc: "zdraviloZaVodo", oznaka: "Zdravilo za vodo (diuretik)", tip: "zdravilo" },
+    CILJNI_TLAK,
+  ],
+  vprasanja: [
+    {
+      id: "teza",
+      tip: "teza",
+      besedilo: "Stopite na tehtnico. Koliko tehtate danes?",
+      korak: 0.5,
+      vednoVprasaj: true,
+      privzetoIzbrano: true,
+      pogostost: "dnevno",
+      vir: HFA_TEZA,
+    },
+    {
+      id: "dusenje",
+      tip: "izbira",
+      besedilo: "Ali vas danes bolj duši kot običajno?",
+      odgovori: [
+        { id: "ne", besedilo: "Ne" },
+        { id: "pri-hoji", besedilo: "Pri hoji bolj" },
+        { id: "lezanje", besedilo: "Tudi ko ležim ali ponoči" },
+      ],
+      vednoVprasaj: false,
+      privzetoIzbrano: true,
+      pogostost: "dnevno",
+      vir: { opis: "HFA/ESC 2021, tabela 2: težka sapa (pri naporu, leže, ponoči)", potrjeno: true },
+    },
+    {
+      id: "otekline",
+      tip: "izbira",
+      besedilo: "Ali so vam gležnji ali noge danes bolj otekli?",
+      odgovori: NE_DA,
+      vednoVprasaj: false,
+      privzetoIzbrano: true,
+      pogostost: "dnevno",
+      vir: { opis: "HFA/ESC 2021, tabela 2: otekline (noge, gležnji …)", potrjeno: true },
+    },
+    {
+      id: "diuretik",
+      tip: "izbira",
+      besedilo: "Ste včeraj vzeli {zdraviloZaVodo}?",
+      odgovori: DA_NE,
+      vednoVprasaj: false,
+      privzetoIzbrano: true,
+      pogostost: "dnevno",
+      vir: HFA,
+    },
+    {
+      id: "prsi-omedlevica",
+      tip: "izbira",
+      besedilo: "Ali imate bolečino v prsih ali ste omedleli?",
+      odgovori: NE_DA,
+      vednoVprasaj: false,
+      privzetoIzbrano: true,
+      pogostost: "dnevno",
+      vir: { opis: "HFA/ESC 2021, tabela 2: bolečina v prsih, omotica", potrjeno: false },
+    },
+    vprasanjeTlak({ opis: "HFA/ESC 2021, tabela 2: krvni tlak in utrip", potrjeno: true }),
+  ],
+  pravila: [
+    {
+      id: "teza-3-dni",
+      tip: "porastVDneh",
+      vprasanje: "teza",
+      vecKot: 2,
+      dni: 3,
+      stopnja: "opozorilo",
+      razlog: "Teža +{razlika} kg v {dni} dneh",
+      vir: HFA_TEZA,
+    },
+    {
+      // research.md: "above dry weight". No margin is given (T-42), so it is any weight above it.
+      id: "teza-nad-suho",
+      tip: "nadVrednostjo",
+      vprasanje: "teza",
+      vrednost: "suhaTeza",
+      vecKot: 0,
+      stopnja: "opozorilo",
+      razlog: "Teža {razlika} kg nad suho težo",
+      vir: { opis: "docs/research.md: teža nad suho težo; HFA: prilagoditi posamezniku", potrjeno: false },
+    },
+    {
+      id: "dusenje-lezanje",
+      tip: "odgovor",
+      vprasanje: "dusenje",
+      odgovori: ["lezanje"],
+      stopnja: "opozorilo",
+      razlog: "Težka sapa tudi leže ali ponoči",
+      vir: { opis: "HFA/ESC 2021, tabela 1: ortopneja", potrjeno: true },
+    },
+    {
+      id: "otekline",
+      tip: "odgovor",
+      vprasanje: "otekline",
+      odgovori: ["da"],
+      stopnja: "opozorilo",
+      razlog: "Bolj otekli gležnji ali noge",
+      vir: { opis: "HFA/ESC 2021, tabela 2: otekline", potrjeno: true },
+    },
+    {
+      id: "diuretik-izpuscen",
+      tip: "odgovor",
+      vprasanje: "diuretik",
+      odgovori: ["ne"],
+      stopnja: "opozorilo",
+      razlog: "Izpuščen diuretik",
+      vir: HFA,
+    },
+    {
+      id: "prsi-112",
+      tip: "odgovor",
+      vprasanje: "prsi-omedlevica",
+      odgovori: ["da"],
+      stopnja: "klic112",
+      razlog: "Bolečina v prsih ali omedlevica",
+      vir: { ...AGENTS_112, potrjeno: false },
+    },
+    PRAVILO_BREZ_MERILNIKA,
+  ],
+  // TODO(T-37): recommended medicines from docs/medicines.md.
+  zdravila: [],
+  // TODO(T-17): exercises (daily walking, minutes increasing) from docs/rehab-content.md.
+  vaje: [],
+};
