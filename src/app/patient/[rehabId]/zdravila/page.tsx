@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import { notFound } from "next/navigation";
+import Link from "next/link";
 import { DoseCard } from "@/components/patient/dose-card";
 import { AppShell } from "@/components/shell";
 import { PickupReminder } from "@/components/erecept/pickup-reminder";
@@ -7,6 +8,7 @@ import { SupplyReminder } from "@/components/erecept/supply-reminder";
 import { requireProfile } from "@/lib/auth";
 import { formatLongDate } from "@/lib/format";
 import { isRehabActive, todayLjubljana, type DoseLog, type Medication } from "@/lib/types";
+import { groupChanges } from "../../_lib/changes";
 import { getMedsAndLogs, logMissedDoses } from "../../_lib/doses";
 import { getMyRehab } from "../../_lib/rehabs";
 import { addDays, dosesOn, TIME_LABEL } from "../../_lib/schedule";
@@ -61,6 +63,11 @@ async function Pills({ params }: Pick<PageProps<"/patient/[rehabId]/zdravila">, 
   return (
     <AppShell title="Zdravila danes" back={back}>
       <p className="text-xl">{capitalize(formatLongDate(new Date()))}</p>
+      {groupChanges(meds).any && (
+        <Link href={`/patient/${rehab.id}/spremembe`} className="inline-flex min-h-12 items-center text-lg font-semibold text-primary underline underline-offset-4">
+          Kaj se je spremenilo ob odpustu
+        </Link>
+      )}
 
       <PickupReminder meds={meds} odpust={rehab.start_date} danes={today} />
       <SupplyReminder meds={meds} danes={today} />

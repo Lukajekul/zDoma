@@ -5,7 +5,7 @@ import "server-only";
 // (filled by seed data and the /demo switch). In production this would call
 // eRecept via CEZIH and nothing else in the app would change.
 import { createAdminClient } from "@/lib/supabase/admin";
-import type { IsoDate, Uuid } from "@/lib/types";
+import type { IsoDate, TimeOfDay, Uuid } from "@/lib/types";
 
 export interface Prevzem {
   /** Pick-up date, null = not picked up. */
@@ -14,9 +14,20 @@ export interface Prevzem {
   pakiranje: number | null;
 }
 
+/** A medicine the patient took before admission (T-35). */
+export interface ZdraviloPrej {
+  name: string;
+  dose: string;
+  times: TimeOfDay[];
+  purpose: string | null;
+  active_substance: string | null;
+}
+
 export interface ERecept {
   /** Pick-up status for each medicine. */
   prevzemi(medicationIds: Uuid[]): Promise<Map<Uuid, Prevzem>>;
+  /** Medicines the patient took before this admission (prescription history). */
+  zdravilaPredSprejemom(patientId: Uuid): Promise<ZdraviloPrej[]>;
 }
 
 /** Mock: the pick-up fields on `medications` are the "pharmacy". Server only. */
@@ -36,6 +47,26 @@ export const mockERecept: ERecept & {
     return map;
   },
 
+  // Mock history: the medicines of the patient's latest earlier rehabilitacija
+  // (not the stopped ones). In production: the eRecept prescription history.
+  async zdravilaPredSprejemom(patientId) {
+    const admin = createAdminClient();
+    const { data: last } = await admin
+      .from("rehabilitacije")
+      .select("id")
+      .eq("patient_id", patientId)
+      .order("start_date", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    if (!last) return [];
+    const { data, error } = await admin
+      .from("medications")
+      .select("name, dose, times, purpose, active_substance")
+      .eq("rehab_id", last.id)
+      .neq("change", "ukinjeno");
+    if (error) throw new Error(`eRecept mock: ${error.message}`);
+    return (data ?? []) as ZdraviloPrej[];
+  },
   async nastaviPrevzem(id, prevzeto, datum, pakiranje) {
     const { error } = await createAdminClient()
       .from("medications")

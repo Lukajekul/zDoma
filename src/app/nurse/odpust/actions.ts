@@ -3,14 +3,15 @@
 import { redirect } from "next/navigation";
 import { requireStaff } from "@/lib/auth";
 import { isValidDavcna, normalizeDavcna } from "@/lib/davcna";
+import { erecept, type ZdraviloPrej } from "@/lib/erecept";
 import { ensurePatientAccount } from "@/lib/qr/accounts";
 import { createClient } from "@/lib/supabase/server";
 import { getPredloga } from "@/lib/templates";
 import { TIME_ORDER } from "@/app/patient/_lib/schedule";
-import type { PatientValues, TimeOfDay } from "@/lib/types";
+import type { PatientValues } from "@/lib/types";
 import { dailyCount, medicineChange, type MedLine } from "./_lib/plan";
 
-export type PreviousMed = { name: string; dose: string; times: TimeOfDay[]; purpose: string | null; active_substance: string | null };
+export type PreviousMed = ZdraviloPrej;
 
 export type PatientLookup =
   | { error: string }
@@ -39,19 +40,9 @@ export async function lookupPatient(davcnaInput: string): Promise<PatientLookup>
     .maybeSingle();
   if (!p) return { exists: false, firstName: "", lastName: "", address: "", obcina: "", naselje: "", hasActiveRehab: false, previous: [] };
 
-  const { data: rehabs } = await supabase
-    .from("rehabilitacije")
-    .select("id, status")
-    .eq("patient_id", p.id)
-    .order("start_date", { ascending: false });
-  const last = rehabs?.[0];
-  const { data: meds } = last
-    ? await supabase
-        .from("medications")
-        .select("name, dose, times, purpose, active_substance")
-        .eq("rehab_id", last.id)
-        .neq("change", "ukinjeno")
-    : { data: [] };
+  const { data: rehabs } = await supabase.from("rehabilitacije").select("status").eq("patient_id", p.id);
+  // "Already takes" = eRecept history before this admission (mock, T-35).
+  const previous = await erecept.zdravilaPredSprejemom(p.id);
 
   return {
     exists: true,
@@ -61,7 +52,7 @@ export async function lookupPatient(davcnaInput: string): Promise<PatientLookup>
     obcina: p.obcina ?? "",
     naselje: p.naselje ?? "",
     hasActiveRehab: !!rehabs?.some((r) => r.status === "aktivna"),
-    previous: (meds ?? []) as PreviousMed[],
+    previous,
   };
 }
 

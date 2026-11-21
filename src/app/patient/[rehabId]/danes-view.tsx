@@ -1,12 +1,14 @@
+import { cookies } from "next/headers";
 import Link from "next/link";
 import { NextActionCard } from "@/components/patient/danes/next-action-card";
 import { ProgressRing } from "@/components/patient/progress-ring";
 import { rehabDay, rehabTitle } from "@/components/patient/rehab-info";
-import { AppShell } from "@/components/shell";
+import { AppShell, BigButton } from "@/components/shell";
 import { countPendingRequests } from "@/lib/family-access";
 import { createClient } from "@/lib/supabase/server";
 import type { Profile } from "@/lib/types";
 import type { loadCheckinContext } from "../_lib/checkins";
+import { groupChanges, seenCookie } from "../_lib/changes";
 import { nextAction, nowMinutesLjubljana } from "../_lib/danes";
 import { getMedsAndLogs, logMissedDoses } from "../_lib/doses";
 import { getExercisesForDay } from "../_lib/exercises";
@@ -45,6 +47,8 @@ export async function DanesView({ ctx, profile, back }: { ctx: Ctx; profile: Pro
     })),
     nowMinutes: nowMinutesLjubljana(),
   });
+  const changes = groupChanges(meds);
+  const showChanges = changes.any && !(await cookies()).get(seenCookie(rehab.id));
   const { day, total } = rehabDay(rehab, today);
   const [h, m = "00"] = profile.checkin_time.split(":");
 
@@ -61,12 +65,27 @@ export async function DanesView({ ctx, profile, back }: { ctx: Ctx; profile: Pro
         </Link>
       )}
 
-      <NextActionCard
-        action={action}
-        base={base}
-        nextCheckin={`${Number(h)}:${m}`}
-        onSlotTaken={action.kind === "pills" ? markSlotTaken.bind(null, rehab.id, action.time) : undefined}
-      />
+      {showChanges ? (
+        // T-35: medicine changes come before anything else until the patient taps "Razumem".
+        <section className="flex flex-col gap-4 rounded-2xl border-2 border-primary p-5">
+          <h2 className="text-3xl font-bold">Vaša zdravila so se spremenila</h2>
+          <p className="text-xl">
+            {[
+              changes.novo.length && `Novo: ${changes.novo.length}`,
+              changes.spremenjeno.length && `Spremenjeno: ${changes.spremenjeno.length}`,
+              changes.ukinjeno.length && `Ukinjeno: ${changes.ukinjeno.length}`,
+            ].filter(Boolean).join(" · ")}
+          </p>
+          <BigButton href={`${base}/spremembe`}>Poglejte spremembe</BigButton>
+        </section>
+      ) : (
+        <NextActionCard
+          action={action}
+          base={base}
+          nextCheckin={`${Number(h)}:${m}`}
+          onSlotTaken={action.kind === "pills" ? markSlotTaken.bind(null, rehab.id, action.time) : undefined}
+        />
+      )}
 
       <ProgressRing data={ring} extendedUntil={extendedUntil} />
 
@@ -74,6 +93,7 @@ export async function DanesView({ ctx, profile, back }: { ctx: Ctx; profile: Pro
         <Link href={`${base}/pregled`} className={smallLink}>Pregled</Link>
         <Link href={`${base}/zdravila`} className={smallLink}>Vse tablete</Link>
         <Link href={`${base}/vaje`} className={smallLink}>Vaje</Link>
+        {changes.any && <Link href={`${base}/spremembe`} className={smallLink}>Spremembe zdravil</Link>}
         <Link href="/patient/dostop" className={smallLink}>Družina</Link>
       </nav>
     </AppShell>
