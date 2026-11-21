@@ -4,7 +4,8 @@ Seed data from `npm run seed` (T-10) on the shared zDoma project. **All people a
 
 ## How to log in
 
-- **Bolničarji and zadolženci:** `/prijava` with the davčna številka below and the shared demo password. The password is **not in the repo**: ask Tian for `SEED_PASSWORD`, or set your own `SEED_PASSWORD` in `.env.local` and run `npm run seed` again.
+- **Bolničarji and zadolženci:** `/prijava` with the davčna številka below and the demo password **`zdoma-eupRh0qTB1SQ`** (same for every seeded staff and family account; it is `SEED_PASSWORD` in `.env.local`).
+- This repo is public, so anyone can use this password on the live site. Data is synthetic. To change it: set a new `SEED_PASSWORD` in `.env.local`, run `npm run seed`, and update this line.
 - **Patients (odpuščenci):** no password, only the QR on the prijavni listek. Log in as a bolničar, open `/prijava/listek/<patientId>` (or the patient detail once T-09 has "Pokaži QR za prijavo") and scan the QR with a phone.
 - Re-running `npm run seed` recreates everything with the same names and numbers. If the seed itself changes (e.g. more patients), numbers can shift: update this file from the list the seed prints at the end.
 
