@@ -438,6 +438,39 @@ export type Database = {
           },
         ]
       }
+      patient_qr_tokens: {
+        Row: {
+          created_at: string
+          patient_id: string
+          token: string
+        }
+        Insert: {
+          created_at?: string
+          patient_id: string
+          token: string
+        }
+        Update: {
+          created_at?: string
+          patient_id?: string
+          token?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "patient_qr_tokens_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "patient_qr_tokens_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: true
+            referencedRelation: "staff_directory"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           address: string | null
@@ -758,6 +791,7 @@ export type Database = {
         Args: { p_davcna: string; p_relation?: string }
         Returns: undefined
       }
+      revoke_user_sessions: { Args: { p_user: string }; Returns: undefined }
       today_lj: { Args: never; Returns: string }
       valid_davcna: { Args: { d: string }; Returns: boolean }
     }
