@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { BigButton } from "@/components/shell";
 import { formatNumber } from "@/lib/format";
 import type { TriageStatus } from "@/lib/types";
@@ -14,10 +15,12 @@ type Props = {
   /** "8:00" */
   nextTime: string;
   backHref: string;
+  /** Progress ring (T-40), shown under "Dan X od Y". */
+  ring?: ReactNode;
 };
 
 /** Check-in done: something back against the patient's own numbers, never a diagnosis. */
-export function EndScreen({ status, day, total, weight, target, trend, nextTime, backHref }: Props) {
+export function EndScreen({ status, day, total, weight, target, trend, nextTime, backHref, ring }: Props) {
   const green = status === "zeleno";
   const min = Math.min(...trend.map((t) => t.kg));
   // At least a 3 kg span, so small day-to-day changes don't look dramatic.
@@ -38,6 +41,7 @@ export function EndScreen({ status, day, total, weight, target, trend, nextTime,
       <p className="text-2xl font-semibold">
         Dan {day} od {total}
       </p>
+      {ring}
 
       {trend.length > 1 && (
         <figure className="flex flex-col gap-2">

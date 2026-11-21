@@ -2,12 +2,14 @@ import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import { CheckinFlow } from "@/components/patient/checkin/checkin-flow";
 import { EndScreen } from "@/components/patient/checkin/end-screen";
+import { ProgressRing } from "@/components/patient/progress-ring";
 import { rehabDay } from "@/components/patient/rehab-info";
 import { AppShell } from "@/components/shell";
 import { requireProfile } from "@/lib/auth";
 import type { Checkin } from "@/lib/types";
 import { targetFor } from "../../_lib/checkin-plan";
 import { loadCheckinContext } from "../../_lib/checkins";
+import { getRing } from "../../_lib/ring";
 import { addDays } from "../../_lib/schedule";
 import { saveCheckin } from "./actions";
 
@@ -46,6 +48,7 @@ async function CheckinScreen({ params }: Pick<PageProps<"/patient/[rehabId]/preg
   if (ctx.todayCheckin) {
     const weightQ = ctx.predloga.vprasanja.find((q) => q.tip === "teza" && ctx.todayCheckin!.answers[q.id] !== undefined);
     const { day, total } = rehabDay(ctx.rehab, ctx.today);
+    const { ring, extendedUntil } = await getRing(ctx.rehab, ctx.predloga, ctx.today);
     return shell(
       <EndScreen
         status={ctx.todayCheckin.triage_status}
@@ -56,6 +59,7 @@ async function CheckinScreen({ params }: Pick<PageProps<"/patient/[rehabId]/preg
         trend={weightQ ? weightTrend(weightQ.id, [ctx.todayCheckin, ...ctx.history], ctx.today) : []}
         nextTime={shortTime(profile.checkin_time)}
         backHref={back}
+        ring={<ProgressRing data={ring} extendedUntil={extendedUntil} />}
       />,
     );
   }

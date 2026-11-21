@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { NextActionCard } from "@/components/patient/danes/next-action-card";
+import { ProgressRing } from "@/components/patient/progress-ring";
 import { rehabDay, rehabTitle } from "@/components/patient/rehab-info";
 import { AppShell } from "@/components/shell";
 import { countPendingRequests } from "@/lib/family-access";
@@ -9,6 +10,7 @@ import type { loadCheckinContext } from "../_lib/checkins";
 import { nextAction, nowMinutesLjubljana } from "../_lib/danes";
 import { getMedsAndLogs, logMissedDoses } from "../_lib/doses";
 import { getExercisesForDay } from "../_lib/exercises";
+import { getRing } from "../_lib/ring";
 import { dosesOn } from "../_lib/schedule";
 import { markSlotTaken } from "./zdravila/actions";
 
@@ -23,10 +25,12 @@ export async function DanesView({ ctx, profile, back }: { ctx: Ctx; profile: Pro
   const base = `/patient/${rehab.id}`;
   const supabase = await createClient();
 
-  const [{ meds, logs: loaded }, exercises, pending] = await Promise.all([
+  const [{ meds, logs: loaded }, exercises, pending, { ring, extendedUntil }] = await Promise.all([
+
     getMedsAndLogs(rehab.id),
     getExercisesForDay(rehab, today),
     countPendingRequests(supabase, profile.id),
+    getRing(rehab, ctx.predloga, today),
   ]);
   const logs = await logMissedDoses(rehab, meds, loaded, today);
 
@@ -63,6 +67,8 @@ export async function DanesView({ ctx, profile, back }: { ctx: Ctx; profile: Pro
         nextCheckin={`${Number(h)}:${m}`}
         onSlotTaken={action.kind === "pills" ? markSlotTaken.bind(null, rehab.id, action.time) : undefined}
       />
+
+      <ProgressRing data={ring} extendedUntil={extendedUntil} />
 
       <nav aria-label="Več" className="mt-4 flex flex-wrap gap-x-2 gap-y-1">
         <Link href={`${base}/pregled`} className={smallLink}>Pregled</Link>
