@@ -62,6 +62,7 @@ Cut: T-13 "Moje okrevanje" (own trend moved to the T-05 end screen) and T-15 emo
 - [ ] **T-37** Medicine content → `docs/medicines.md`: for each of the six templates, the medicines guidelines usually recommend after discharge (e.g. heart failure: diuretic, ACE inhibitor/ARNI, beta blocker, MRA, SGLT2 inhibitor), each with 2–4 usual dose options and times of day, a plain-language Slovenian "what it's for", and the source (ESC/GOLD/NICE guideline or SmPC). Mark anything to confirm with someone with medical knowledge. T-29 copies this into the templates.
 - [ ] **T-17** Rehab content → `docs/rehab-content.md`: 3–5 exercises per template (walking plan for heart groups, breathing exercises for KOPB, physio for kolk/koleno, mobility for kap, light activity for rak), each with Slovenian title, 3–4 short steps, repetitions, a picture and an optional embeddable video, plus the source and its licence.
 - [ ] **T-30** Pitch slides with evidence: one slide per patient group with its key paper, from `docs/research.md`. Verify each number against the full paper before it goes on a slide.
+- [~] **T-41** Check-in questions per template from European guidelines → `docs/checkin-questions.md`: for each of the six templates, the questions and red-flag thresholds with the European source (ESC, ERS/GOLD, ESO, ESMO, ECDC…) that proves each one, plus validated questionnaires they come from. T-29 copies them into the templates. *Claimed: Tian Istenič, main (docs only).*
 
 ## Codeplain challenge (turri) — DRAFT, review together before anyone claims it
 
