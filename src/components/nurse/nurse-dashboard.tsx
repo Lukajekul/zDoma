@@ -106,7 +106,7 @@ export function NurseDashboard({ rows, nurseId, covering = [], templates }: {
           Povezava za sprotne posodobitve je prekinjena. Seznam lahko osvežite v brskalniku.
         </p>
       )}
-      <div className="grid items-start gap-5 lg:grid-cols-[minmax(18rem,1fr)_minmax(0,2fr)]">
+      <div className="grid items-start gap-5 lg:grid-cols-[17rem_minmax(0,1fr)]">
         <details className="rounded-2xl border bg-muted/40" ref={filterPanel}>
           <summary className="min-h-12 cursor-pointer rounded-2xl px-4 py-3 font-bold">
             Filtri pacientov
