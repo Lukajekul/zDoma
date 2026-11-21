@@ -47,9 +47,17 @@ Use a **feature branch** (`feat/T-05-checkin`, `fix/T-03-lace-edge`) when the ch
 
 Merge a feature branch by rebasing on `main`, checking that `npm run lint` and `npm run build` pass, then fast-forwarding or opening a PR. **Never force-push `main`.**
 
+## 3a. Tests: only the must-haves
+
+Tests cost time and tokens, so keep them minimal.
+- **Write tests only for pure logic where a bug is dangerous:** triage rules and status (`src/lib/triage/`), the davčna številka check digit, temporary-password generation, and a check that every template in `src/lib/templates/` is valid. A few cases each: one normal, one red flag, one edge case.
+- **No other tests:** no UI or component tests, no snapshots, no end-to-end tests, no tests for Supabase calls or simple pages.
+- Use Vitest, added by the first task that needs it (T-04). Run it quietly: `npx vitest run --reporter=dot 2>&1 | tail -15`.
+- Don't add tests beyond these unless the task says so.
+
 ## 4. Definition of done
 
-1. `npm run lint` and `npm run build` pass. The build also typechecks.
+1. `npm run lint` and `npm run build` pass. The build also typechecks. If your task touched code covered by §3a, its tests pass too.
 2. The feature works as the task describes. For UI work, check it at phone width (390 px) and on a desktop width, against the UI rules in §7.
 3. Committed in the format above and pushed.
 4. The task is marked `[x]` in `TASKS.md` with a one-line note.
