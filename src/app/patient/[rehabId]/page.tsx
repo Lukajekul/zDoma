@@ -6,12 +6,14 @@ import { requireProfile } from "@/lib/auth";
 import { formatDate } from "@/lib/format";
 import { createClient } from "@/lib/supabase/server";
 import { isRehabActive, todayLjubljana } from "@/lib/types";
+import { loadCheckinContext } from "../_lib/checkins";
 import { getMyRehab } from "../_lib/rehabs";
+import { DanesView } from "./danes-view";
 
 const BACK = "/patient?seznam=1";
 
 /**
- * One rehabilitacija. Active → "Danes" (T-33 fills in today's steps).
+ * One rehabilitacija. Active → "Danes" (T-33): today's next action.
  * Finished → read-only summary, no check-ins.
  */
 export default function RehabPage({ params }: PageProps<"/patient/[rehabId]">) {
@@ -35,27 +37,12 @@ async function Rehab({ params }: Pick<PageProps<"/patient/[rehabId]">, "params">
   if (!rehab) notFound();
 
   const today = todayLjubljana();
-  const { day, total } = rehabDay(rehab, today);
+  const { total } = rehabDay(rehab, today);
 
   if (isRehabActive(rehab, today)) {
-    return (
-      <AppShell title="Danes" back={BACK}>
-        <p className="text-xl">
-          <strong>{rehabTitle(rehab)}</strong> · Dan {day} od {total}
-        </p>
-        {/* T-33 replaces this with today's next action, one at a time. */}
-        <p className="rounded-xl bg-muted p-4 text-xl">
-          Tukaj bodo vaši današnji koraki: pregled, tablete in vaje.
-        </p>
-        <BigButton href={`/patient/${rehab.id}/pregled`}>Današnji pregled</BigButton>
-        <BigButton href={`/patient/${rehab.id}/zdravila`} variant="secondary">
-          Zdravila danes
-        </BigButton>
-        <BigButton href={`/patient/${rehab.id}/vaje`} variant="secondary">
-          Vaje danes
-        </BigButton>
-      </AppShell>
-    );
+    const ctx = await loadCheckinContext(profile.id, rehab.id);
+    if (!ctx) notFound();
+    return <DanesView ctx={ctx} profile={profile} back={BACK} />;
   }
 
   const supabase = await createClient();
@@ -78,6 +65,12 @@ async function Rehab({ params }: Pick<PageProps<"/patient/[rehabId]">, "params">
         <dt className="text-muted-foreground">Pregledov</dt>
         <dd>{count ?? 0} od {total} dni</dd>
       </dl>
+      <BigButton href={`/patient/${rehab.id}/zdravila`} variant="secondary">
+        Zdravila
+      </BigButton>
+      <BigButton href={`/patient/${rehab.id}/vaje`} variant="secondary">
+        Vaje
+      </BigButton>
       <BigButton href={BACK} variant="secondary">
         Vsa okrevanja
       </BigButton>

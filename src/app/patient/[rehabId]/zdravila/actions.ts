@@ -64,3 +64,26 @@ export async function undoTaken(rehabId: string, logId: string): Promise<DoseAct
   refresh();
   return {};
 }
+
+/** "Da, vzeto" on "Danes": log every open dose of one time of day today. */
+export async function markSlotTaken(rehabId: string, time: TimeOfDay): Promise<DoseActionState> {
+  const profile = await requireProfile();
+  const today = todayLjubljana();
+  const rehab = await getMyRehab(profile.id, rehabId);
+  if (!rehab || !isRehabActive(rehab, today) || !TIME_ORDER.includes(time)) {
+    return { error: "To okrevanje je zaključeno. Tablet tukaj ne označujete več." };
+  }
+
+  const supabase = await createClient();
+  const { data } = await supabase.from("medications").select("*").eq("rehab_id", rehab.id);
+  const meds = ((data ?? []) as Medication[]).filter((m) => isScheduledOn(m, today) && m.times.includes(time));
+  if (!meds.length) return {};
+
+  const { error } = await supabase.from("dose_logs").upsert(
+    meds.map((m) => ({ medication_id: m.id, rehab_id: rehab.id, scheduled_date: today, time_of_day: time, status: "vzeto" as const })),
+    { onConflict: "medication_id,scheduled_date,time_of_day", ignoreDuplicates: true },
+  );
+  if (error) return { error: TRY_AGAIN };
+  refresh();
+  return {};
+}
