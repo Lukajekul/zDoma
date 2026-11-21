@@ -73,8 +73,9 @@ export function searchPatients(rows: DashboardRow[], query: string) {
   });
 }
 
-export function matchesFilters(row: DashboardRow, filters: Filters, nurseId: string) {
-  if (filters.scope === "moji" && row.nurseId !== nurseId) return false;
+/** `covering`: nurses she substitutes for today (nadomeščanje); their patients count as "Moji". */
+export function matchesFilters(row: DashboardRow, filters: Filters, nurseId: string, covering: string[] = []) {
+  if (filters.scope === "moji" && row.nurseId !== nurseId && !(row.nurseId && covering.includes(row.nurseId))) return false;
   if (filters.scope === "nedodeljeni" && row.nurseId !== null) return false;
   if (filters.status && row.status !== filters.status) return false;
   if (row.oldestAlertMs === null && filters.scope !== "nedodeljeni" && filters.status !== "zeleno") return false;
@@ -88,8 +89,8 @@ export function matchesFilters(row: DashboardRow, filters: Filters, nurseId: str
   return !band || (row.daysSinceDischarge >= band.from && row.daysSinceDischarge <= band.through);
 }
 
-export function selectDashboardRows(rows: DashboardRow[], filters: Filters, nurseId: string) {
-  return rows.filter((row) => matchesFilters(row, filters, nurseId)).sort((a, b) =>
+export function selectDashboardRows(rows: DashboardRow[], filters: Filters, nurseId: string, covering: string[] = []) {
+  return rows.filter((row) => matchesFilters(row, filters, nurseId, covering)).sort((a, b) =>
     priority[a.status] - priority[b.status]
     || (a.oldestAlertMs ?? Infinity) - (b.oldestAlertMs ?? Infinity)
     || slovenian.compare(a.name, b.name)

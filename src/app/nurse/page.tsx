@@ -8,7 +8,7 @@ import { requireStaff } from "@/lib/auth";
 import { seznamPredlog } from "@/lib/templates";
 import { todayLjubljana } from "@/lib/format";
 import { getDashboardRows } from "./_lib/dashboard";
-import { getVisits } from "./_patronaza/visits";
+import { getCoveredNurseIds, getVisits } from "./_patronaza/visits";
 
 export const metadata = { title: "Pacienti – zDoma" };
 
@@ -24,7 +24,8 @@ export default function NursePage() {
 
 async function Dashboard() {
   const staff = await requireStaff();
-  const [rows, visits] = await Promise.all([getDashboardRows(todayLjubljana()), getVisits(staff.id, todayLjubljana())]);
+  const today = todayLjubljana();
+  const [rows, visits, covering] = await Promise.all([getDashboardRows(today), getVisits(staff.id, today), getCoveredNurseIds(staff.id, today)]);
 
   return (
     <>
@@ -39,7 +40,7 @@ async function Dashboard() {
         </Link>
       )}
       {rows ? (
-        <NurseDashboard rows={rows} nurseId={staff.id} templates={seznamPredlog.map(({ id, ime }) => ({ id, label: ime }))} />
+        <NurseDashboard rows={rows} nurseId={staff.id} covering={covering} templates={seznamPredlog.map(({ id, ime }) => ({ id, label: ime }))} />
       ) : (
         <p role="alert" className="rounded-xl border p-4">
           Seznama pacientov ni bilo mogoče naložiti. Osvežite stran in poskusite znova.

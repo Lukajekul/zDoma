@@ -17,18 +17,19 @@ interface DashboardControlsProps {
   rows: DashboardRow[];
   filters: Filters;
   nurseId: string;
+  covering?: string[];
   templates: TemplateOption[];
   change: (key: string, value: string | null) => void;
   clear: () => void;
 }
 
-export function DashboardControls({ rows, filters, nurseId, templates, change, clear }: DashboardControlsProps) {
+export function DashboardControls({ rows, filters, nurseId, covering = [], templates, change, clear }: DashboardControlsProps) {
   function picks(title: string, key: string, options: FilterOption[]) {
     return (
       <FilterGroup title={title}>
         {options.map((option) => {
           const candidate = { ...filters, ...option.filter };
-          const count = rows.filter((row) => matchesFilters(row, candidate, nurseId)).length;
+          const count = rows.filter((row) => matchesFilters(row, candidate, nurseId, covering)).length;
 
           return (
             <button

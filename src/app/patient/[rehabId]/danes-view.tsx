@@ -5,6 +5,7 @@ import { ProgressRing } from "@/components/patient/progress-ring";
 import { rehabDay, rehabTitle } from "@/components/patient/rehab-info";
 import { AppShell, BigButton } from "@/components/shell";
 import { countPendingRequests } from "@/lib/family-access";
+import { formatDate } from "@/lib/format";
 import { createClient } from "@/lib/supabase/server";
 import type { Profile } from "@/lib/types";
 import type { loadCheckinContext } from "../_lib/checkins";
@@ -12,6 +13,7 @@ import { groupChanges, seenCookie } from "../_lib/changes";
 import { nextAction, nowMinutesLjubljana } from "../_lib/danes";
 import { getMedsAndLogs, logMissedDoses } from "../_lib/doses";
 import { getExercisesForDay } from "../_lib/exercises";
+import { getMyNurse } from "../_lib/nurse";
 import { getRing } from "../_lib/ring";
 import { dosesOn } from "../_lib/schedule";
 import { markSlotTaken } from "./zdravila/actions";
@@ -33,9 +35,7 @@ export async function DanesView({ ctx, profile, back }: { ctx: Ctx; profile: Pro
     getExercisesForDay(rehab, today),
     countPendingRequests(supabase, profile.id),
     getRing(rehab, ctx.predloga, today),
-    rehab.assigned_nurse_id
-      ? supabase.from("staff_directory").select("first_name, last_name").eq("id", rehab.assigned_nurse_id).maybeSingle().then((r) => r.data)
-      : null,
+    getMyNurse(rehab.assigned_nurse_id, today),
   ]);
   const logs = await logMissedDoses(rehab, meds, loaded, today);
 
@@ -63,7 +63,12 @@ export async function DanesView({ ctx, profile, back }: { ctx: Ctx; profile: Pro
 
       {nurse && (
         <p className="text-lg">
-          Vaša patronažna sestra: <strong>{nurse.first_name} {nurse.last_name}</strong>
+          Vaša patronažna sestra: <strong>{nurse.nurse}</strong>
+          {nurse.substitute && (
+            <span className="block">
+              Do {formatDate(nurse.substitute.until)} vas obiskuje <strong>{nurse.substitute.name}</strong>.
+            </span>
+          )}
         </p>
       )}
 

@@ -20,9 +20,11 @@ const messages = {
   error: "Prevzem ni uspel. Osvežite stran in poskusite znova.",
 } as const;
 
-export function NurseDashboard({ rows, nurseId, templates }: {
+export function NurseDashboard({ rows, nurseId, covering = [], templates }: {
   rows: DashboardRow[];
   nurseId: string;
+  /** Nurses she substitutes for today (T-49). */
+  covering?: string[];
   templates: TemplateOption[];
 }) {
   const params = useSearchParams();
@@ -37,7 +39,7 @@ export function NurseDashboard({ rows, nurseId, templates }: {
   const [claiming, setClaiming] = useState<string>();
   const [feedback, setFeedback] = useState<keyof typeof messages>();
   const searchedRows = searchPatients(rows, query);
-  const filtered = selectDashboardRows(searchedRows, filters, nurseId);
+  const filtered = selectDashboardRows(searchedRows, filters, nurseId, covering);
 
   useEffect(() => {
     const desktop = window.matchMedia("(min-width: 64rem)");
@@ -117,6 +119,7 @@ export function NurseDashboard({ rows, nurseId, templates }: {
             }}
             filters={filters}
             nurseId={nurseId}
+            covering={covering}
             rows={searchedRows}
             templates={templates}
           />

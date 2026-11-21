@@ -15,6 +15,13 @@ export type VisitRow = {
   coveringFor?: string;
 };
 
+/** Nurses this nurse substitutes for today (nadomeščanje). */
+export async function getCoveredNurseIds(nurseId: string, today: string): Promise<string[]> {
+  const supabase = await createClient();
+  const { data } = await supabase.from("nadomescanje").select("nurse_id").eq("substitute_id", nurseId).gte("until_date", today);
+  return (data ?? []).map((d) => d.nurse_id);
+}
+
 const RANK: Record<TriageStatus, number> = { rdece: 0, rumeno: 1, zeleno: 2 };
 
 /**
