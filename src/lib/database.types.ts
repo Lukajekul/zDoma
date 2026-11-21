@@ -20,6 +20,7 @@ export type Database = {
           checkin_id: string | null
           created_at: string
           id: string
+          medication_id: string | null
           reason: string
           rehab_id: string
           resolved_at: string | null
@@ -33,6 +34,7 @@ export type Database = {
           checkin_id?: string | null
           created_at?: string
           id?: string
+          medication_id?: string | null
           reason: string
           rehab_id: string
           resolved_at?: string | null
@@ -46,6 +48,7 @@ export type Database = {
           checkin_id?: string | null
           created_at?: string
           id?: string
+          medication_id?: string | null
           reason?: string
           rehab_id?: string
           resolved_at?: string | null
@@ -60,6 +63,13 @@ export type Database = {
             columns: ["checkin_id"]
             isOneToOne: false
             referencedRelation: "checkins"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "alerts_medication_id_fkey"
+            columns: ["medication_id"]
+            isOneToOne: false
+            referencedRelation: "medications"
             referencedColumns: ["id"]
           },
           {
@@ -322,6 +332,8 @@ export type Database = {
           id: string
           name: string
           photo_url: string | null
+          picked_up_at: string | null
+          pickup_pack_size: number | null
           previous_dose: string | null
           purpose: string | null
           rehab_id: string
@@ -337,6 +349,8 @@ export type Database = {
           id?: string
           name: string
           photo_url?: string | null
+          picked_up_at?: string | null
+          pickup_pack_size?: number | null
           previous_dose?: string | null
           purpose?: string | null
           rehab_id: string
@@ -352,6 +366,8 @@ export type Database = {
           id?: string
           name?: string
           photo_url?: string | null
+          picked_up_at?: string | null
+          pickup_pack_size?: number | null
           previous_dose?: string | null
           purpose?: string | null
           rehab_id?: string
