@@ -36,7 +36,7 @@ Every feature must feed this loop. If a feature doesn't produce data for triage 
 - **Every alert says why it fired.** For example: "Flagged because pain rose 3→7 over 3 days and 2 rehab sessions were skipped."
 - Trend alerts, for example "weight +2 kg in 3 days" or "rehab adherence 40%".
 - Wound photos shown side by side over time, so the nurse can compare them.
-- An AI-written one-paragraph weekly summary for each patient.
+- A one-paragraph weekly summary for each patient, generated from a template using the triage data.
 - One-click actions: call the patient, adjust the plan, book a visit.
 - A workload line, for example: "Today: 140 patients monitored, 6 need attention, about 15 min of work."
 
@@ -54,7 +54,7 @@ Every feature must feed this loop. If a feature doesn't produce data for triage 
 - **Works for patients who don't use apps.** Many discharged patients are elderly, so they can check in by phone call or SMS ("Press 1 if pain is worse than yesterday"), or a family member can check in for them.
 - **Passive data.** Daily steps come from Google Fit or Apple Health. A sharp drop in mobility is an early warning that needs no input from the patient.
 - **Alerts explain themselves.** Nurses can see exactly why a patient was flagged.
-- **Safe uses of AI.** AI only rewrites discharge letters in plain language and summarises each patient's week for the nurse.
+- **No AI guesswork.** Summaries come from templates and plain-language letters are written by hand, so nothing is made up. A live LLM letter rewrite is a stretch goal only.
 
 ## Demo
 
@@ -98,5 +98,5 @@ Every feature must feed this loop. If a feature doesn't produce data for triage 
 
 - [ ] Find a real readmission cost or rate figure for Slovenia or the EU
 - [ ] Check the red-flag thresholds with someone who has medical knowledge
-- [ ] Pick the tech stack
+- [x] Pick the tech stack (Next.js + TS, Supabase, Cloudflare Workers, no LLM; see AGENTS.md)
 - [ ] Choose 3–5 hip-replacement rehab videos from reputable physio sources
