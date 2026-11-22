@@ -24,6 +24,12 @@ export interface VrednostPacienta {
   tip: "stevilo" | "tlak" | "zdravilo" | "telefon";
   enota?: string;
   privzeto?: string | number;
+  /**
+   * For `tip: "zdravilo"`: template medicines (by `ime`) that fill this value.
+   * The name comes from the rehabilitacija's own medicines (matched by name or
+   * active substance), so staff never type it; `privzeto` is the fallback text.
+   */
+  zdravila?: string[];
 }
 
 export interface Odgovor {
@@ -52,6 +58,12 @@ interface VprasanjeOsnova {
 export interface VprasanjeIzbira extends VprasanjeOsnova {
   tip: "izbira";
   odgovori: Odgovor[];
+  /**
+   * Answered from the pill list instead of asking: when every scheduled dose of
+   * the medicines filling `vrednost`, `dniNazaj` days ago, is logged as taken,
+   * the answer is `vzeto` and the question is skipped. Otherwise it is asked.
+   */
+  izZdravil?: { vrednost: string; dniNazaj: number; vzeto: string };
 }
 
 /** Weight as a row of buttons around the last weight, plus "Drugo" for a number field. */

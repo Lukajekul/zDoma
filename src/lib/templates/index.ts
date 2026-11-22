@@ -8,6 +8,7 @@ import type { Predloga, PredlogaId, Pravilo } from "./types";
 
 export type * from "./types";
 export { NAJVEC_DNEVNIH_VPRASANJ } from "./types";
+export * from "./vrednosti";
 
 /** All templates, heart failure first (main template and demo story). */
 export const predloge: Record<PredlogaId, Predloga> = {

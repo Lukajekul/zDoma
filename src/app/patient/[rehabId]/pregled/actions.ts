@@ -30,7 +30,7 @@ export async function saveCheckin(rehabId: string, input: CheckinInput): Promise
 
   // Recompute on the server: never trust copied answers from the client.
   const same = input.sameAsYesterday && ctx.sameSource ? copyFromYesterday(ctx.questions, ctx.sameSource) : {};
-  const answers: CheckinAnswers = { ...same };
+  const answers: CheckinAnswers = { ...ctx.known, ...same };
   for (const q of ctx.questions) {
     if (same[q.id] !== undefined) continue;
     const v = cleanAnswer(q, input.answers[q.id]);
@@ -41,7 +41,7 @@ export async function saveCheckin(rehabId: string, input: CheckinInput): Promise
 
   const ocena = oceniPregled({
     predloga: ctx.predloga,
-    vrednosti: ctx.rehab.patient_values,
+    vrednosti: ctx.values,
     danes: { datum: ctx.today, odgovori: answers },
     prejsnji: ctx.history.map((c) => ({ datum: c.checkin_date, odgovori: c.answers })),
     izbranaVprasanja: ctx.rehab.questions.length ? ctx.rehab.questions : undefined,

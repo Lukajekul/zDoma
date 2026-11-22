@@ -13,7 +13,13 @@ export const mozganskaKap: Predloga = {
   privzetoTrajanjeDni: 30,
   trajanjeVir: { opis: "Privzeta dolžina, ni vira", potrjeno: false },
   vrednostiPacienta: [
-    { kljuc: "zdraviloProtiStrjevanju", oznaka: "Zdravilo proti strjevanju krvi", tip: "zdravilo" },
+    {
+      kljuc: "zdraviloProtiStrjevanju",
+      oznaka: "Zdravilo proti strjevanju krvi",
+      tip: "zdravilo",
+      zdravila: ["Plavix", "Eliquis"],
+      privzeto: "zdravilo proti strjevanju krvi",
+    },
     CILJNI_TLAK,
   ],
   vprasanja: [
@@ -33,6 +39,7 @@ export const mozganskaKap: Predloga = {
       tip: "izbira",
       besedilo: "Ste včeraj vzeli {zdraviloProtiStrjevanju}?",
       odgovori: DA_NE,
+      izZdravil: { vrednost: "zdraviloProtiStrjevanju", dniNazaj: 1, vzeto: "da" },
       vednoVprasaj: false,
       privzetoIzbrano: true,
       pogostost: "dnevno",

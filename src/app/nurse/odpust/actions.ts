@@ -6,6 +6,7 @@ import { davcnaError, normalizeDavcna } from "@/lib/davcna";
 import { erecept, type ZdraviloPrej } from "@/lib/erecept";
 import { ensurePatientAccount } from "@/lib/qr/accounts";
 import { createClient } from "@/lib/supabase/server";
+import { izZdravil, potrebneVrednosti, privzeteVrednosti, vrednostiIzZdravil } from "@/lib/templates";
 import { getPrilagojenaPredloga } from "@/lib/templates/server";
 import { TIME_ORDER } from "@/app/patient/_lib/schedule";
 import type { PatientValues } from "@/lib/types";
@@ -92,10 +93,25 @@ export async function openRehab(input: OpenRehabInput): Promise<{ error: string 
   if (!questions.length) return { error: "Izberite vsaj eno vprašanje za dnevni pregled." };
   if (dailyCount(predloga, questions) > 6) return { error: "Največ 6 dnevnih vprašanj." };
 
+  // Only values the ticked questions or their rules use; a rule threshold may stay empty,
+  // medicine names come from the chosen medicines (T-70).
+  const needed = potrebneVrednosti(predloga, questions);
+  const chosen = input.meds.filter((m) => m.selected).map((m) => ({ name: m.name, active_substance: m.activeSubstance }));
+  const fromMeds = vrednostiIzZdravil(predloga, chosen);
+  const defaults = privzeteVrednosti(predloga);
   const values: PatientValues = {};
   for (const v of predloga.vrednostiPacienta) {
+    if (izZdravil(v)) {
+      const name = fromMeds[v.kljuc] ?? defaults[v.kljuc];
+      if (name !== undefined) values[v.kljuc] = name;
+      continue;
+    }
+    if (!needed.has(v.kljuc)) continue;
     const raw = (input.values[v.kljuc] ?? "").trim();
-    if (!raw) return { error: `Vpišite: ${v.oznaka}.` };
+    if (!raw) {
+      if (needed.get(v.kljuc) === "besedilo") return { error: `Vpišite: ${v.oznaka}.` };
+      continue;
+    }
     if (v.tip === "stevilo") {
       const n = Number(raw.replace(",", "."));
       if (!Number.isFinite(n) || n <= 0) return { error: `${v.oznaka}: vpišite število.` };

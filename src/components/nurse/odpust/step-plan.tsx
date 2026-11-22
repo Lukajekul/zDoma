@@ -1,7 +1,7 @@
 "use client";
 
 import { BigButton } from "@/components/shell";
-import { vstaviVrednosti, type Predloga } from "@/lib/templates";
+import { izZdravil, potrebneVrednosti, vstaviVrednosti, type Predloga } from "@/lib/templates";
 import { dailyCount } from "@/app/nurse/odpust/_lib/plan";
 import { Field } from "./ui";
 
@@ -37,25 +37,20 @@ type ValuesProps = {
   onNext: () => void;
 };
 
-/** Step 3: the patient's own values (dry weight …) and which check-in questions they get. */
+/**
+ * Step 3: which check-in questions the patient gets, and only the values those
+ * questions or their rules use (T-70). Medicine names come from step 4.
+ */
 export function StepValues({ predloga, values, questions, onValues, onQuestions, onNext }: ValuesProps) {
   const daily = dailyCount(predloga, questions);
-  const missing = predloga.vrednostiPacienta.some((v) => !(values[v.kljuc] ?? "").trim());
+  const needed = potrebneVrednosti(predloga, questions);
+  const fields = predloga.vrednostiPacienta.filter((v) => needed.has(v.kljuc) && !izZdravil(v));
+  const missing = fields.some((v) => needed.get(v.kljuc) === "besedilo" && !(values[v.kljuc] ?? "").trim());
   const toggle = (id: string) => onQuestions(questions.includes(id) ? questions.filter((q) => q !== id) : [...questions, id]);
 
   return (
     <div className="flex flex-col gap-4">
-      {predloga.vrednostiPacienta.map((v) => (
-        <Field
-          key={v.kljuc}
-          label={`${v.oznaka}${v.enota ? ` (${v.enota})` : ""}`}
-          inputMode={v.tip === "stevilo" ? "decimal" : "text"}
-          value={values[v.kljuc] ?? ""}
-          onChange={(x) => onValues({ ...values, [v.kljuc]: x })}
-        />
-      ))}
-
-      <h3 className="mt-2 text-xl font-bold">Vprašanja za dnevni pregled</h3>
+      <h3 className="text-xl font-bold">Vprašanja za dnevni pregled</h3>
       <p className="text-lg text-muted-foreground">Izbranih dnevnih: {daily} od največ 6.</p>
       <ul className="flex flex-col gap-2">
         {predloga.vprasanja.map((q) => (
@@ -73,10 +68,25 @@ export function StepValues({ predloga, values, questions, onValues, onQuestions,
         ))}
       </ul>
       {daily > 6 && <p role="alert" className="text-lg font-semibold text-status-rdece">Odznačite nekaj vprašanj: največ 6 na dan.</p>}
+
+      {fields.length > 0 && <h3 className="mt-2 text-xl font-bold">Vrednosti pacienta</h3>}
+      {fields.map((v) => {
+        const optional = needed.get(v.kljuc) === "pravilo";
+        return (
+          <Field
+            key={v.kljuc}
+            label={`${v.oznaka}${v.enota ? ` (${v.enota})` : ""}${optional ? " – ni obvezno" : ""}`}
+            inputMode={v.tip === "stevilo" ? "decimal" : "text"}
+            value={values[v.kljuc] ?? ""}
+            onChange={(x) => onValues({ ...values, [v.kljuc]: x })}
+            hint={optional ? "Če je ne vpišete, spremljamo le spremembe od dneva do dneva." : undefined}
+          />
+        );
+      })}
       <BigButton onClick={onNext} disabled={missing || daily > 6 || questions.length === 0}>
         Naprej
       </BigButton>
-      {missing && <p className="text-lg text-muted-foreground">Izpolnite vse vrednosti zgoraj.</p>}
+      {missing && <p className="text-lg text-muted-foreground">Izpolnite obvezne vrednosti zgoraj.</p>}
     </div>
   );
 }

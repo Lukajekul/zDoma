@@ -35,6 +35,12 @@ export function preveriPredlogo(p: Predloga): string[] {
       if (v.odgovori.length < 2) napake.push(`${v.id}: needs at least 2 answers`);
       for (const id of podvojeni(v.odgovori.map((o) => o.id))) napake.push(`${v.id}: duplicate answer ${id}`);
       besedila.push(...v.odgovori.map((o) => o.besedilo));
+      const iz = v.izZdravil;
+      if (iz && !p.vrednostiPacienta.some((x) => x.kljuc === iz.vrednost && x.zdravila?.length)) {
+        napake.push(`${v.id}: izZdravil needs a value with zdravila`);
+      }
+      if (iz && !v.odgovori.some((o) => o.id === iz.vzeto)) napake.push(`${v.id}: izZdravil unknown answer ${iz.vzeto}`);
+      if (iz && !(iz.dniNazaj >= 0)) napake.push(`${v.id}: izZdravil dniNazaj must be >= 0`);
     } else if (!(v.korak > 0)) {
       napake.push(`${v.id}: korak must be > 0`);
     }
@@ -84,6 +90,10 @@ export function preveriPredlogo(p: Predloga): string[] {
     }
   }
   for (const id of podvojeni(p.zdravila.map((z) => z.ime))) napake.push(`duplicate medicine ${id}`);
+  for (const v of p.vrednostiPacienta) {
+    if (v.zdravila && v.tip !== "zdravilo") napake.push(`${v.kljuc}: zdravila only on tip zdravilo`);
+    for (const ime of v.zdravila ?? []) if (!p.zdravila.some((z) => z.ime === ime)) napake.push(`${v.kljuc}: unknown medicine ${ime}`);
+  }
   for (const id of podvojeni(p.vaje.map((v) => v.id))) napake.push(`duplicate exercise id ${id}`);
   for (const v of p.vaje) {
     if (v.koraki.length === 0) napake.push(`${v.id}: no steps`);

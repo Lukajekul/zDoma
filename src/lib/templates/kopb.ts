@@ -17,7 +17,15 @@ export const kopb: Predloga = {
   // TODO(T-42): no source for the default length yet.
   privzetoTrajanjeDni: 30,
   trajanjeVir: { opis: "Privzeta dolžina, ni vira", potrjeno: false },
-  vrednostiPacienta: [{ kljuc: "inhalatorZaOlajsanje", oznaka: "Inhalator za olajšanje", tip: "zdravilo" }],
+  vrednostiPacienta: [
+    {
+      kljuc: "inhalatorZaOlajsanje",
+      oznaka: "Inhalator za olajšanje",
+      tip: "zdravilo",
+      zdravila: ["Ventolin Evohaler"],
+      privzeto: "inhalator za olajšanje",
+    },
+  ],
   vprasanja: [
     {
       id: "dusenje",

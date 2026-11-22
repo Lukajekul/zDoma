@@ -18,7 +18,13 @@ export const srcnoPopuscanje: Predloga = {
   trajanjeVir: { opis: "Privzeta dolžina, ni vira", potrjeno: false },
   vrednostiPacienta: [
     { kljuc: "suhaTeza", oznaka: "Suha teža", tip: "stevilo", enota: "kg" },
-    { kljuc: "zdraviloZaVodo", oznaka: "Zdravilo za vodo (diuretik)", tip: "zdravilo" },
+    {
+      kljuc: "zdraviloZaVodo",
+      oznaka: "Zdravilo za vodo (diuretik)",
+      tip: "zdravilo",
+      zdravila: ["Lasix"],
+      privzeto: "zdravilo za vodo",
+    },
     CILJNI_TLAK,
   ],
   vprasanja: [
@@ -61,6 +67,7 @@ export const srcnoPopuscanje: Predloga = {
       tip: "izbira",
       besedilo: "Ste včeraj vzeli {zdraviloZaVodo}?",
       odgovori: DA_NE,
+      izZdravil: { vrednost: "zdraviloZaVodo", dniNazaj: 1, vzeto: "da" },
       vednoVprasaj: false,
       privzetoIzbrano: true,
       pogostost: "dnevno",
