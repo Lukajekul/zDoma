@@ -28,7 +28,7 @@ async function goHome(): Promise<never> {
   redirect(profile ? await homePathFor(profile) : LOGIN_PATH);
 }
 
-/** Login with davčna številka + password: staff, family, and patients who already set their own password. */
+/** Login with davčna številka + password: family (zadolženci) and patients who already set their own password. Staff use loginStaff. */
 export async function login(_prev: FormState, formData: FormData): Promise<FormState> {
   const davcna = normalizeDavcna(text(formData, "davcna"));
   const password = String(formData.get("password") ?? "");
@@ -43,6 +43,37 @@ export async function login(_prev: FormState, formData: FormData): Promise<FormS
     return { error: "Davčna številka ali geslo ni pravilno. Preverite in poskusite znova.", values };
   }
   return goHome();
+}
+
+const STAFF_LOGIN_ERROR = "E-pošta ali geslo ni pravilno. Preverite in poskusite znova.";
+
+/**
+ * Staff (bolničarji, patronažne sestre) log in with their email + password (T-67).
+ * Only `is_staff` profiles get through; anyone else is signed out again, so this
+ * form never logs in a patient or family member (the nurse area is still gated by requireStaff).
+ */
+export async function loginStaff(_prev: FormState, formData: FormData): Promise<FormState> {
+  const email = text(formData, "email").toLowerCase();
+  const password = String(formData.get("password") ?? "");
+  const values = { email };
+
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return { error: "Vpišite svoj službeni e-poštni naslov, na primer ime.priimek@zdoma.demo.", values };
+  }
+  // Internal davčna logins never go through the staff form.
+  if (email.endsWith("@zdoma.local")) return { error: STAFF_LOGIN_ERROR, values };
+  if (!password) return { error: "Vpišite geslo.", values };
+
+  const supabase = await createClient();
+  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+  if (error || !data.user) return { error: STAFF_LOGIN_ERROR, values };
+
+  const { data: profile } = await supabase.from("profiles").select("is_staff").eq("id", data.user.id).maybeSingle();
+  if (!profile?.is_staff) {
+    await supabase.auth.signOut({ scope: "local" });
+    return { error: "Ta prijava je samo za osebje. Svojci se prijavijo z davčno številko.", values };
+  }
+  redirect("/nurse");
 }
 
 /** Family member (zadolženec) registers themselves. Staff accounts are never self-registered. */

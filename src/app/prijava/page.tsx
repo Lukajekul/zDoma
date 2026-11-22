@@ -4,7 +4,7 @@ import { BigButton, Card } from "@/components/shell";
 import { LogoutButton } from "@/components/auth/logout-button";
 import { getCurrentProfile } from "@/lib/auth";
 import { continueHome } from "./actions";
-import { LoginForm } from "./_components/login-form";
+import { LoginChooser } from "./_components/login-chooser";
 import { LoginFrame } from "./_components/login-frame";
 
 export default function PrijavaPage() {
@@ -37,7 +37,7 @@ async function LoginOrAccount() {
   const link = "font-bold text-primary underline underline-offset-4";
   return (
     <>
-      <LoginForm />
+      <LoginChooser />
       <div className="flex flex-col items-center gap-2 text-center text-lg text-muted-foreground">
         <p>
           Ste svojec brez računa?{" "}

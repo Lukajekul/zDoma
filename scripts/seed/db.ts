@@ -46,11 +46,15 @@ export interface Person {
   last: string;
 }
 
-/** Creates a seed account. With `password` that is the login; without it a QR starting password is stored for the listek. */
+/**
+ * Creates a seed account. With `password` that is the login; without it a QR starting password is stored for the listek.
+ * With `email` (staff, T-67) the account is created as `<davcna>@zdoma.local` so the trigger makes the profile,
+ * then its login email is changed to the staff email.
+ */
 export async function createAccount(
   admin: Admin,
   p: Person,
-  opts: { password?: string; staff?: boolean; address?: string; obcina?: string },
+  opts: { password?: string; staff?: boolean; email?: string; address?: string; obcina?: string },
 ): Promise<string> {
   const token = opts.password ? undefined : randomBytes(32).toString("base64url");
   const { data, error } = await admin.auth.admin.createUser({
@@ -61,6 +65,10 @@ export async function createAccount(
   });
   if (error || !data.user) throw new Error(`create ${p.davcna}: ${error?.message}`);
   const id = data.user.id;
+  if (opts.email) {
+    const { error: emailError } = await admin.auth.admin.updateUserById(id, { email: opts.email, email_confirm: true });
+    if (emailError) throw new Error(`set email ${opts.email}: ${emailError.message}`);
+  }
   ok(
     await admin
       .from("profiles")

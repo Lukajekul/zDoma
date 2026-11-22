@@ -6,7 +6,7 @@
 import { predloge } from "@/lib/templates";
 import { todayLjubljana, type CheckinAnswers, type TemplateId, type TriageStatus } from "@/lib/types";
 import {
-  BOLNICARJI, IMENA_M, IMENA_Z, NADOMESCANJE, OBCINE, PRIIMKI, RAZDELITEV, SORODSTVO, davcne, rng,
+  BOLNICARJI, IMENA_M, IMENA_Z, NADOMESCANJE, OBCINE, PRIIMKI, RAZDELITEV, SORODSTVO, davcne, rng, staffEmail,
 } from "./data";
 import { adminClient, cleanSeed, createAccount, ok, type Person } from "./db";
 import { withFallback } from "./fallback";
@@ -32,8 +32,9 @@ const staff: Record<string, string> = {};
 const summary: string[] = [];
 for (const b of BOLNICARJI) {
   const p: Person = { davcna: nextDavcna(), first: b.first, last: b.last };
-  staff[b.key] = await createAccount(admin, p, { password, staff: true });
-  summary.push(`bolničar  ${p.davcna}  ${p.first} ${p.last}${b.tereni.length ? ` (teren: ${b.tereni.join(", ")})` : ""}`);
+  const email = staffEmail(b);
+  staff[b.key] = await createAccount(admin, p, { password, staff: true, email });
+  summary.push(`bolničar  ${email}  ${p.davcna}  ${p.first} ${p.last}${b.tereni.length ? ` (teren: ${b.tereni.join(", ")})` : ""}`);
 }
 ok(await admin.from("tereni").insert(BOLNICARJI.flatMap((b) => b.tereni.map((obcina) => ({ nurse_id: staff[b.key], obcina })))), "tereni");
 ok(

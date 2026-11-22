@@ -80,7 +80,7 @@ Tests cost time and tokens, so keep them minimal.
 |---|---|
 | App | Next.js (App Router) + TypeScript, single app |
 | UI | Tailwind CSS + shadcn/ui, mobile-first, Slovenian (see §7) |
-| Auth | Supabase Auth: patients by QR ticket, staff and family by davčna številka + password (see §6) |
+| Auth | Supabase Auth: patients by QR ticket then own password, staff by email + password, family by davčna številka + password (see §6) |
 | Notifications | Daily check-in reminder as a Web Push notification in the first build (T-39); email and SMS reminders later |
 | Data | Supabase: Postgres, Realtime (live nurse dashboard), Storage (wound photos) |
 | Templates | One data file per patient group in `src/lib/templates/` (see §5a) |
@@ -164,10 +164,10 @@ Odpuščenec and zadolženec aren't account types. They describe a person's rela
   - **Lost ticket or forgotten password:** "Nova koda QR" (bolničar, or the patient in settings) sets a new starting token, signs out every device and reprints the listek; the patient sets a new password after scanning it. Written to audit_log. The listek says "Ob prvi prijavi si nastavite svoje geslo. Nato ta listek ne deluje več."
   - If the patient **already has an account** from an earlier rehabilitacija, the new rehabilitacija simply appears in it. The bolničar prints a new listek only if asked ("Nova koda QR").
   - The judge demo (`/demo`) stores no token, so its throwaway patient skips the password step.
-- **Bolničarji and zadolženci log in with davčna številka + password.** Bolničar accounts are created by seed data or an admin and marked as staff, never self-registered. **Family members (zadolženci) register themselves** with davčna številka + name + password; their account shows nothing until a patient approves their request.
+- **Bolničarji log in with email + password; zadolženci with davčna številka + password.** `/prijava` first asks "Kdo se prijavlja?" with two big buttons, "Svojci" (davčna številka) and "Osebje" (e-pošta). Bolničar accounts are created by seed data or an admin and marked as staff (`is_staff`), never self-registered; their auth email is a real work address (demo: `ime.priimek@zdoma.demo`), while their profile keeps the davčna številka. The staff form signs out anyone who isn't staff, and the nurse area is gated by `requireStaff()`. **Family members (zadolženci) register themselves** with davčna številka + name + password; their account shows nothing until a patient approves their request.
 - The davčna številka is not secret, so it never logs anyone in on its own.
 - Validate the format before sending: 8 digits. The last digit is a check digit: multiply the first 7 digits by 8, 7, 6, 5, 4, 3, 2 and add the results. Then take `11 − (sum mod 11)`: a result of 10 means the check digit is 0, and a result of 11 means the number is invalid.
-- Supabase Auth only knows email and phone, so map the davčna številka to an internal email, `<davcna>@zdoma.local`. Never show that email to users.
+- Supabase Auth only knows email and phone, so map the davčna številka of patients and family to an internal email, `<davcna>@zdoma.local`. Never show that email to users. Staff use their real email instead.
 - Seed and demo users get made-up davčne številke that pass the check-digit test. Never use a real person's number.
 
 ### Rehabilitacije

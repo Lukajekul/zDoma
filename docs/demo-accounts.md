@@ -4,32 +4,32 @@ Seed data from `npm run seed` (T-10) on the shared zDoma project. **All people a
 
 ## How to log in
 
-- **Every seeded account** (bolničarji, zadolženci and patients) uses the davčna številka below and the demo password **`zdoma-eupRh0qTB1SQ`** (it is `SEED_PASSWORD` in `.env.local`).
-- **Bolničarji and zadolženci** log in at `/prijava`. **Patients (odpuščenci)** log in at `/prijava/pacient` ("Sem pacient" on the home page).
+- **Every seeded account** uses the demo password **`zdoma-eupRh0qTB1SQ`** (it is `SEED_PASSWORD` in `.env.local`).
+- **Bolničarji** log in at `/prijava` → "Osebje" with the **e-pošta** below (T-67). **Zadolženci** log in at `/prijava` → "Svojci" with their davčna številka. **Patients (odpuščenci)** log in at `/prijava/pacient` ("Sem pacient" on the home page).
 - This repo is public, so anyone can use this password on the live site. Data is synthetic. To change it: set a new `SEED_PASSWORD` in `.env.local`, run `npm run seed`, and update this line.
 - **To show the QR login:** as a bolničar open a patient and press "Nova koda QR". The printed QR logs the patient in once, then asks them to set their own password (T-54); after that the demo password above no longer works for that patient until the seed is re-run.
 - Re-running `npm run seed` keeps the davčne številke of the demo story, staff and zadolženci, but the other patients' names, občine and dates can change between runs: update the tables below after every re-run (last: 22. 11. 2026).
 
 ## Demo story
 
-| Davčna | Geslo | Who | What to show |
+| Davčna / e-pošta | Geslo | Who | What to show |
 |---|---|---|---|
 | 99000075 | `zdoma-eupRh0qTB1SQ` | **Janez Novak** (patient, Šentjur) | Srčno popuščanje, day 7. Dry weight 72 kg → 74,5 kg today, swollen ankles, diuretic missed yesterday → **Rdeče** with 4 reasons ("Teža +2,5 kg v 3 dneh" …). |
 | 99000580 | `zdoma-eupRh0qTB1SQ` | **Ana Novak** (zadolženec) | Janez's daughter, approved. Marks his evening pills ("Označila: Ana (hčerka)"). |
-| 99000016 | `zdoma-eupRh0qTB1SQ` | **Mojca Kovač** (bolničar) | Patronažna sestra for Šentjur and Celje: Janez is her patient. Also covers Petra's patients (nadomeščanje). |
+| mojca.kovac@zdoma.demo | `zdoma-eupRh0qTB1SQ` | **Mojca Kovač** (bolničar) | Patronažna sestra for Šentjur and Celje: Janez is her patient. Also covers Petra's patients (nadomeščanje). |
 | 99000091 | `zdoma-eupRh0qTB1SQ` | Stanko Zupančič (patient, Žalec) | New Furosemid **not picked up** at the pharmacy → open alert "Furosemid ni prevzet 4 dni po odpustu" (T-31). |
 | 99000652 | `zdoma-eupRh0qTB1SQ` | **Vesna Zupančič** (zadolženec) | Stanko's daughter, approved. "Skrbim za" shows "Zdravila niso prevzeta v lekarni" on his card and the red warning with Furosemid on his page (T-48, T-62). |
 | 99000083 | `zdoma-eupRh0qTB1SQ` | Marija Kos (patient, Celje) | Two rehabilitacije: kolk/koleno (zaključena) + po infarktu (aktivna). |
 
 ## Bolničarji
 
-| Davčna | Geslo | Name | Role |
-|---|---|---|---|
-| 99000016 | `zdoma-eupRh0qTB1SQ` | Mojca Kovač | Patronažna sestra, teren: Šentjur, Celje |
-| 99000024 | `zdoma-eupRh0qTB1SQ` | Petra Golob | Patronažna sestra, teren: Laško, Žalec · **na nadomeščanju**, njene paciente ima Mojca Kovač (4 dni od seeda) |
-| 99000032 | `zdoma-eupRh0qTB1SQ` | Nina Kralj | Patronažna sestra, teren: Vojnik, Slovenske Konjice |
-| 99000059 | `zdoma-eupRh0qTB1SQ` | Tina Bizjak | Bolnišnica (odpira rehabilitacije) |
-| 99000067 | `zdoma-eupRh0qTB1SQ` | Marko Horvat | Bolnišnica (odpira rehabilitacije) |
+| E-pošta (login) | Davčna | Geslo | Name | Role |
+|---|---|---|---|---|
+| mojca.kovac@zdoma.demo | 99000016 | `zdoma-eupRh0qTB1SQ` | Mojca Kovač | Patronažna sestra, teren: Šentjur, Celje |
+| petra.golob@zdoma.demo | 99000024 | `zdoma-eupRh0qTB1SQ` | Petra Golob | Patronažna sestra, teren: Laško, Žalec · **na nadomeščanju**, njene paciente ima Mojca Kovač (4 dni od seeda) |
+| nina.kralj@zdoma.demo | 99000032 | `zdoma-eupRh0qTB1SQ` | Nina Kralj | Patronažna sestra, teren: Vojnik, Slovenske Konjice |
+| tina.bizjak@zdoma.demo | 99000059 | `zdoma-eupRh0qTB1SQ` | Tina Bizjak | Bolnišnica (odpira rehabilitacije) |
+| marko.horvat@zdoma.demo | 99000067 | `zdoma-eupRh0qTB1SQ` | Marko Horvat | Bolnišnica (odpira rehabilitacije) |
 
 ## Zadolženci (family)
 

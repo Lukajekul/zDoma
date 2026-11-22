@@ -56,6 +56,12 @@ export interface Bolnicar {
   tereni: string[];
 }
 
+/** Staff login email (T-67): "Mojca Kovač" → mojca.kovac@zdoma.demo. Made up, never a real address. */
+export function staffEmail(b: Pick<Bolnicar, "first" | "last">): string {
+  const slug = (s: string) => s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z]+/g, "-");
+  return `${slug(b.first)}.${slug(b.last)}@zdoma.demo`;
+}
+
 export const BOLNICARJI: Bolnicar[] = [
   { key: "mojca", first: "Mojca", last: "Kovač", tereni: ["Šentjur", "Celje"] },
   { key: "petra", first: "Petra", last: "Golob", tereni: ["Laško", "Žalec"] },

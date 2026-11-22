@@ -36,7 +36,7 @@ export type AlertSource = "checkin" | "zdravila" | "brez_pregleda" | "drugo";
 
 // ---------- Tables ----------
 
-/** One per auth user. id = auth.users.id. Login email is `<davcna>@zdoma.local`, never shown. */
+/** One per auth user. id = auth.users.id. Login email is `<davcna>@zdoma.local` (never shown), except staff who log in with their own email (T-67). */
 export interface Profile {
   id: Uuid;
   davcna: string;
