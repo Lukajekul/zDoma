@@ -13,7 +13,7 @@ export type IsoDate = string;
 export type IsoDateTime = string;
 
 /** Relation of a person to a patient (AGENTS.md §6). Not stored as an account type. */
-export type UserRole = "odpuscenec" | "zadolzenec" | "bolnicar";
+export type UserRole = "odpuscenec" | "zadolzenec" | "bolnicar" | "student";
 
 export const TEMPLATE_IDS = [
   "srcno-popuscanje",
@@ -54,6 +54,8 @@ export interface Profile {
   photo_url: string | null;
   /** Daily check-in reminder time, "08:00", Europe/Ljubljana (T-39). */
   checkin_time: string;
+  /** Študent pomočnik: last day of the internship, set only by an admin. null = not a student. */
+  student_until: IsoDate | null;
   created_at: IsoDateTime;
 }
 
@@ -107,6 +109,17 @@ export interface Teren {
   /** Optional narrowing within the občina; null = whole občina. */
   naselja: string[] | null;
   postcodes: string[] | null;
+}
+
+/** Študent pomočnik assigned to a patient by staff; the patient approves. One per patient. */
+export interface StudentAssignment {
+  id: Uuid;
+  student_id: Uuid;
+  patient_id: Uuid;
+  assigned_by: Uuid;
+  status: AccessStatus;
+  created_at: IsoDateTime;
+  decided_at: IsoDateTime | null;
 }
 
 /** Nurse's patients handed to a colleague until a date (T-36). */
@@ -310,4 +323,12 @@ export function isRehabActive(
   today: IsoDate = todayLjubljana(),
 ): boolean {
   return rehab.status === "aktivna" && today <= rehab.end_date;
+}
+
+/** A študent pomočnik whose internship has not ended (AGENTS.md §6). */
+export function isActiveStudent(
+  profile: Pick<Profile, "is_staff" | "student_until">,
+  today: IsoDate = todayLjubljana(),
+): boolean {
+  return !profile.is_staff && !!profile.student_until && today <= profile.student_until;
 }

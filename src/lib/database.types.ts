@@ -763,6 +763,7 @@ export type Database = {
           obcina: string | null
           phone: string | null
           photo_url: string | null
+          student_until: string | null
         }
         Insert: {
           address?: string | null
@@ -777,6 +778,7 @@ export type Database = {
           obcina?: string | null
           phone?: string | null
           photo_url?: string | null
+          student_until?: string | null
         }
         Update: {
           address?: string | null
@@ -791,6 +793,7 @@ export type Database = {
           obcina?: string | null
           phone?: string | null
           photo_url?: string | null
+          student_until?: string | null
         }
         Relationships: []
       }
@@ -1074,6 +1077,90 @@ export type Database = {
           },
         ]
       }
+      student_assignments: {
+        Row: {
+          assigned_by: string
+          created_at: string
+          decided_at: string | null
+          id: string
+          patient_id: string
+          status: Database["public"]["Enums"]["access_status"]
+          student_id: string
+        }
+        Insert: {
+          assigned_by?: string
+          created_at?: string
+          decided_at?: string | null
+          id?: string
+          patient_id: string
+          status?: Database["public"]["Enums"]["access_status"]
+          student_id: string
+        }
+        Update: {
+          assigned_by?: string
+          created_at?: string
+          decided_at?: string | null
+          id?: string
+          patient_id?: string
+          status?: Database["public"]["Enums"]["access_status"]
+          student_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "student_assignments_assigned_by_fkey"
+            columns: ["assigned_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "student_assignments_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "student_assignments_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      student_reminders_sent: {
+        Row: {
+          assignment_id: string
+          day: string
+          kind: string
+          sent_at: string
+          slot: Database["public"]["Enums"]["time_of_day"]
+        }
+        Insert: {
+          assignment_id: string
+          day: string
+          kind: string
+          sent_at?: string
+          slot: Database["public"]["Enums"]["time_of_day"]
+        }
+        Update: {
+          assignment_id?: string
+          day?: string
+          kind?: string
+          sent_at?: string
+          slot?: Database["public"]["Enums"]["time_of_day"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "student_reminders_sent_assignment_id_fkey"
+            columns: ["assignment_id"]
+            isOneToOne: false
+            referencedRelation: "student_assignments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       template_overrides: {
         Row: {
           data: Json
@@ -1176,6 +1263,8 @@ export type Database = {
     Functions: {
       can_log_rehab: { Args: { p_rehab: string }; Returns: boolean }
       can_read_rehab: { Args: { p_rehab: string }; Returns: boolean }
+      is_active_student: { Args: never; Returns: boolean }
+      is_student_of: { Args: { p_patient: string }; Returns: boolean }
       claim_rehab: { Args: { p_rehab_id: string }; Returns: boolean }
       is_carer_of: { Args: { p_patient: string }; Returns: boolean }
       is_staff: { Args: never; Returns: boolean }
