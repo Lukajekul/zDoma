@@ -35,7 +35,7 @@ export function EmergencyScreen({ emergency, onContinue, onBack }: Props) {
         <p className="text-xl">Vaši odgovori še niso poslani.</p>
         <div className="mt-6 flex flex-col gap-3">
           <button type="button" onClick={onContinue} className="min-h-16 rounded-2xl border-2 border-white text-xl font-bold">
-            Nadaljuj pregled
+            Nadaljuj dnevni pregled
           </button>
           <button type="button" onClick={onBack} className="min-h-14 rounded-xl text-xl font-semibold underline">
             Nazaj – popravi odgovor

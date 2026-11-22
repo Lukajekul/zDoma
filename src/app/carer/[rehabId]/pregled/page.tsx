@@ -7,14 +7,14 @@ import { type RehabParams, getCarerRehab, patientName } from "../../_lib/access"
 import { carerSaveCheckin } from "../actions";
 import { TogetherNote } from "../together-note";
 
-export const metadata = { title: "Pregled – Skrbim za – zDoma" };
+export const metadata = { title: "Dnevni pregled – Skrbim za – zDoma" };
 
 /** Zadolženec answers today's check-in together with the patient (same flow and triage as T-05). */
 export default function CarerCheckinPage({ params }: RehabParams) {
   return (
     <Suspense
       fallback={
-        <AppShell title="Današnji pregled">
+        <AppShell title="Dnevni pregled">
           <p className="text-xl">Nalagam …</p>
         </AppShell>
       }
@@ -32,7 +32,7 @@ async function Checkin({ params }: RehabParams) {
   if (!ctx) notFound();
   const back = c.base;
   const shell = (children: React.ReactNode) => (
-    <AppShell title="Današnji pregled" back={back}>
+    <AppShell title="Dnevni pregled" back={back}>
       {children}
     </AppShell>
   );
@@ -44,7 +44,7 @@ async function Checkin({ params }: RehabParams) {
           Shranjeno ✓
         </p>
         <StatusBadge status={ctx.todayCheckin.triage_status} />
-        <BigButton href={back}>Nazaj na pregled</BigButton>
+        <BigButton href={back}>Nazaj</BigButton>
       </>,
     );
   }

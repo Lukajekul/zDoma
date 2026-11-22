@@ -87,7 +87,7 @@ async function Overview({ params }: RehabParams) {
         <AppointmentCard appointment={appointment} today={today} />
       )}
 
-      <Card icon={<ClipboardCheck />} title="Današnji pregled">
+      <Card icon={<ClipboardCheck />} title="Dnevni pregled">
         {todayCheckin ? (
           <p className="text-xl">
             Opravljen ✓{by(todayCheckin.entered_by) && ` · Označeno: ${by(todayCheckin.entered_by)}`}

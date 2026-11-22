@@ -56,7 +56,7 @@ async function Rehab({ params }: Pick<PageProps<"/patient/[rehabId]">, "params">
   return (
     <AppShell title={rehabTitle(rehab)} back={BACK}>
       <p className="rounded-3xl bg-card shadow-soft p-4 text-xl">
-        To okrevanje je zaključeno {formatDate(rehab.end_date)}. Pregledov ne pošiljate več, podatke
+        To okrevanje je zaključeno {formatDate(rehab.end_date)}. Dnevnih pregledov ne pošiljate več, podatke
         pa lahko še vedno pregledate.
       </p>
       {appointment && <AppointmentCard appointment={appointment} today={today} heading="Vaša naslednja kontrola pri zdravniku" />}
@@ -65,7 +65,7 @@ async function Rehab({ params }: Pick<PageProps<"/patient/[rehabId]">, "params">
         <dd>{formatDate(rehab.start_date)}</dd>
         <dt className="text-muted-foreground">Konec</dt>
         <dd>{formatDate(rehab.end_date)}</dd>
-        <dt className="text-muted-foreground">Pregledov</dt>
+        <dt className="text-muted-foreground">Dnevnih pregledov</dt>
         <dd>{count ?? 0} od {total} dni</dd>
       </dl>
       <BigButton href={`/patient/${rehab.id}/zdravila`} variant="secondary">

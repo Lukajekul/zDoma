@@ -16,7 +16,7 @@ import { getRing } from "../../_lib/ring";
 import { addDays } from "../../_lib/schedule";
 import { saveCheckin } from "./actions";
 
-export const metadata = { title: "Današnji pregled – zDoma" };
+export const metadata = { title: "Dnevni pregled – zDoma" };
 
 const WEEKDAY = new Intl.DateTimeFormat("sl-SI", { weekday: "short", timeZone: "UTC" });
 
@@ -25,7 +25,7 @@ export default function CheckinPage({ params }: PageProps<"/patient/[rehabId]/pr
   return (
     <Suspense
       fallback={
-        <AppShell title="Današnji pregled" back="/patient">
+        <AppShell title="Dnevni pregled" back="/patient">
           <p className="text-xl">Nalagam …</p>
         </AppShell>
       }
@@ -43,7 +43,7 @@ async function CheckinScreen({ params }: Pick<PageProps<"/patient/[rehabId]/preg
 
   const back = `/patient/${ctx.rehab.id}`;
   const shell = (children: React.ReactNode) => (
-    <AppShell title="Današnji pregled" back={back}>
+    <AppShell title="Dnevni pregled" back={back}>
       {children}
     </AppShell>
   );
@@ -73,7 +73,7 @@ async function CheckinScreen({ params }: Pick<PageProps<"/patient/[rehabId]/preg
   }
 
   if (!ctx.active) {
-    return shell(<p className="rounded-3xl bg-card shadow-soft p-4 text-xl">To okrevanje je zaključeno. Pregledov ne pošiljate več.</p>);
+    return shell(<p className="rounded-3xl bg-card shadow-soft p-4 text-xl">To okrevanje je zaključeno. Dnevnih pregledov ne pošiljate več.</p>);
   }
   if (!ctx.questions.length) {
     return shell(<p className="rounded-3xl bg-card shadow-soft p-4 text-xl">Za danes nimate vprašanj.</p>);

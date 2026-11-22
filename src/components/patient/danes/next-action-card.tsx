@@ -33,11 +33,11 @@ export function NextActionCard({ action, base, nextCheckin, onSlotTaken }: Props
           <Card>
             <Head
               icon={action.weight ? <Scale /> : <ClipboardCheck />}
-              title={action.weight ? "Stopite na tehtnico" : "Današnji pregled"}
+              title={action.weight ? "Stopite na tehtnico" : "Dnevni pregled"}
               sub={`${action.weight ? "Nato nekaj vprašanj. " : ""}Traja 30 sekund.`}
             />
           </Card>
-          <BigButton href={`${base}/pregled`}>Začni pregled</BigButton>
+          <BigButton href={`${base}/pregled`}>Začni dnevni pregled</BigButton>
         </>
       );
     case "pills":

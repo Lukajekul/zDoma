@@ -72,12 +72,12 @@ async function FirstVisit({ params }: Pick<PageProps<"/nurse/prvi-obisk/[rehabId
           {
             id: "obvestila",
             title: "Dovolite obvestila",
-            body: <p>Ko zDoma vpraša za obvestila, tapnite »Dovoli«. Opomnik za pregled pride vsak dan ob 8:00.</p>,
+            body: <p>Ko zDoma vpraša za obvestila, tapnite »Dovoli«. Opomnik za dnevni pregled pride vsak dan ob 8:00.</p>,
           },
           {
             id: "pregled",
-            title: "Prvi pregled skupaj",
-            body: count ? <p>Pacient je pregled že opravil ✓</p> : <p>Na pacientovem telefonu odprite »Danes« in skupaj opravite današnji pregled.</p>,
+            title: "Prvi dnevni pregled skupaj",
+            body: count ? <p>Pacient je dnevni pregled že opravil ✓</p> : <p>Na pacientovem telefonu odprite »Danes« in skupaj opravite današnji dnevni pregled.</p>,
             done: !!count,
           },
         ]}

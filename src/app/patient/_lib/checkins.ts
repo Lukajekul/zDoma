@@ -26,7 +26,7 @@ export async function loadCheckinContext(patientId: Uuid, rehabId: string) {
     .eq("rehab_id", rehab.id)
     .gte("checkin_date", addDays(today, -HISTORY_DAYS))
     .order("checkin_date", { ascending: false });
-  if (error) throw new Error("Pregledov ni bilo mogoče naložiti.");
+  if (error) throw new Error("Dnevnih pregledov ni bilo mogoče naložiti.");
 
   const all = (data ?? []) as Checkin[];
   const todayCheckin = all.find((c) => c.checkin_date === today);

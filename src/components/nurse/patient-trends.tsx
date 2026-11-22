@@ -24,10 +24,10 @@ export function PatientTrends({ trends }: { trends: PatientDetail["trends"] }) {
   return (
     <section className="space-y-4 rounded-3xl bg-card shadow-soft p-4" aria-labelledby="trendi">
       <div>
-        <h2 className="text-xl font-bold" id="trendi">Trendi pregledov</h2>
+        <h2 className="text-xl font-bold" id="trendi">Trendi dnevnih pregledov</h2>
         <p className="text-muted-foreground">{formatDate(trends.start)} – {formatDate(trends.end)}</p>
       </div>
-      {statuses.size === 0 ? <p>V tem obdobju ni opravljenih pregledov.</p> : (
+      {statuses.size === 0 ? <p>V tem obdobju ni opravljenih dnevnih pregledov.</p> : (
         <div className="space-y-2">
           <h3 className="font-semibold">Stanje po dnevih</h3>
           <div
@@ -48,7 +48,7 @@ export function PatientTrends({ trends }: { trends: PatientDetail["trends"] }) {
             <span />
             {days.map((date) => <span key={date}>{new Date(date).getUTCDate()}.</span>)}
           </div>
-          <p className="text-muted-foreground">Dan brez pike je brez pregleda.</p>
+          <p className="text-muted-foreground">Dan brez pike je brez dnevnega pregleda.</p>
         </div>
       )}
       {trends.weights.map((points, index) => points.length > 0 && (

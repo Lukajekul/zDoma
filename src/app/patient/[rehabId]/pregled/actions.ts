@@ -20,7 +20,7 @@ const TRY_AGAIN = "Ni uspelo shraniti. Preverite internetno povezavo in poskusit
 export async function saveCheckin(rehabId: string, input: CheckinInput): Promise<{ error?: string }> {
   const profile = await requireProfile();
   const ctx = await loadCheckinContext(profile.id, rehabId);
-  if (!ctx || !ctx.active) return { error: "To okrevanje je zaključeno. Pregledov ne pošiljate več." };
+  if (!ctx || !ctx.active) return { error: "To okrevanje je zaključeno. Dnevnih pregledov ne pošiljate več." };
   if (ctx.todayCheckin) {
     refresh();
     return {};

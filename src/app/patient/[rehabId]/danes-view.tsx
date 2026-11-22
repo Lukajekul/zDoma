@@ -63,7 +63,7 @@ export async function DanesView({ ctx, profile, back }: { ctx: Ctx; profile: Pro
 
 
   const links = [
-    { href: `${base}/pregled`, label: "Pregled", hint: "Današnja vprašanja", Icon: ClipboardCheck },
+    { href: `${base}/pregled`, label: "Dnevni pregled", hint: "Današnja vprašanja", Icon: ClipboardCheck },
     { href: `${base}/zdravila`, label: "Vse tablete", hint: "Kdaj in koliko", Icon: Pill },
     { href: `${base}/vaje`, label: "Vaje", hint: "Za danes", Icon: Activity },
     ...(changes.any ? [{ href: `${base}/spremembe`, label: "Spremembe zdravil", hint: "Novo in ukinjeno", Icon: RefreshCw }] : []),

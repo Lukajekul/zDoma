@@ -2,4 +2,4 @@
 // saved under her own name. Access: getCarerRehab() lets staff in.
 export { default } from "@/app/carer/[rehabId]/pregled/page";
 
-export const metadata = { title: "Pregled – obisk – zDoma" };
+export const metadata = { title: "Dnevni pregled – obisk – zDoma" };

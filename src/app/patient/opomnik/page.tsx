@@ -15,7 +15,7 @@ export default function OpomnikPage() {
   return (
     <AppShell title="Dnevni opomnik" back="/patient">
       <p className="text-xl">
-        Vsak dan vas spomnimo na pregled. Opomnika ne morete izklopiti, lahko pa izberete uro. Ko pregled opravite,
+        Vsak dan vas spomnimo na dnevni pregled. Opomnika ne morete izklopiti, lahko pa izberete uro. Ko dnevni pregled opravite,
         opomnika ta dan ne dobite več.
       </p>
       <Suspense fallback={<p className="text-xl">Nalagam …</p>}>
