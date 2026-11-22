@@ -27,3 +27,4 @@ export {
   PREVZEM_NASTAVITVE,
 } from "./prevzem";
 export type { PrevzemNastavitve, PrevzemOcena, PrevzemStopnja, PrevzemZdravilo } from "./prevzem";
+export { DRUGA_TEZAVA_BESEDILO, dodajPacientoveOznake, preskokRazlog } from "./preskok";

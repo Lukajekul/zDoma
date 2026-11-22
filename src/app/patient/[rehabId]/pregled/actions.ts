@@ -10,6 +10,10 @@ export type CheckinInput = {
   sameAsYesterday: boolean;
   /** Up to two uploaded wound photos (T-72). */
   photoPaths?: string[];
+  /** T-94: questions the patient skipped ("Preskoči"), flagged for the nurse. */
+  skipped?: string[];
+  /** T-94: "Sporoči drugo težavo" – the patient asks the nurse to call. */
+  otherProblem?: boolean;
 };
 
 /** Saves today's check-in, runs triage and raises alerts. One per rehabilitacija per day. */

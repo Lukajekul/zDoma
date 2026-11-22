@@ -3,9 +3,9 @@ import "server-only";
 import type { CheckinInput } from "@/app/patient/[rehabId]/pregled/actions";
 import { oceniNacrt } from "@/lib/moduli";
 import { createClient } from "@/lib/supabase/server";
-import { oceniPregled } from "@/lib/triage";
+import { dodajPacientoveOznake, oceniPregled } from "@/lib/triage";
 import type { TriageStatus } from "@/lib/types";
-import { collectAnswers, copyFromYesterday } from "./checkin-plan";
+import { collectAnswers, copyFromYesterday, type QuestionView } from "./checkin-plan";
 import type { loadCheckinContext } from "./checkins";
 import { cleanPhotoPaths } from "./photo-paths";
 
@@ -23,7 +23,8 @@ const MISSING = "Manjka odgovor. Pojdite nazaj in odgovorite na vsa vprašanja."
 export async function insertCheckin(ctx: Ctx, input: CheckinInput): Promise<{ error?: string }> {
   // Recompute on the server: never trust copied answers from the client.
   const same = input.sameAsYesterday && ctx.sameSource ? copyFromYesterday(ctx.questions, ctx.sameSource) : {};
-  const collected = collectAnswers(ctx.questions, input.answers, same);
+  const skipped: QuestionView[] = [];
+  const collected = collectAnswers(ctx.questions, input.answers, same, input.skipped ?? [], skipped);
   if (!collected) return { error: MISSING };
   const answers = { ...ctx.known, ...collected };
   const prejsnji = ctx.history.map((c) => ({ datum: c.checkin_date, odgovori: c.answers }));
@@ -46,6 +47,13 @@ export async function insertCheckin(ctx: Ctx, input: CheckinInput): Promise<{ er
     status = o.status;
     reasons = o.razlogi.map((r) => r.besedilo);
   }
+  // T-94: a skipped question or "druga težava" is never read as "all fine".
+  ({ status, razlogi: reasons } = dodajPacientoveOznake({
+    status,
+    razlogi: reasons,
+    preskocena: skipped.map((q) => q.text),
+    drugaTezava: input.otherProblem === true,
+  }));
 
   const supabase = await createClient();
   const { data: saved, error } = await supabase

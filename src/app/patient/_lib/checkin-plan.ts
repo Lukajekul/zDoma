@@ -131,6 +131,15 @@ export function toViews(predloga: Predloga, questions: Vprasanje[], values: Pati
 }
 
 /**
+ * T-94: "Preskoči" is offered only where leaving the answer out is safe to flag
+ * later: never on always-asked measurements (weight) or on a question with an
+ * emergency answer (red flags must be answered).
+ */
+export function canSkip(q: QuestionView): boolean {
+  return !q.always && q.kind === "izbira" && !q.options.some((o) => o.emergency);
+}
+
+/**
  * Yesterday's check-in can be repeated with one tap when it was green and
  * answered every question that today's "Enako kot včeraj" would fill.
  */
@@ -165,9 +174,17 @@ export function collectAnswers(
   questions: QuestionView[],
   submitted: Record<string, unknown>,
   same: CheckinAnswers,
+  /** T-94: ids the patient skipped ("Preskoči"); only skippable ones count. */
+  skipped: string[] = [],
+  /** Filled with the questions actually skipped, for the nurse's reason. */
+  skippedOut: QuestionView[] = [],
 ): CheckinAnswers | undefined {
   const out: CheckinAnswers = {};
   const take = (q: QuestionView) => {
+    if (same[q.id] === undefined && skipped.includes(q.id) && canSkip(q)) {
+      skippedOut.push(q);
+      return true;
+    }
     const v = same[q.id] !== undefined ? same[q.id] : cleanAnswer(q, submitted[q.id]);
     if (v === undefined || v === null) return false;
     out[q.id] = v;
@@ -175,6 +192,7 @@ export function collectAnswers(
   };
   for (const q of questions) {
     if (!take(q)) return undefined;
+    // A skipped parent has no answer, so its follow-up is not triggered.
     const f = followUpFor(q, out[q.id]);
     if (f && !take(f)) return undefined;
   }

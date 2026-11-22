@@ -1,12 +1,14 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { ArrowLeft, Copy } from "lucide-react";
+import { Copy } from "lucide-react";
 import { BigButton } from "@/components/shell";
-import { withFollowUps, type Emergency, type QuestionView } from "@/app/patient/_lib/checkin-plan";
+import { canSkip, withFollowUps, type Emergency, type QuestionView } from "@/app/patient/_lib/checkin-plan";
 import type { CheckinInput } from "@/app/patient/[rehabId]/pregled/actions";
 import { WithChange } from "./change-mark";
 import { EmergencyScreen } from "./emergency-screen";
+import { HelpRow, NUJNA_POMOC } from "./help-row";
+import { OtherProblem } from "./other-problem";
 import { PhotoScreen } from "./photo-screen";
 import { WeightScreen } from "./weight-screen";
 
@@ -30,6 +32,10 @@ export function CheckinFlow({ rehabId, today, questions, canRepeat, save }: Prop
   const [photoPaths, setPhotoPaths] = useState<string[]>([]);
   const [emergency, setEmergency] = useState<{ q: QuestionView; optionId: string; e: Emergency }>();
   const [error, setError] = useState<string>();
+  // T-94: skipped question ids, "Sporoči drugo težavo", and which side screen is open.
+  const [skipped, setSkipped] = useState<string[]>([]);
+  const [otherProblem, setOtherProblem] = useState(false);
+  const [side, setSide] = useState<"help" | "other">();
   const [saving, startSaving] = useTransition();
 
   // A follow-up joins the queue right after its parent once the answer triggers it (T-80).
@@ -43,7 +49,14 @@ export function CheckinFlow({ rehabId, today, questions, canRepeat, save }: Prop
     // Drop answers to follow-ups no longer triggered (the parent was changed after going back).
     const final = Object.fromEntries(queueFor(all).flatMap((x) => (all[x.id] === undefined ? [] : [[x.id, all[x.id]]])));
     startSaving(async () => {
-      const res = await save({ answers: final, sameAsYesterday: mode === "same", photoPaths: photos });
+      const asked = new Set(queueFor(all).map((x) => x.id));
+      const res = await save({
+        answers: final,
+        sameAsYesterday: mode === "same",
+        photoPaths: photos,
+        skipped: skipped.filter((id) => asked.has(id) && all[id] === undefined),
+        otherProblem,
+      });
       if (res.error) setError(res.error);
     });
   }
@@ -56,7 +69,17 @@ export function CheckinFlow({ rehabId, today, questions, canRepeat, save }: Prop
   function answer(question: QuestionView, value: string | number) {
     const updated = { ...answers, [question.id]: value };
     setAnswers(updated);
+    setSkipped((s) => s.filter((id) => id !== question.id));
     if (question.photo) return setPhotoFor(question.id);
+    next(updated);
+  }
+
+  /** "Preskoči": no answer is kept, the nurse sees it as skipped (T-94). */
+  function skip(question: QuestionView) {
+    const updated = { ...answers };
+    delete updated[question.id];
+    setAnswers(updated);
+    setSkipped((s) => (s.includes(question.id) ? s : [...s, question.id]));
     next(updated);
   }
 
@@ -96,6 +119,18 @@ export function CheckinFlow({ rehabId, today, questions, canRepeat, save }: Prop
         <p role="alert" className="rounded-xl bg-status-rdece-bg p-4 text-xl font-semibold text-status-rdece">{error}</p>
         <BigButton onClick={() => submit(answers)}>Poskusi znova</BigButton>
       </div>
+    );
+  }
+
+  if (side === "other") {
+    return (
+      <OtherProblem
+        onConfirm={() => {
+          setOtherProblem(true);
+          setSide(undefined);
+        }}
+        onBack={() => setSide(undefined)}
+      />
     );
   }
 
@@ -146,15 +181,22 @@ export function CheckinFlow({ rehabId, today, questions, canRepeat, save }: Prop
         </div>
       )}
 
-      {index > 0 && (
-        <button
-          type="button"
-          onClick={() => setIndex(index - 1)}
-          className="inline-flex min-h-12 w-fit items-center gap-2 rounded-xl bg-card shadow-soft px-4 text-lg font-semibold hover:bg-muted"
-        >
-          <ArrowLeft aria-hidden className="size-6" />
-          Prejšnje vprašanje
-        </button>
+      <HelpRow
+        onBack={index > 0 ? () => setIndex(index - 1) : undefined}
+        onSkip={canSkip(q) ? () => skip(q) : undefined}
+        otherProblem={otherProblem}
+        onOther={() => setSide("other")}
+        onCancelOther={() => setOtherProblem(false)}
+        onHelp={() => setSide("help")}
+      />
+
+      {side === "help" && (
+        <EmergencyScreen
+          emergency={NUJNA_POMOC}
+          backLabel="Nazaj na vprašanje"
+          onContinue={() => setSide(undefined)}
+          onBack={() => setSide(undefined)}
+        />
       )}
 
       {emergency && (
