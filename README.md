@@ -101,7 +101,7 @@ Next.js 16 (App Router) in TypeScript, Tailwind CSS in shadcn/ui, Supabase (Auth
 
 | Tema | Kaj vsebuje | Povezava |
 |---|---|---|
-| Potek predstavitve | Scenarij za 3-minutni demo, korak za korakom | [DEMO.md](DEMO.md) |
+| Potek predstavitve | Scenarij za 3-minutno predstavitev s prosojnicami | [DEMO.md](DEMO.md) |
 | Demo računi | Prijave in zgodba za predstavitev | [docs/demo-accounts.md](docs/demo-accounts.md) |
 | Raziskave | Skupine bolnikov, mejne vrednosti in viri | [docs/research.md](docs/research.md) |
 | Številke za predstavitev | Preverjeni podatki in viri | [docs/pitch.md](docs/pitch.md) |

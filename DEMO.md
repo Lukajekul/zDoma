@@ -1,67 +1,58 @@
-# Demo zDoma (3 minute)
+# Predstavitev zDoma (3 minute, prosojnice)
 
-Vsi računi in gesla: `docs/demo-accounts.md`. Geslo za vse demo račune: `zdoma-eupRh0qTB1SQ`.
+Žive predstavitve ni: govorimo ob prosojnicah. Številke in viri: `docs/pitch.md`. Demo računi za žirijo, če želi aplikacijo preizkusiti sama: `docs/demo-accounts.md`.
 
 ## Priprava (pred nastopom)
 
-- **Prenosnik (projektor):** vsaka vloga v svojem oknu ali zavihku, **že prijavljena** (tipkanje gesla na odru stane 10 s):
-  - Tina Bizjak (bolnišnica): `tina.bizjak@zdoma.demo`
-  - Mojca Kovač (patronažna sestra): `mojca.kovac@zdoma.demo`
-  - Vesna Zupančič (svojka, hči Stanka): davčna `99000652`
-  - Luka Kranjc (študent): `luka.kranjc@zdoma.demo`
-- **Telefon:** odjavljen, kamera pripravljena za QR, **zrcaljen na projektor**.
-- **Davčna za novega pacienta:** `99000709`. Vsaka vaja porabi eno številko, rezervne: `99000717`, `99000725`, `99000733`, `99000741`.
-- Novo geslo pacienta imej pripravljeno (npr. `Janez2026!`).
-- **Rezerva:** posnetek celotnega poteka, če Wi-Fi odpove.
+- **8 prosojnic, ena misel na prosojnico.** Na prosojnici le naslov in ena slika ali številka. Vse ostalo povemo.
+- **Zaslonske slike iz žive aplikacije** (seed podatki, širina telefona 390 px, v okvirju telefona). Seznam je pri vsaki prosojnici spodaj, pod »Slika«.
+- **Na zadnji prosojnici koda QR** na [zdoma.tian-istenic34.workers.dev/demo](https://zdoma.tian-istenic34.workers.dev/demo), da žirija pregled preizkusi sama.
+- **Govor ima okoli 310 besed**, to je dobri 2:30 v mirnem tempu, ostalo so premori ob menjavi prosojnic. Če zmanjka časa, glej spodaj.
+- Rezerva: `docs/media/zdoma-v2.mp4` lahko brez zvoka teče na zadnji prosojnici.
 
 ## Potek
 
-### 0:00–0:15 Uvod (brez klikanja)
-> »Vsak peti bolnik s srčnim popuščanjem se v enem letu vrne v slovensko bolnišnico zaradi srčnega popuščanja. Vsak deseti že v 30 dneh. zDoma podaljša skrb bolnišnice do pacientovega doma.«
-- Vir: nacionalni podatki NIJZ 2008–2012 (`docs/pitch.md`).
+### 1. Problem (0:00–0:20)
+- **Prosojnica:** velika številka **»1 od 5«**, pod njo »se v enem letu vrne v bolnišnico«. Spodaj drobno: »2.849–4.666 € na sprejem (ZZZS 2026)«, vir Omersa et al., NIJZ 2008–2012.
+> »Vsak peti bolnik s srčnim popuščanjem se v enem letu vrne v slovensko bolnišnico zaradi srčnega popuščanja, vsak deseti že v 30 dneh. Vsak tak sprejem stane ZZZS do 4.666 evrov. Doma bolnik ostane sam: nihče ne opazi, da se mu teža dviga ali da zdravil ni prevzel.«
 
-### 0:15–0:55 Bolnišnica odpre rehabilitacijo (Tina, 40 s)
-- `/nurse/odpust` → predloga **Srčno popuščanje**.
-- Davčna `99000709`, ime in priimek, suha teža 72 kg, naslov v **Šentjurju**.
-- »Potrdi« → »Odpri rehabilitacijo« → prijavni listek s kodo QR.
-> »Vprašanja, zdravila iz eRecepta, datum konca in patronažna sestra so že izpolnjeni. Trije koraki.«
-- Ne odpiraj »Uredi« in ne spreminjaj zdravil.
+### 2. Rešitev v enem stavku (0:20–0:35)
+- **Prosojnica:** logotip zDoma in stavek »Bolnik vsak dan 30 sekund odgovarja. Sestra vidi samo tiste, ki jo potrebujejo.« Pod njim štiri ikone z napisi: Bolnišnica · Pacient · Svojec · Patronažna sestra (+ Študent).
+> »zDoma podaljša skrb bolnišnice do bolnikovega doma. Bolnik vsak dan pol minute odgovarja na vprašanja, sestra pa vidi samo tiste, ki jo res potrebujejo.«
 
-### 0:55–1:35 Pacient (telefon, 40 s)
-- Skeniraj QR → nastavi geslo → pregled se odpre sam.
-> »Ob prvi prijavi si nastavi svoje geslo, listek nato ne deluje več.«
-- Odgovori na 2–3 vprašanja.
-> »Eno vprašanje na zaslon, veliki gumbi, teža okoli njegove lastne teže.«
-- Pokaži na »Nujna pomoč« (ne pritisni) → »Končano za danes ✓«.
-- Zdravila za 3 s:
-> »Novo, Spremenjeno, Ukinjeno, s sliko škatlice.«
-- Vaj ne odpiraj, samo omeni.
+### 3. Odpust v treh korakih (0:35–0:55)
+- **Slika:** `/nurse/odpust` (korak s suho težo) in prijavni listek s kodo QR.
+> »Ob odpustu bolničar izbere predlogo, na primer srčno popuščanje, vpiše davčno številko in suho težo. Vprašanja, zdravila iz eRecepta, datum konca in patronažna sestra po naslovu so že izpolnjeni. Bolnik dobi listek s kodo QR, ga skenira in si nastavi svoje geslo.«
 
-### 1:35–2:05 Svojec (Vesna, 30 s)
-- »Skrbim za« → rdeče opozorilo **»Zdravila niso prevzeta v lekarni«**.
-> »Stanko dobi isti opomnik. Če zdravil še vedno ne prevzame, je obveščena sestra. Aplikacija preganja pacienta, ne sestre.«
-- Odpri **Opažanje**, izberi eno možnost, shrani.
-> »Svojec vidi isti pregled, zdravila in vaje kot pacient in sporoči, kar opazi.«
+### 4. Pacient: »Danes« (0:55–1:25)
+- **Slika:** vprašanje o teži z gumbi okoli 72 kg, obroč napredka (»Dan 6 od 30«), majhen izrez zaslona »Pokličite 112«.
+> »Domači zaslon ni meni, ampak naslednji korak za danes. Eno vprašanje na zaslon, veliki gumbi, vprašanja z njegovimi številkami: ›Ali tehtate več kot 72 kilogramov?‹ Obroč pokaže, koliko okrevanja je za njim. Ob bolečini v prsih aplikacija najprej reče: pokličite 112. Diagnoz ne postavlja in odmerkov ne spreminja.«
 
-### 2:05–2:45 Patronažna sestra (Mojca, 40 s)
-- Seznam pokaže samo paciente, ki potrebujejo pozornost. **Janez Novak je rdeč**, razlogi so zapisani z besedami (»Teža +2,5 kg v 3 dneh«).
-- Pritisni »Poklicano – vse v redu«.
-> »En dotik, zapis v revizijsko sled, Janez vidi: Sestra Mojca vas bo poklicala.«
-- Izberi en filter (npr. »Ni prevzeto«), nato **»Danes obiščite«**.
-- Če ostane čas:
-> »Pacient, ki smo ga pravkar ustvarili, je že na njenem seznamu – dodeljen po naslovu.«
+### 5. Aplikacija preganja pacienta, ne sestre (1:25–1:50)
+- **Slika:** veriga s puščicami Pacient → Svojec → Sestra, ob njej »Skrbim za« z opozorilom »Zdravila niso prevzeta v lekarni«.
+> »Če bolnik pregled zamudi ali zdravil ne prevzame v lekarni, opomnik najprej dobi on, nato svojec in šele nato sestra. Svojec vidi isti načrt kot bolnik in lahko zdravila označi skupaj z njim.«
 
-### 2:45–3:00 Študenti in zaključek
-- Mojca → **»Študenti«**: zemljevid ob seznamu, tap na pacienta pod »Potrebujejo pomoč« → trije predlagani študenti. **Ne pritisni »Dodeli«** (spremeni živo bazo).
-> »Sestra razporedi študente po potrebi po pomoči, ne po resnosti: rdeči gredo najprej k njej.«
-- Lukov `/student` za 3 s: »Danes po vrsti« z naslovom in gumbom »Pot«.
-> »Študenti medicine na praksi pomagajo pacientom brez svojcev. Pacient jih odobri, dostop se konča s prakso.«
-> »zDoma: aplikacija preganja pacienta, zato sestra vidi samo tiste, ki jo potrebujejo.«
+### 6. Patronažna sestra (1:50–2:15)
+- **Slika:** seznam sestre Mojce z rdečim Janezom Novakom, razlog »Teža +2,5 kg v 3 dneh«, gumb »Poklicano – vse v redu«.
+> »Sestra vidi samo tiste, ki potrebujejo pozornost, in zakaj, z besedami: teža plus dva kilograma in pol v treh dneh. En dotik zapiše klic, Janez pa vidi: sestra Mojca vas bo poklicala.«
+
+### 7. Študenti (2:15–2:35)
+- **Slika:** zemljevid »Študenti« in Lukov zaslon »Danes po vrsti« z gumbom »Pot«.
+> »Bolnikom brez svojcev pomagajo študenti medicine na praksi. Bolnik jih odobri, sestra jih razporedi na zemljevidu, študent pa dobi pot za današnje obiske. Dostop se konča s prakso.«
+
+### 8. Zakaj bo delovalo (2:35–3:00)
+- **Prosojnica:** »29 % manj sprejemov zaradi srčnega popuščanja« (Cochrane, Inglis 2015), »6 skupin bolnikov«, koda QR na `/demo`. Spodaj drobno: Next.js · Supabase · Cloudflare.
+> »Spremljanje doma pri srčnem popuščanju po pregledu Cochrane pomeni 29 odstotkov manj sprejemov zaradi srčnega popuščanja. zDoma deluje že danes, za šest skupin bolnikov, in nova skupina je le nova predloga, brez nove kode. Preizkusite jo s kodo QR. zDoma: aplikacija preganja pacienta, zato sestra vidi samo tiste, ki jo potrebujejo.«
+
+## Povejte pošteno (če žirija vpraša)
+- Številke o sprejemih so samo zaradi srčnega popuščanja, nacionalni podatki 2008–2012.
+- Cochrane: manj sprejemov zaradi srčnega popuščanja in manj smrti, ne manj sprejemov nasploh.
+- Prototip: vprašanja in meje, ki jih specialist še ni potrdil, mora pred resno uporabo pregledati zdravnik. Vsi podatki so izmišljeni.
 
 ## Če zmanjka časa
-1. Najprej izpusti Opažanje pri svojcu. Opozorilo o neprevzetih zdravilih obdrži.
-2. Pri sestri izpusti »Danes obiščite«.
-3. Pri študentih pokaži samo zemljevid »Študenti«, Lukov zaslon izpusti.
-4. Odpiranja rehabilitacije in skeniranja QR ne krajšaj: to je glavni trenutek.
+1. Prosojnico 2 povej v enem stavku in pojdi naprej.
+2. Študente (7) skrajšaj na en stavek: »Bolnikom brez svojcev pomagajo študenti medicine.«
+3. Pri pacientu (4) izpusti obroč.
+4. Problema (1) in zadnjega stavka (8) ne krajšaj.
 
 Vadi s štoparico.
