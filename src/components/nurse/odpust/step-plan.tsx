@@ -1,5 +1,6 @@
 "use client";
 
+import type { ReactNode } from "react";
 import { BigButton } from "@/components/shell";
 import { izZdravil, potrebneVrednosti, vstaviVrednosti, type Predloga } from "@/lib/templates";
 import { dailyCount } from "@/app/nurse/odpust/_lib/plan";
@@ -35,13 +36,15 @@ type ValuesProps = {
   onValues: (v: Record<string, string>) => void;
   onQuestions: (q: string[]) => void;
   onNext: () => void;
+  /** Extra block under the list, e.g. the doctor's own questions (T-69). */
+  extra?: ReactNode;
 };
 
 /**
  * Step 3: which check-in questions the patient gets, and only the values those
  * questions or their rules use (T-70). Medicine names come from step 4.
  */
-export function StepValues({ predloga, values, questions, onValues, onQuestions, onNext }: ValuesProps) {
+export function StepValues({ predloga, values, questions, onValues, onQuestions, onNext, extra }: ValuesProps) {
   const daily = dailyCount(predloga, questions);
   const needed = potrebneVrednosti(predloga, questions);
   const fields = predloga.vrednostiPacienta.filter((v) => needed.has(v.kljuc) && !izZdravil(v));
@@ -68,6 +71,7 @@ export function StepValues({ predloga, values, questions, onValues, onQuestions,
         ))}
       </ul>
       {daily > 6 && <p role="alert" className="text-lg font-semibold text-status-rdece">Odznačite nekaj vprašanj: največ 6 na dan.</p>}
+      {extra}
 
       {fields.length > 0 && <h3 className="mt-2 text-xl font-bold">Vrednosti pacienta</h3>}
       {fields.map((v) => {

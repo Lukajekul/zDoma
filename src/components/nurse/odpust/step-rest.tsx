@@ -1,5 +1,6 @@
 "use client";
 
+import type { ReactNode } from "react";
 import { BigButton } from "@/components/shell";
 import { formatDate } from "@/lib/format";
 import type { Predloga } from "@/lib/templates";
@@ -14,10 +15,12 @@ type ExProps = {
   onExercises: (ids: string[]) => void;
   onEnd: (d: string) => void;
   onNext: () => void;
+  /** Extra block under the list, e.g. the doctor's own exercises (T-69). */
+  extra?: ReactNode;
 };
 
 /** Step 5: exercises (pre-ticked) and the end date (template default, can change). */
-export function StepExercises({ predloga, exercises, start, end, onExercises, onEnd, onNext }: ExProps) {
+export function StepExercises({ predloga, exercises, start, end, onExercises, onEnd, onNext, extra }: ExProps) {
   const toggle = (id: string) => onExercises(exercises.includes(id) ? exercises.filter((x) => x !== id) : [...exercises, id]);
   return (
     <div className="flex flex-col gap-4">
@@ -36,6 +39,7 @@ export function StepExercises({ predloga, exercises, start, end, onExercises, on
           </li>
         ))}
       </ul>
+      {extra}
       <p className="text-lg">Začetek: {formatDate(start)} (danes)</p>
       <Field label="Konec rehabilitacije" type="date" value={end} onChange={onEnd} hint={`Privzeto ${predloga.privzetoTrajanjeDni} dni.`} />
       <BigButton onClick={onNext} disabled={!end || end < start}>Naprej</BigButton>
