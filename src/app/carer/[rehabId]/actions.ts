@@ -6,6 +6,7 @@
 import { refresh } from "next/cache";
 import { cleanAnswer, copyFromYesterday } from "@/app/patient/_lib/checkin-plan";
 import { loadCheckinContext } from "@/app/patient/_lib/checkins";
+import { cleanPhotoPaths } from "@/app/patient/_lib/photo-paths";
 import { isScheduledOn, TIME_ORDER } from "@/app/patient/_lib/schedule";
 import type { CheckinInput } from "@/app/patient/[rehabId]/pregled/actions";
 import { createClient } from "@/lib/supabase/server";
@@ -142,7 +143,7 @@ export async function carerSaveCheckin(rehabId: string, input: CheckinInput): Pr
     if (v === undefined) return { error: "Manjka odgovor. Pojdite nazaj in odgovorite na vsa vprašanja." };
     answers[q.id] = v;
   }
-  const photoPath = input.photoPath?.startsWith(`${ctx.rehab.id}/`) ? input.photoPath : null;
+  const photos = cleanPhotoPaths(ctx.rehab.id, input.photoPaths);
 
   const ocena = oceniPregled({
     predloga: ctx.predloga,
@@ -162,7 +163,7 @@ export async function carerSaveCheckin(rehabId: string, input: CheckinInput): Pr
       same_as_yesterday: Object.keys(same).length > 0,
       triage_status: ocena.status,
       reasons: ocena.razlogi.map((r) => r.besedilo),
-      photo_path: photoPath,
+      ...photos,
     })
     .select("id")
     .single();

@@ -7,11 +7,13 @@ import { oceniPregled } from "@/lib/triage";
 import type { CheckinAnswers } from "@/lib/types";
 import { cleanAnswer, copyFromYesterday } from "../../_lib/checkin-plan";
 import { loadCheckinContext } from "../../_lib/checkins";
+import { cleanPhotoPaths } from "../../_lib/photo-paths";
 
 export type CheckinInput = {
   answers: Record<string, string | number>;
   sameAsYesterday: boolean;
-  photoPath?: string;
+  /** Up to two uploaded wound photos (T-72). */
+  photoPaths?: string[];
 };
 
 const TRY_AGAIN = "Ni uspelo shraniti. Preverite internetno povezavo in poskusite znova.";
@@ -35,7 +37,7 @@ export async function saveCheckin(rehabId: string, input: CheckinInput): Promise
     if (v === undefined) return { error: "Manjka odgovor. Pojdite nazaj in odgovorite na vsa vprašanja." };
     answers[q.id] = v;
   }
-  const photoPath = input.photoPath?.startsWith(`${ctx.rehab.id}/`) ? input.photoPath : null;
+  const photos = cleanPhotoPaths(ctx.rehab.id, input.photoPaths);
 
   const ocena = oceniPregled({
     predloga: ctx.predloga,
@@ -55,7 +57,7 @@ export async function saveCheckin(rehabId: string, input: CheckinInput): Promise
       same_as_yesterday: Object.keys(same).length > 0,
       triage_status: ocena.status,
       reasons: ocena.razlogi.map((r) => r.besedilo),
-      photo_path: photoPath,
+      ...photos,
     })
     .select("id")
     .single();

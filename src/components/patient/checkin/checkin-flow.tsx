@@ -26,7 +26,7 @@ export function CheckinFlow({ rehabId, today, questions, canRepeat, save }: Prop
   const [index, setIndex] = useState(0);
   const [answers, setAnswers] = useState<Answers>({});
   const [photoFor, setPhotoFor] = useState<string>();
-  const [photoPath, setPhotoPath] = useState<string>();
+  const [photoPaths, setPhotoPaths] = useState<string[]>([]);
   const [emergency, setEmergency] = useState<{ q: QuestionView; optionId: string; e: Emergency }>();
   const [error, setError] = useState<string>();
   const [saving, startSaving] = useTransition();
@@ -34,17 +34,17 @@ export function CheckinFlow({ rehabId, today, questions, canRepeat, save }: Prop
   const queue = mode === "same" ? questions.filter((q) => q.always) : questions;
   const q = queue[index];
 
-  function submit(final: Answers, photo = photoPath) {
+  function submit(final: Answers, photos = photoPaths) {
     setError(undefined);
     startSaving(async () => {
-      const res = await save({ answers: final, sameAsYesterday: mode === "same", photoPath: photo });
+      const res = await save({ answers: final, sameAsYesterday: mode === "same", photoPaths: photos });
       if (res.error) setError(res.error);
     });
   }
 
-  function next(final: Answers, photo?: string) {
+  function next(final: Answers, photos?: string[]) {
     if (index + 1 < queue.length) setIndex(index + 1);
-    else submit(final, photo);
+    else submit(final, photos);
   }
 
   function answer(question: QuestionView, value: string | number) {
@@ -98,10 +98,11 @@ export function CheckinFlow({ rehabId, today, questions, canRepeat, save }: Prop
       <PhotoScreen
         rehabId={rehabId}
         today={today}
-        onDone={(path) => {
+        onDone={(paths) => {
+          const kept = paths.length ? paths : photoPaths;
           setPhotoFor(undefined);
-          setPhotoPath(path ?? photoPath);
-          next(answers, path ?? photoPath);
+          setPhotoPaths(kept);
+          next(answers, kept);
         }}
       />
     );

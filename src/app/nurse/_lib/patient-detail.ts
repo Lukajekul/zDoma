@@ -52,12 +52,12 @@ export async function getPatientDetail(id: string, today: string) {
       .limit(8),
     supabase
       .from("checkins")
-      .select("checkin_date, photo_path")
+      .select("checkin_date, photo_path, photo_path_2")
       .eq("rehab_id", id)
       .lte("checkin_date", end)
       .not("photo_path", "is", null)
       .order("checkin_date", { ascending: false })
-      .limit(2),
+      .limit(3),
     template ? getRing(rehab, template, today) : null,
     getAppointments(id).catch(() => null),
   ]);
@@ -66,11 +66,12 @@ export async function getPatientDetail(id: string, today: string) {
     throw new Error("Could not read the episode's checks or alerts");
   }
 
-  const photos = (photoRows.data ?? []).reverse().map(({ checkin_date, photo_path }) => ({
+  // Up to two photos per check-in day (T-72); older rows only have photo_path.
+  const photos = (photoRows.data ?? []).reverse().map(({ checkin_date, photo_path, photo_path_2 }) => ({
     date: checkin_date,
-    path: photo_path?.startsWith(`${id}/`) ? photo_path : null,
+    paths: [photo_path, photo_path_2].flatMap((p) => (p ? [p.startsWith(`${id}/`) ? p : null] : [])),
   }));
-  const paths = [...new Set(photos.flatMap(({ path }) => path ? [path] : []))];
+  const paths = [...new Set(photos.flatMap((day) => day.paths.flatMap((p) => (p ? [p] : []))))];
   const signed = paths.length
     ? await supabase.storage.from("wound-photos").createSignedUrls(paths, photoLifetimeSeconds)
     : null;
@@ -119,7 +120,7 @@ export async function getPatientDetail(id: string, today: string) {
       statuses: series.map((row) => ({ date: row.checkin_date, status: row.triage_status })),
       weights,
     },
-    photos: photos.map(({ date, path }) => ({ date, url: path ? urls.get(path) ?? null : null })),
+    photos: photos.map(({ date, paths }) => ({ date, urls: paths.map((p) => (p ? urls.get(p) ?? null : null)) })),
     photosUnavailable: Boolean(photoRows.error),
     appointments,
     today,
