@@ -18,13 +18,18 @@ export function ok<T>(res: { data: T; error: { message: string } | null }, what:
   return res.data;
 }
 
-/** Removes everything a previous seed run created (users marked seed: true). Other users are untouched. */
+/**
+ * Removes everything a previous seed run created (users marked seed: true) and every
+ * throwaway /demo patient (demo: true, T-96), so one seed run resets the demo data.
+ * Other users are untouched.
+ */
 export async function cleanSeed(admin: Admin): Promise<number> {
   const seedIds: string[] = [];
   for (let page = 1; ; page++) {
     const { data, error } = await admin.auth.admin.listUsers({ page, perPage: 1000 });
     if (error) throw error;
-    seedIds.push(...data.users.filter((u) => u.user_metadata?.seed === true).map((u) => u.id));
+    const ours = (u: (typeof data.users)[number]) => u.user_metadata?.seed === true || u.user_metadata?.demo === true;
+    seedIds.push(...data.users.filter(ours).map((u) => u.id));
     if (data.users.length < 1000) break;
   }
   if (seedIds.length === 0) return 0;
