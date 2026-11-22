@@ -180,6 +180,8 @@ export interface Checkin {
   reasons: string[];
   /** Storage path in bucket `wound-photos`: `<rehab_id>/<file>`. */
   photo_path: string | null;
+  /** Optional second wound photo of the same check-in (T-72). */
+  photo_path_2: string | null;
   entered_by: Uuid;
   created_at: IsoDateTime;
 }

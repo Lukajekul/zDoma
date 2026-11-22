@@ -212,6 +212,7 @@ export type Database = {
           entered_by: string
           id: string
           photo_path: string | null
+          photo_path_2: string | null
           reasons: string[]
           rehab_id: string
           same_as_yesterday: boolean
@@ -224,6 +225,7 @@ export type Database = {
           entered_by?: string
           id?: string
           photo_path?: string | null
+          photo_path_2?: string | null
           reasons?: string[]
           rehab_id: string
           same_as_yesterday?: boolean
@@ -236,6 +238,7 @@ export type Database = {
           entered_by?: string
           id?: string
           photo_path?: string | null
+          photo_path_2?: string | null
           reasons?: string[]
           rehab_id?: string
           same_as_yesterday?: boolean
