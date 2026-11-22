@@ -2,6 +2,8 @@
 // Row types mirror the tables in supabase/migrations/ (snake_case, as the
 // Supabase client returns them). Shared file: change it on a branch.
 
+import type { Nacrt } from "@/lib/moduli";
+
 // ---------- Ids and enums ----------
 
 export type Uuid = string;
@@ -184,8 +186,38 @@ export interface Checkin {
   photo_path: string | null;
   /** Optional second wound photo of the same check-in (T-72). */
   photo_path_2: string | null;
+  /** Approved plan (`patient_plans.version`) this check-in followed; answers keyed by versioned item id. Null = template check-in (T-78). */
+  plan_version: number | null;
   entered_by: Uuid;
   created_at: IsoDateTime;
+}
+
+/** Table `patient_facts` (T-78): discharge facts that switch modules on, one per rehabilitacija. */
+export interface PatientFacts {
+  rehab_id: Uuid;
+  discharge_date: IsoDate;
+  /** ICD-10 codes, e.g. "I50.0". */
+  icd10: string[];
+  /** Procedure keys, e.g. "endoproteza-kolena". */
+  procedures: string[];
+  /** By ATC code; `konec` = last day of a finite course (antibiotics). */
+  medicines: { atc: string; ime?: string; konec?: IsoDate }[];
+  entered_by: Uuid;
+  created_at: IsoDateTime;
+  updated_at: IsoDateTime;
+}
+
+/** Table `patient_plans` (T-78): an approved plan snapshot, append-only; the highest version is current. */
+export interface PatientPlan {
+  id: Uuid;
+  rehab_id: Uuid;
+  version: number;
+  /** `Nacrt.verzija`: the item bank version. */
+  bank_version: number;
+  /** The approved plan from `odobriNacrt`, frozen. */
+  plan: Nacrt;
+  approved_by: Uuid;
+  approved_at: IsoDateTime;
 }
 
 export interface RehabExercise {

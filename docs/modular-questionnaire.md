@@ -42,3 +42,11 @@ Add the new items to `postavke.ts`, reusing existing concepts where the question
 - rules that match answers
 - items sharing a concept that share answer ids
 - red flags that have a 112 rule
+
+## Storage (T-78)
+
+Migration `supabase/migrations/20261122180000_patient_plans.sql`, helpers in `src/lib/plans-server.ts`.
+
+- `patient_facts`: one row per rehabilitacija with `DejstvaPacienta` (`discharge_date`, `icd10[]`, `procedures[]`, `medicines` jsonb `[{atc, ime?, konec?}]`). Staff write, anyone who can read the rehabilitacija reads.
+- `patient_plans`: the approved `Nacrt` as a frozen JSON snapshot, `version` 1, 2, 3 … per rehabilitacija (the highest is current), `bank_version` (= `Nacrt.verzija`), `approved_by`, `approved_at`. Append-only: staff insert as themselves, nobody updates or deletes. A change is a new version.
+- Answers need no new table: `checkins.answers` is already a jsonb keyed by question id, and plan item ids are versioned (`sp.teza.v1`), so trends stay comparable. `checkins.plan_version` (foreign key to `patient_plans (rehab_id, version)`) records which plan the check-in followed; null means a template check-in.
