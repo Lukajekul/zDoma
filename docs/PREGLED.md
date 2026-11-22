@@ -26,7 +26,7 @@ Vsi ljudje, davčne številke in podatki so izmišljeni.
 | `tina.bizjak@zdoma.demo` | **Tina Bizjak**, bolnišnica | Vsi bolniki, »Nova rehabilitacija« (odpust v nekaj korakih), urejanje predlog. |
 | `99000075` | **Janez Novak**, pacient, srčno popuščanje | Dnevni pregled se odpre sam. Teža se mu dviga, stanje je **Rdeče**. Domov se vrnete z »Nazaj«. |
 | `99000580` | **Ana Novak**, Janezova hči | Zavihek »Skrbim za«: ali Janez jemlje zdravila in dela preglede. Lahko označi zdravila skupaj z njim. |
-| `99000091` | **Stanko Zupančič**, pacient | Zdravila Lasix ni prevzel v lekarni. Vprašanja mu sestavi modularni pogon (§6). Na domačem zaslonu čaka prošnja študenta Luke (»Poglejte«). |
+| `99000091` | **Stanko Zupančič**, pacient | Zdravila Lasix ni prevzel v lekarni. Vprašanja mu sestavi modularni pogon (§7). Na domačem zaslonu čaka prošnja študenta Luke (»Poglejte«). |
 | `99000652` | **Vesna Zupančič**, Stankova hči | Opozorilo »Zdravila niso prevzeta v lekarni«. |
 | `luka.kranjc@zdoma.demo` | **Luka Kranjc**, študent medicine | »Danes po vrsti«: obiski po urah, naslov, gumb »Pot« in zemljevid. |
 | `99000083` | **Marija Kos**, pacientka | Dve rehabilitaciji: končana (kolk) in aktivna (po infarktu). |
@@ -37,7 +37,47 @@ Vse račune (15) in podrobnosti najdete v [demo-accounts.md](demo-accounts.md).
 - Pri pacientih se ob prijavi najprej odpre današnji pregled. Vsi pregledi so odprti, ker podatki segajo do včeraj.
 - Prijava s kodo QR: kot sestra odprite bolnika in pritisnite »Nova koda QR«. Ko bolnik kodo skenira, si mora nastaviti novo geslo, zato `zdoma2026` za tega bolnika potem ne deluje več.
 
-## 2. Skupine uporabnikov
+## 2. Kako pregledati (okoli 15 minut)
+
+Potek je enak kot v naši predstavitvi: od odpusta v bolnišnici do študenta na terenu. Potrebujete **računalnik** in **dva telefona** (namesto drugega telefona zadošča zasebno okno brskalnika). Geslo je povsod `zdoma2026`.
+
+Za novega pacienta in svojca uporabite izmišljeni davčni številki **`99123401`** (pacient) in **`99123410`** (svojec). Če ju je nekdo že porabil, vzemite naslednji par: `99123428` in `99123436`, ali `99123444` in `99123452`.
+
+### Korak 1 – Računalnik: bolnišnica odpusti pacienta
+1. Prijavite se kot **Tina Bizjak** (`tina.bizjak@zdoma.demo`) in odprite **»Nova rehabilitacija«**.
+2. Vpišite davčno številko `99123401`, nato ime, priimek in občino **Šentjur** (naselje in naslov po želji).
+3. Izberite **Srčno popuščanje**. Vprašanja so že izbrana; vpišite suho težo, npr. `78`.
+4. Pri zdravilih odkljukajte npr. Lasix in tapnite odmerek.
+5. Pri »Načrt vprašanj« pritisnite **»Odobri načrt in naprej«**, pri vajah **»Naprej«**.
+6. Aplikacija po občini sama predlaga patronažno sestro Mojco: **»Potrdi predlog«**, nato **»Odpri rehabilitacijo«**.
+7. Pritisnite **»Natisni prijavni listek«**. Koda QR ostane odprta na zaslonu.
+
+### Korak 2 – Telefon 1: pacient
+1. S kamero telefona skenirajte kodo QR na zaslonu računalnika in odprite povezavo.
+2. Nastavite svoje geslo (npr. `zdoma2026`). Listek od zdaj ne deluje več.
+3. Odpre se dnevni pregled. Pri prvem vprašanju lahko tapnete **»Da«** in vidite zaslon **»Pokličite 112«**. Nič se še ne pošlje: tapnite »Nazaj – popravi odgovor« in opravite pregled do konca.
+4. Z »Nazaj« pridete na zaslon »Danes«: krog napredka, zdravila (Novo / Spremenjeno) in vaje.
+
+### Korak 3 – Telefon 2: svojec
+1. Odprite [/prijava](https://zdoma.tian-istenic34.workers.dev/prijava) → **»Ustvarite račun«**. Vpišite ime, davčno številko `99123410` in geslo.
+2. Pritisnite **»Zaprosi za dostop«**, vpišite pacientovo davčno številko `99123401` in izberite npr. »Hčerka«.
+3. **Telefon 1:** na domačem zaslonu pacienta se pokaže prošnja. Tapnite **»Poglejte«** → **»Dovoli«**.
+4. **Telefon 2:** pod »Skrbim za« je zdaj pacient. Odprite ga in označite tableto kot vzeto; pacient vidi, kdo jo je označil.
+
+### Korak 4 – Računalnik: patronažna sestra
+1. Pri Tini pritisnite »Odjava« in se prijavite kot **Mojca Kovač** (`mojca.kovac@zdoma.demo`).
+2. Na seznamu so samo bolniki, ki potrebujejo pozornost, vsak z razlogom, npr. Janez Novak: »Teža +2,5 kg v 3 dneh«. Pritisnite »Odpri« in pri opozorilu tapnite **»Poklicano – vse v redu«**.
+3. Vaš novi pacient je zelen, zato je skrit. Tapnite **»Zeleno«** in ga vidite med Mojčinimi pacienti, ker živi v Šentjurju.
+4. Odprite **»Študenti«**, tapnite svojega pacienta in pri študentu Luki pritisnite **»Dodeli«**.
+5. **Telefon 1:** pacient tapne **»Poglejte«** → **»Dovoli«**.
+
+### Korak 5 – Računalnik: študent
+1. Odjavite se in se prijavite kot **Luka Kranjc** (`luka.kranjc@zdoma.demo`).
+2. **»Danes po vrsti«** pokaže današnje obiske po urah, z naslovom, gumbom **»Pot«** in zemljevidom. Vaš pacient je na seznamu.
+
+Ta potek smo 22. 11. 2026 preizkusili na spletni strani od začetka do konca, nato smo podatke ponastavili.
+
+## 3. Skupine uporabnikov
 
 | V aplikaciji | Kdo je | Kaj dela |
 |---|---|---|
@@ -54,7 +94,7 @@ Vse račune (15) in podrobnosti najdete v [demo-accounts.md](demo-accounts.md).
 
 **Svojec** se registrira sam in pod »Zaprosi za dostop« vpiše bolnikovo davčno številko. Odgovor je vedno »Prošnja poslana«, tudi če številka ne obstaja, da nihče ne more ugotoviti, kdo uporablja zDoma. Dostop začne veljati, ko ga bolnik dovoli.
 
-## 3. Kaj rešujemo
+## 4. Kaj rešujemo
 
 Po odpustu je bolnik doma skoraj brez nadzora. Zaplet, kot je poslabšanje srčnega popuščanja ali zdravilo, ki ga ni prevzel v lekarni, se pogosto opazi šele na urgenci.
 
@@ -64,14 +104,14 @@ Po odpustu je bolnik doma skoraj brez nadzora. Zaplet, kot je poslabšanje srčn
 
 Viri: [pitch.md](pitch.md).
 
-## 4. Cilji
+## 5. Cilji
 
 1. **Za 80-letnika.** Velike črke, veliki gumbi, eno vprašanje na zaslon, brez tipkanja.
 2. **Čim manj dela za vse.** Kar lahko naredi aplikacija, naredi sama.
 3. **Bolnik vsak dan opravi pregled in vzame zdravila.** Zato pomagajo svojci, študenti in patronažne sestre.
 4. **Varnost.** Pri nujnih znakih najprej »Pokličite 112«. Aplikacija ne postavlja diagnoz in ne spreminja odmerkov, pove samo, koga poklicati.
 
-## 5. Dnevni pregled
+## 6. Dnevni pregled
 
 - **En dotik na odgovor.** Samo veliki gumbi, brez tipkanja in drsnikov.
 - **Največ 6 vprašanj na dan, eno na zaslon.** Traja okoli 30 sekund.
@@ -81,7 +121,7 @@ Viri: [pitch.md](pitch.md).
 - **Nujni znaki.** Bolečina v prsih, nenadno hudo težko dihanje, omedlevica ali znaki kapi takoj odprejo celozaslonski »Pokličite 112«, še preden se karkoli shrani. Pri raku vročina 38 °C ali več pokaže telefon oddelka.
 - Besedilo vsaj 18 px, gumbi vsaj 48 px, visok kontrast, slovenski zapis (`74,5 kg`, `21. 11. 2026`).
 
-## 6. Zakaj so vprašanja točna
+## 7. Zakaj so vprašanja točna
 
 **Vprašanja ne izmišljujemo in jih ne piše umetna inteligenca.** Vsako vprašanje in vsaka meja izhaja iz smernice evropskega strokovnega združenja za to bolezen. Ob vsakem vprašanju je zapisan vir in stavek iz smernice.
 
@@ -121,7 +161,7 @@ Imamo **banko vprašanj**, ki jih je enkrat napisal ali odobril klinik, razdelje
 
 Podrobno: [modular-questionnaire.md](modular-questionnaire.md). Za bolezni brez modula je **šest predlog** (tabela zgoraj). Predloga je samo podatkovna datoteka, zato nova bolezen ne potrebuje nove kode ali zaslona.
 
-## 7. Zdravila
+## 8. Zdravila
 
 **Za zdravnika: izbira namesto vnosa.**
 - Predloga našteje zdravila, ki jih smernica običajno priporoča, vsako z 2–4 običajnimi odmerki. Odmerki so iz uradnih navodil (SmPC) pri EMA in CBZ: [medicines.md](medicines.md).
@@ -135,7 +175,7 @@ Podrobno: [modular-questionnaire.md](modular-questionnaire.md). Za bolezni brez 
 - **Prevzem v lekarni.** Neprevzeto zdravilo najprej opomni bolnika, nato svojca, nato sestro z razlogom (»Lasix ni prevzet 4 dni po odpustu«).
 - **Zaloga.** Pakiranje deljeno z dnevnim odmerkom pove, koliko dni je še ostalo. Nekaj dni prej: »Zdravila vam bodo zmanjkala čez 5 dni. Pokličite osebnega zdravnika za nov recept.«
 
-## 8. Da bolnik vztraja
+## 9. Da bolnik vztraja
 
 Raziskave kažejo, da je spremljanje doma propadlo, ko so bolniki nehali sodelovati, in da korist izgine, ko spremljanje preneha. Zato:
 
@@ -148,21 +188,21 @@ Raziskave kažejo, da je spremljanje doma propadlo, ko so bolniki nehali sodelov
 
 Več: [research.md](research.md), razdelek *What failed before*.
 
-## 9. Svojci (»Skrbim za«)
+## 10. Svojci (»Skrbim za«)
 
 - Vidijo, ali bolnik sledi načrtu: tablete, vaje, pregledi, stanje, neprevzeta zdravila.
 - Ko nalogo opravijo skupaj z bolnikom, jo označijo. Vsak vnos pove, kdo ga je vpisal: »Označila: Ana (hčerka)«.
 - Lahko sporočijo, kaj so opazili (»Bolj zmeden«, »Padel je«). Resna opažanja ustvarijo opozorilo za sestro.
 - Bolnik dostop kadarkoli odvzame.
 
-## 10. Študent pomočnik
+## 11. Študent pomočnik
 
 - Študenta bolniku dodeli sestra, bolnik ga mora odobriti.
 - Sestra v zavihku »Študenti« vidi bolnike brez pomoči na zemljevidu, razvrščene po potrebi po pomoči. En dotik predlaga študenta z istega območja (največ 3 bolniki na študenta).
 - Študent vidi današnje obiske po vrsti, z naslovom, gumbom »Pot« in zemljevidom. Pri rumenem ali rdečem stanju ga aplikacija napoti k sestri.
 - Vnosi so označeni z »(študent)«.
 
-## 11. Osebje
+## 12. Osebje
 
 **Odpust v nekaj korakih.** Bolnik (davčna številka), predloga, bolnikove vrednosti (npr. suha teža), potrditev. Vprašanja, zdravila, vaje, datum konca in patronažna sestra so že izpolnjeni. Na koncu se natisne listek s kodo QR. Kasneje: »Podaljšaj«, »Nova koda QR«, kontrolni pregled.
 
@@ -177,7 +217,7 @@ Več: [research.md](research.md), razdelek *What failed before*.
 - »Moji pacienti« z velikimi filtri, »Danes obiščite«, »Nadomeščanje« med odsotnostjo.
 - »Obisk«: ko bolnik ne zmore sam, sestra opravi pregled z njim na istih zaslonih.
 
-## 12. Varnost in zasebnost
+## 13. Varnost in zasebnost
 
 - Vrstična varnost na vsaki tabeli: bolnik vidi svoje podatke, svojec in študent samo odobrene bolnike, osebje vse.
 - Davčna številka sama nikoli ne prijavi nikogar. Preveri se tudi kontrolna števka.
@@ -185,7 +225,7 @@ Več: [research.md](research.md), razdelek *What failed before*.
 - Pomembna dejanja se zapišejo v revizijsko sled.
 - zDoma je podpora odločanju, ne diagnoza in ne nujna služba.
 
-## 13. Raziskave in viri
+## 14. Raziskave in viri
 
 | Dokument | Kaj vsebuje |
 |---|---|
@@ -196,13 +236,13 @@ Več: [research.md](research.md), razdelek *What failed before*.
 | [rehab-content.md](rehab-content.md) | Vaje za okrevanje doma z viri in slikami. |
 | [pitch.md](pitch.md) | Preverjene številke za Slovenijo in stroški ZZZS. |
 
-## 14. Tehnologija
+## 15. Tehnologija
 
 Next.js 16 in TypeScript, Tailwind CSS, Supabase (prijava, Postgres z vrstično varnostjo, sprotne posodobitve, shramba slik), Cloudflare Workers. Opomniki so spletna potisna obvestila, ki jih vsakih 15 minut sproži cron. Aplikacijo se da namestiti na začetni zaslon telefona.
 
 Triaža (`src/lib/triage/`) in pogon vprašanj (`src/lib/moduli/`) sta čisti funkciji brez dostopa do baze, pokriti s testi, prav tako kontrolna števka davčne številke in zaloga zdravil.
 
-## 15. Kaj še ni narejeno
+## 16. Kaj še ni narejeno
 
 - Vrednosti s `potrjeno: false` mora pred resno uporabo potrditi zdravnik.
 - eRecept je simuliran. V praksi bi podatki prišli prek CEZIH.
