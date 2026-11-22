@@ -7,6 +7,8 @@ import { getMarkerNames } from "@/app/patient/_lib/marker-names";
 import { addDays, dosesOn, TIME_LABEL, unloggedDoses } from "@/app/patient/_lib/schedule";
 import { AppointmentCard } from "@/components/appointment-card";
 import { PickupWarning } from "@/components/carer/pickup-warning";
+import { StudentWarning } from "@/components/student/student-warning";
+import { getNurseContact } from "@/app/student/_lib/contact";
 import { rehabDay, rehabTitle } from "@/components/patient/rehab-info";
 import { AppShell, BigButton, StatusBadge } from "@/components/shell";
 import { getNextAppointment } from "@/lib/appointments-server";
@@ -70,18 +72,27 @@ async function Overview({ params }: RehabParams) {
   const exDone = exercises.filter((e) => e.logs.filter((l) => l.done).length >= e.exercise.times_per_day).length;
   const exSkipped = exercises.filter((e) => e.logs.some((l) => !l.done)).length;
   const { day, total } = rehabDay(rehab, today);
+  const student = c.helper === "student";
+  const [openAlerts, nurse] = student
+    ? await Promise.all([
+        supabase.from("alerts").select("reason").eq("rehab_id", rehab.id).eq("state", "odprto").then((r) => (r.data ?? []).map((a) => a.reason)),
+        getNurseContact(rehab, c.profile.id),
+      ])
+    : [[] as string[], null];
   const by = (enteredBy: string) => (enteredBy !== patient.id ? names[enteredBy] : undefined);
 
   return (
     <AppShell title={patientName(patient)} back={c.home}>
       <p className="text-xl">
         {c.helper === "staff" && <strong className="block">Obisk pri pacientu</strong>}
-        {rehabTitle(rehab)} · {active ? `Dan ${day} od ${total}` : "Zaključeno"}
+        {/* Students get no diagnosis, only the tasks (data minimisation). */}
+        {student ? "Študent pomočnik" : rehabTitle(rehab)} · {active ? `Dan ${day} od ${total}` : "Zaključeno"}
       </p>
 
       {active && <PickupWarning meds={meds} odpust={rehab.start_date} danes={today} ime={patient.first_name} />}
 
       <StatusBadge status={rehab.current_status} />
+      {student && <StudentWarning status={rehab.current_status} reasons={[...new Set(openAlerts)]} nurse={nurse} />}
 
       {appointment && (
         <AppointmentCard appointment={appointment} today={today} />
@@ -146,8 +157,11 @@ async function Overview({ params }: RehabParams) {
       )}
 
       <p className="text-lg text-muted-foreground">
-        Kar označite, se shrani z vašim imenom.
-        {c.helper === "family" ? " Načrta, zdravil in datuma konca ne morete spreminjati." : " Načrt in zdravila urejate v podrobnostih pacienta."}
+        Kar označite, se shrani z vašim imenom{student && " in oznako »študent«"}.
+        {c.helper === "staff"
+          ? " Načrt in zdravila urejate v podrobnostih pacienta."
+          : " Načrta, zdravil in datuma konca ne morete spreminjati."}
+        {student && " Tablet ne pripravljate in ne dajete: pacienta opomnite in preverite, ali jih je vzel."}
       </p>
     </AppShell>
   );

@@ -1,12 +1,14 @@
 import { timingSafeEqual } from "node:crypto";
 import { logMissedDosesForAll } from "@/lib/doses/missed-job";
 import { runReminders } from "@/lib/reminders/run";
+import { runStudentReminders } from "@/lib/student/run";
 
 /**
  * Called every 15 minutes by the Worker's cron trigger (worker.mjs) with
  * `Authorization: Bearer <CRON_SECRET>`:
  * - T-45: log yesterday's untaken pills as missed,
- * - T-39: send due daily check-in reminders.
+ * - T-39: send due daily check-in reminders,
+ * - študent pomočnik: visit reminders and late-visit notices.
  * Each job is idempotent; one failing does not stop the other.
  */
 export async function POST(request: Request) {
@@ -15,11 +17,13 @@ export async function POST(request: Request) {
   if (!secret || given.length !== secret.length || !timingSafeEqual(Buffer.from(given), Buffer.from(secret))) {
     return new Response("Forbidden", { status: 403 });
   }
-  const [missed, reminders] = await Promise.allSettled([logMissedDosesForAll(), runReminders()]);
-  const result = {
-    missedDoses: missed.status === "fulfilled" ? missed.value : { error: String(missed.reason) },
-    reminders: reminders.status === "fulfilled" ? reminders.value : { error: String(reminders.reason) },
-  };
-  const failed = missed.status === "rejected" || reminders.status === "rejected";
+  const [missed, reminders, students] = await Promise.allSettled([
+    logMissedDosesForAll(),
+    runReminders(),
+    runStudentReminders(),
+  ]);
+  const value = <T,>(r: PromiseSettledResult<T>) => (r.status === "fulfilled" ? r.value : { error: String(r.reason) });
+  const result = { missedDoses: value(missed), reminders: value(reminders), studentVisits: value(students) };
+  const failed = [missed, reminders, students].some((r) => r.status === "rejected");
   return Response.json(result, { status: failed ? 500 : 200 });
 }

@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import type { PatientDetail } from "@/app/nurse/_lib/patient-detail";
 import { AppShell, BigButton, StatusBadge } from "@/components/shell";
 import { formatDate } from "@/lib/format";
@@ -7,6 +8,7 @@ import { PatientAppointments } from "./patient-appointments";
 import { PatientObservations } from "./patient-observations";
 import { PatientPhotos } from "./patient-photos";
 import { PatientTrends } from "./patient-trends";
+import { StudentHelper } from "./student-helper";
 
 const percent = new Intl.NumberFormat("sl-SI", { style: "percent" });
 
@@ -43,6 +45,9 @@ export function PatientOverview({ detail, back }: { detail: PatientDetail; back:
       {detail.zamujeno && <MissedCheckins zamujeno={detail.zamujeno} />}
       <PatientAlerts active={detail.active} openAlerts={detail.openAlerts} closedAlerts={detail.closedAlerts} zakaj={detail.zakaj} />
       <PatientObservations observations={detail.observations} />
+      <Suspense fallback={<p>Nalagam …</p>}>
+        <StudentHelper rehabId={detail.rehabId} patientId={detail.patientId} active={detail.active} />
+      </Suspense>
       {detail.appointments ? (
         <PatientAppointments rehabId={detail.rehabId} appointments={detail.appointments} today={detail.today} />
       ) : <p className="rounded-3xl bg-card p-4 shadow-soft" role="alert">Kontrol ni bilo mogoče naložiti. Osvežite stran.</p>}

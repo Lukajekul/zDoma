@@ -56,11 +56,11 @@ export async function listAccessForCarer(supabase: Client, carerId: string): Pro
 }
 
 /** For a banner on the patient's home ("1 prošnja čaka"). */
+/** Requests waiting for the patient: family members and a študent pomočnik assigned by staff. */
 export async function countPendingRequests(supabase: Client, patientId: string): Promise<number> {
-  const { count } = await supabase
-    .from("family_access")
-    .select("id", { count: "exact", head: true })
-    .eq("patient_id", patientId)
-    .eq("status", "pending");
-  return count ?? 0;
+  const [family, student] = await Promise.all([
+    supabase.from("family_access").select("id", { count: "exact", head: true }).eq("patient_id", patientId).eq("status", "pending"),
+    supabase.from("student_assignments").select("id", { count: "exact", head: true }).eq("patient_id", patientId).eq("status", "pending"),
+  ]);
+  return (family.count ?? 0) + (student.count ?? 0);
 }

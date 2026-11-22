@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import { FamilyObservations } from "@/components/patient/family-observations";
+import { StudentAccess } from "@/components/patient/student-access";
 import { AppShell, BigButton } from "@/components/shell";
 import { requireProfile } from "@/lib/auth";
 import { listAccessForPatient, personLabel } from "@/lib/family-access";
@@ -9,6 +10,7 @@ import { RemoveButton } from "./_components/remove-button";
 
 const MESSAGES: Record<string, { text: string; ok: boolean }> = {
   dovoljeno: { text: "Dostop dovoljen ✓", ok: true },
+  student_dovoljen: { text: "Študent vam bo pomagal ✓", ok: true },
   zavrnjeno: { text: "Prošnja zavrnjena ✓", ok: true },
   odstranjeno: { text: "Dostop odstranjen ✓", ok: true },
   napaka: { text: "Ni uspelo. Poskusite znova ali pokličite patronažno sestro.", ok: false },
@@ -53,6 +55,7 @@ async function AccessList() {
 
   return (
     <>
+      <StudentAccess patientId={profile.id} />
       {pending.map((r) => {
         const name = r.person ? personLabel(r.person, r.relation) : "Neznana oseba";
         return (

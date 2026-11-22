@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import { loadCheckinContext } from "@/app/patient/_lib/checkins";
 import { CheckinFlow } from "@/components/patient/checkin/checkin-flow";
 import { AppShell, BigButton, StatusBadge } from "@/components/shell";
+import { StudentWarning } from "@/components/student/student-warning";
+import { getNurseContact } from "@/app/student/_lib/contact";
 import { type RehabParams, getCarerRehab, patientName } from "../../_lib/access";
 import { carerSaveCheckin } from "../actions";
 import { TogetherNote } from "../together-note";
@@ -38,12 +40,16 @@ async function Checkin({ params }: RehabParams) {
   );
 
   if (ctx.todayCheckin) {
+    const t = ctx.todayCheckin;
+    const warnStudent = c.helper === "student" && t.triage_status !== "zeleno";
+    const nurse = warnStudent ? await getNurseContact(c.rehab, c.profile.id) : null;
     return shell(
       <>
         <p role="status" className="rounded-3xl border-2 border-status-zeleno bg-status-zeleno-bg p-5 text-2xl font-bold text-status-zeleno">
           Shranjeno ✓
         </p>
-        <StatusBadge status={ctx.todayCheckin.triage_status} />
+        <StatusBadge status={t.triage_status} />
+        {warnStudent && <StudentWarning status={t.triage_status} reasons={t.reasons ?? []} nurse={nurse} />}
         <BigButton href={back}>Nazaj</BigButton>
       </>,
     );

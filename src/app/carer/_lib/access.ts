@@ -2,7 +2,7 @@ import "server-only";
 
 import { requireProfile } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import { isRehabActive, todayLjubljana, type Profile, type Rehabilitacija } from "@/lib/types";
+import { isActiveStudent, isRehabActive, todayLjubljana, type Profile, type Rehabilitacija } from "@/lib/types";
 
 export type CaredPatient = Pick<Profile, "id" | "first_name" | "last_name">;
 
@@ -41,14 +41,46 @@ export async function getCaredPatients(carerId: string) {
 /** Route params of the helper pages; shared by /carer/<id>/… and /nurse/obisk/<id>/…. */
 export type RehabParams = { params: Promise<{ rehabId: string }> };
 
-/** Who does tasks together with the patient: an approved zadolženec, or staff on a home visit (T-57). */
-export type Helper = "family" | "staff";
+/**
+ * Who does tasks together with the patient: an approved zadolženec, staff on a
+ * home visit (T-57), or the patient's approved študent pomočnik.
+ */
+export type Helper = "family" | "staff" | "student";
+
+const PATHS: Record<Helper, (id: string) => { base: string; home: string }> = {
+  family: (id) => ({ base: `/carer/${id}`, home: "/carer" }),
+  staff: (id) => ({ base: `/nurse/obisk/${id}`, home: `/nurse/${id}` }),
+  student: (id) => ({ base: `/student/${id}`, home: "/student" }),
+};
+
+async function hasHelperAccess(profile: Profile, patientId: string): Promise<Helper | null> {
+  if (profile.is_staff) return "staff";
+  const supabase = await createClient();
+  if (isActiveStudent(profile)) {
+    const { data } = await supabase
+      .from("student_assignments")
+      .select("id")
+      .eq("student_id", profile.id)
+      .eq("patient_id", patientId)
+      .eq("status", "approved")
+      .maybeSingle();
+    if (data) return "student";
+  }
+  const { data } = await supabase
+    .from("family_access")
+    .select("id")
+    .eq("requester_id", profile.id)
+    .eq("patient_id", patientId)
+    .eq("status", "approved")
+    .maybeSingle();
+  return data ? "family" : null;
+}
 
 /**
  * The helper's view of one rehabilitacija, or null without access: an approved
- * zadolženec, or a bolničar (a patronažna sestra on a home visit). Every carer
- * page and action calls this. `base` / `home` are where its links lead:
- * "/carer/<id>" and "/carer" for family, "/nurse/obisk/<id>" and "/nurse/<id>" for staff.
+ * zadolženec, a bolničar (a patronažna sestra on a home visit) or the approved
+ * študent pomočnik during the internship. Every carer page and action calls this.
+ * `base` / `home` are where its links lead (see PATHS).
  */
 export async function getCarerRehab(rehabId: string) {
   const profile = await requireProfile();
@@ -57,27 +89,17 @@ export async function getCarerRehab(rehabId: string) {
   const r = rehab as Rehabilitacija | null;
   if (!r || r.patient_id === profile.id) return null;
 
-  const [{ data: access }, { data: patient }] = await Promise.all([
-    profile.is_staff
-      ? Promise.resolve({ data: null })
-      : supabase
-          .from("family_access")
-          .select("id")
-          .eq("requester_id", profile.id)
-          .eq("patient_id", r.patient_id)
-          .eq("status", "approved")
-          .maybeSingle(),
+  const [helper, { data: patient }] = await Promise.all([
+    hasHelperAccess(profile, r.patient_id),
     supabase.from("profiles").select("id, first_name, last_name").eq("id", r.patient_id).maybeSingle(),
   ]);
-  if ((!access && !profile.is_staff) || !patient) return null;
+  if (!helper || !patient) return null;
 
-  const helper: Helper = profile.is_staff ? "staff" : "family";
   const today = todayLjubljana();
   return {
     profile,
     helper,
-    base: helper === "staff" ? `/nurse/obisk/${r.id}` : `/carer/${r.id}`,
-    home: helper === "staff" ? `/nurse/${r.id}` : "/carer",
+    ...PATHS[helper](r.id),
     rehab: r,
     patient: patient as CaredPatient,
     today,

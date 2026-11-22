@@ -35,6 +35,13 @@ export async function requireProfile(): Promise<Profile> {
   return profile;
 }
 
+/** For študent pomočnik pages: anyone else is sent to their own home screen. */
+export async function requireStudent(): Promise<Profile> {
+  const profile = await requireProfile();
+  if (profile.is_staff || !profile.student_until) redirect(await homePathFor(profile));
+  return profile;
+}
+
 /** For bolničar pages: non-staff are sent to their own home screen. */
 export async function requireStaff(): Promise<Profile> {
   const profile = await requireProfile();
@@ -43,11 +50,13 @@ export async function requireStaff(): Promise<Profile> {
 }
 
 /**
- * Where a user lands after login: staff → /nurse, someone with their own
- * rehabilitacija → /patient, a family member only → /carer.
+ * Where a user lands after login: staff → /nurse, a študent pomočnik →
+ * /student, someone with their own rehabilitacija → /patient, a family member
+ * only → /carer.
  */
-export async function homePathFor(profile: Pick<Profile, "id" | "is_staff">): Promise<string> {
+export async function homePathFor(profile: Pick<Profile, "id" | "is_staff" | "student_until">): Promise<string> {
   if (profile.is_staff) return "/nurse";
+  if (profile.student_until) return "/student";
   const supabase = await createClient();
   const { count } = await supabase
     .from("rehabilitacije")
