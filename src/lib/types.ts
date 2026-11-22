@@ -83,8 +83,10 @@ export interface Rehabilitacija {
   created_by: Uuid | null;
   /** Patronažna sestra; null = "Nedodeljeni". */
   assigned_nurse_id: Uuid | null;
-  /** Ids of the template's check-in questions chosen for this patient. */
+  /** Ids of the template's check-in questions chosen for this patient (custom ones included). */
   questions: string[];
+  /** Doctors' own questions for this patient (T-69), read with `preberiLastnaVprasanja`. */
+  custom_questions?: unknown;
   patient_values: PatientValues;
   lace: LaceInput | null;
   /** Latest triage status, for sorting the dashboard. */
@@ -194,6 +196,8 @@ export interface RehabExercise {
   title: string;
   /** e.g. "10-krat" or "15 minut" */
   repetitions: string | null;
+  /** Steps of a doctor's own exercise (T-69); null = steps come from the template. */
+  steps?: string[] | null;
   times_per_day: number;
   active: boolean;
   created_at: IsoDateTime;

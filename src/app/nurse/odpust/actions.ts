@@ -8,8 +8,11 @@ import { ensurePatientAccount } from "@/lib/qr/accounts";
 import { createClient } from "@/lib/supabase/server";
 import { izZdravil, potrebneVrednosti, privzeteVrednosti, vrednostiIzZdravil } from "@/lib/templates";
 import { getPrilagojenaPredloga } from "@/lib/templates/server";
+import type { LastnaVaja, LastnoVprasanje } from "@/lib/templates";
+import { lastniZaRehab } from "./_lib/custom";
 import { TIME_ORDER } from "@/app/patient/_lib/schedule";
 import type { PatientValues } from "@/lib/types";
+import type { Json } from "@/lib/database.types";
 import { dailyCount, medicineChange, type MedLine } from "./_lib/plan";
 
 export type PreviousMed = ZdraviloPrej;
@@ -70,6 +73,9 @@ export type OpenRehabInput = {
   questions: string[];
   meds: Pick<MedLine, "name" | "activeSubstance" | "purpose" | "dose" | "times" | "selected" | "previousDose" | "asNeeded">[];
   exercises: { id: string; title: string; repetitions: string }[];
+  /** Questions and exercises the doctor added for this patient only (T-69). */
+  customQuestions?: LastnoVprasanje[];
+  customExercises?: LastnaVaja[];
   startDate: string;
   endDate: string;
   nurseId: string | null;
@@ -80,11 +86,14 @@ const isDate = (s: string) => /^\d{4}-\d{2}-\d{2}$/.test(s) && !Number.isNaN(Dat
 /** Last step: account (if new), rehabilitacija, medicines, exercises, audit log. Redirects to the done page. */
 export async function openRehab(input: OpenRehabInput): Promise<{ error: string }> {
   const staff = await requireStaff();
-  const predloga = await getPrilagojenaPredloga(input.templateId);
+  const osnova = await getPrilagojenaPredloga(input.templateId);
   const davcna = normalizeDavcna(input.davcna);
-  if (!predloga) return { error: "Izberite skupino pacientov." };
+  if (!osnova) return { error: "Izberite skupino pacientov." };
   const davcnaProblem = davcnaError(davcna);
   if (davcnaProblem) return { error: davcnaProblem };
+  const lastni = lastniZaRehab(osnova, input.customQuestions, input.customExercises, input.questions, input.exercises.map((e) => e.id));
+  if ("error" in lastni) return lastni;
+  const { predloga } = lastni;
   if (!input.firstName.trim() || !input.lastName.trim()) return { error: "Vpišite ime in priimek pacienta." };
   if (!isDate(input.startDate) || !isDate(input.endDate) || input.endDate < input.startDate) {
     return { error: "Preverite datum konca: biti mora po začetku." };
@@ -144,6 +153,7 @@ export async function openRehab(input: OpenRehabInput): Promise<{ error: string 
       created_by: staff.id,
       assigned_nurse_id: input.nurseId,
       questions,
+      custom_questions: lastni.vprasanja as unknown as Json,
       patient_values: values,
     })
     .select("id")
@@ -165,14 +175,17 @@ export async function openRehab(input: OpenRehabInput): Promise<{ error: string 
       start_date: input.startDate,
     }];
   });
-  const exRows = input.exercises.map((e) => ({
-    rehab_id: rehab.id,
-    exercise_id: e.id,
-    title: e.title,
-    repetitions: e.repetitions || null,
-    times_per_day: 1,
-    active: true,
-  }));
+  const exRows = predloga.vaje
+    .filter((v) => input.exercises.some((e) => e.id === v.id))
+    .map((v) => ({
+      rehab_id: rehab.id,
+      exercise_id: v.id,
+      title: v.naslov,
+      repetitions: v.ponovitve || null,
+      steps: lastni.vaje.find((x) => x.id === v.id)?.koraki ?? null,
+      times_per_day: 1,
+      active: true,
+    }));
   const [m, x] = await Promise.all([
     medRows.length ? supabase.from("medications").insert(medRows) : { error: null },
     exRows.length ? supabase.from("rehab_exercises").insert(exRows) : { error: null },
@@ -184,6 +197,15 @@ export async function openRehab(input: OpenRehabInput): Promise<{ error: string 
     entity_id: rehab.id,
     details: { template: predloga.id, novRacun: created, sestra: input.nurseId, zdravila: medRows.length, vaje: exRows.length },
   });
+  if (lastni.vprasanja.length || lastni.vaje.length) {
+    await supabase.from("audit_log").insert({
+      actor_id: staff.id,
+      action: "rehab.custom_items",
+      entity: "rehabilitacije",
+      entity_id: rehab.id,
+      details: { lastnaVprasanja: lastni.vprasanja, lastneVaje: lastni.vaje } as unknown as Json,
+    });
+  }
   // Always land on the result page, so a retry can't open a second rehabilitacija.
   const q = new URLSearchParams();
   if (created) q.set("nov", "1");

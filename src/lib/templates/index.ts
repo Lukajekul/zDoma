@@ -1,5 +1,6 @@
 import { kolkKoleno } from "./kolk-koleno";
 import { kopb } from "./kopb";
+import { preberiLastnaVprasanja, zLastnimi } from "./lastno";
 import { mozganskaKap } from "./mozganska-kap";
 import { rakSistemsko } from "./rak-sistemsko";
 import { srcePoInfarktu } from "./srce-po-infarktu";
@@ -28,6 +29,15 @@ export function jePredlogaId(id: string): id is PredlogaId {
 
 export function getPredloga(id: string): Predloga | undefined {
   return jePredlogaId(id) ? predloge[id] : undefined;
+}
+
+/**
+ * The template a rehabilitacija runs on: the file template plus the doctors' own
+ * questions (and their red-flag rules) stored on it at discharge (T-69).
+ */
+export function predlogaZaRehab(rehab: { template_id: string; custom_questions?: unknown }): Predloga | undefined {
+  const p = getPredloga(rehab.template_id);
+  return p && zLastnimi(p, preberiLastnaVprasanja(rehab.custom_questions));
 }
 
 /**

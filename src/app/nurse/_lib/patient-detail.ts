@@ -4,7 +4,7 @@ import { getRing } from "@/app/patient/_lib/ring";
 import { addDays } from "@/app/patient/_lib/schedule";
 import { getAppointments } from "@/lib/appointments-server";
 import { createClient } from "@/lib/supabase/server";
-import { getPredloga } from "@/lib/templates";
+import { predlogaZaRehab } from "@/lib/templates";
 import { laceScore, tedenskiPovzetek } from "@/lib/triage";
 import { isRehabActive } from "@/lib/types";
 import type { CheckinAnswers, Rehabilitacija } from "@/lib/types";
@@ -24,7 +24,7 @@ export async function getPatientDetail(id: string, today: string) {
 
   const { patient, ...rawRehab } = row;
   const rehab = rawRehab as Rehabilitacija;
-  const template = getPredloga(rehab.template_id);
+  const template = predlogaZaRehab(rehab);
   const end = rehab.end_date < today ? rehab.end_date : today;
   const start = addDays(end, -6);
   const [checkins, openAlerts, closedAlerts, photoRows, participation, appointments] = await Promise.all([

@@ -191,6 +191,31 @@ export interface Predloga {
   vaje: Vaja[];
   /** Staff note for the exercise step. */
   vajeOpomba?: string;
+  /** Doctors' own questions merged in by `zLastnimi` (T-69); also listed in `vprasanja`. */
+  lastnaVprasanja?: LastnoVprasanje[];
+  /** Doctors' own exercises merged in by `zLastnimi` (T-69); also listed in `vaje`. */
+  lastneVaje?: LastnaVaja[];
+}
+
+/**
+ * A doctor's own check-in question (T-69): one tap on one of 2–5 answers,
+ * optionally one answer that raises an alert with a reason the nurse reads.
+ */
+export interface LastnoVprasanje {
+  /** "lastno-…" */
+  id: string;
+  besedilo: string;
+  odgovori: Odgovor[];
+  opozorilo?: { odgovor: string; razlog: string };
+}
+
+/** A doctor's own exercise (T-69): title, 1–4 steps, repetitions. */
+export interface LastnaVaja {
+  /** "lastna-…" */
+  id: string;
+  naslov: string;
+  koraki: string[];
+  ponovitve: string;
 }
 
 /** At most this many daily questions (AGENTS.md §5a). */

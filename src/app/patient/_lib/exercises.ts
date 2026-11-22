@@ -6,11 +6,17 @@ import type { IsoDate, Rehabilitacija, RehabExercise, RehabLog } from "@/lib/typ
 
 export type ExerciseWithContent = {
   exercise: RehabExercise;
-  /** Steps and picture from the template; undefined until the template lists it (T-44). */
+  /** Steps and picture from the template, or a doctor's own steps (T-69); undefined when neither has it. */
   content: Vaja | undefined;
   /** This exercise's logs for the given day. */
   logs: RehabLog[];
 };
+
+/** A doctor's own exercise (T-69): its steps are stored on the row. */
+function lastnaVaja(e: RehabExercise): Vaja | undefined {
+  if (!e.steps?.length) return undefined;
+  return { id: e.exercise_id, naslov: e.title, koraki: e.steps, ponovitve: e.repetitions ?? "", vir: { opis: "Dodal zdravnik", potrjeno: false } };
+}
 
 /** Active exercises of a rehabilitacija with template content and that day's logs. */
 export async function getExercisesForDay(
@@ -27,7 +33,7 @@ export async function getExercisesForDay(
   const vaje = getPredloga(rehab.template_id)?.vaje ?? [];
   return ((ex.data ?? []) as RehabExercise[]).map((exercise) => ({
     exercise,
-    content: vaje.find((v) => v.id === exercise.exercise_id),
+    content: vaje.find((v) => v.id === exercise.exercise_id) ?? lastnaVaja(exercise),
     logs: ((logs.data ?? []) as RehabLog[]).filter((l) => l.rehab_exercise_id === exercise.id),
   }));
 }

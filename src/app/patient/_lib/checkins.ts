@@ -1,6 +1,6 @@
 import "server-only";
 
-import { getPredloga, privzeteVrednosti, vrednostiIzZdravil } from "@/lib/templates";
+import { predlogaZaRehab, privzeteVrednosti, vrednostiIzZdravil } from "@/lib/templates";
 import { createClient } from "@/lib/supabase/server";
 import { isRehabActive, todayLjubljana, type Checkin, type PatientValues, type Uuid } from "@/lib/types";
 import { dueQuestions, sameAsYesterdaySource, toViews } from "./checkin-plan";
@@ -17,7 +17,7 @@ const HISTORY_DAYS = 14;
  */
 export async function loadCheckinContext(patientId: Uuid, rehabId: string) {
   const rehab = await getMyRehab(patientId, rehabId);
-  const predloga = rehab ? getPredloga(rehab.template_id) : undefined;
+  const predloga = rehab ? predlogaZaRehab(rehab) : undefined;
   if (!rehab || !predloga) return null;
 
   const today = todayLjubljana();
