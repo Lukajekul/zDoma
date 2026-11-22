@@ -52,7 +52,7 @@ async function CheckinScreen({ params }: Pick<PageProps<"/patient/[rehabId]/preg
     const weightQ = ctx.predloga.vprasanja.find((q) => q.tip === "teza" && ctx.todayCheckin!.answers[q.id] !== undefined);
     const { day, total } = rehabDay(ctx.rehab, ctx.today);
     const [{ ring, extendedUntil }, { meds, logs }] = await Promise.all([
-      getRing(ctx.rehab, ctx.predloga, ctx.today),
+      getRing(ctx.rehab, ctx.predloga, ctx.today, ctx.plan?.nacrt),
       getMedsAndLogs(ctx.rehab.id),
     ]);
     const pills = ctx.active ? slotDueNow(meds, logs, ctx.today) : null;

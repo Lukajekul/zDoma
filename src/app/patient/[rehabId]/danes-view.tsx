@@ -37,7 +37,7 @@ export async function DanesView({ ctx, profile, back }: { ctx: Ctx; profile: Pro
     getMedsAndLogs(rehab.id),
     getExercisesForDay(rehab, today),
     countPendingRequests(supabase, profile.id),
-    getRing(rehab, ctx.predloga, today),
+    getRing(rehab, ctx.predloga, today, ctx.plan?.nacrt),
     getMyNurse(rehab.assigned_nurse_id, today),
     getLatestNurseUpdate(supabase, rehab.id),
     getNextAppointment(rehab.id, today),

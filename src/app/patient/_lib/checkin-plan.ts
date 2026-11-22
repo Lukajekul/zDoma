@@ -8,8 +8,14 @@ import { addDays } from "./schedule";
 
 export type Emergency = { kind: "klic112" | "klicOddelek"; reason: string; phone?: string };
 
+/**
+ * A follow-up asked right after its parent when the parent's answer is one of
+ * `on` (an approved plan's `nadaljnje`, T-80). One level only.
+ */
+export type FollowUp = { on: string[]; question: QuestionView };
+
 /** Serializable question for the client flow. */
-export type QuestionView =
+export type QuestionView = (
   | {
       id: string;
       kind: "izbira";
@@ -28,7 +34,21 @@ export type QuestionView =
       options: number[];
       /** Per option: worse or better than the last weight (T-66). */
       changes: (Change | null)[];
-    };
+    }
+) & { followUp?: FollowUp };
+
+/** The follow-up to ask after `q` given its answer, if any. */
+export function followUpFor(q: QuestionView, answer: unknown): QuestionView | undefined {
+  return q.followUp && answer !== undefined && q.followUp.on.includes(String(answer)) ? q.followUp.question : undefined;
+}
+
+/** Questions in the order asked: each follow-up right after its parent, once its answer triggers it. */
+export function withFollowUps(questions: QuestionView[], answers: Record<string, unknown>): QuestionView[] {
+  return questions.flatMap((q) => {
+    const f = followUpFor(q, answers[q.id]);
+    return f ? [q, f] : [q];
+  });
+}
 
 const WEEKLY_GAP_DAYS = 7;
 
@@ -118,14 +138,46 @@ export function sameAsYesterdaySource(questions: QuestionView[], history: Checki
   const y = history.find((c) => c.checkin_date === addDays(today, -1));
   if (!y || y.triage_status !== "zeleno") return undefined;
   const filled = questions.filter((q) => !q.always);
-  if (!filled.length || filled.some((q) => y.answers[q.id] === undefined)) return undefined;
+  if (!filled.length) return undefined;
+  const copied = copyFromYesterday(questions, y);
+  if (withFollowUps(filled, copied).some((q) => copied[q.id] === undefined)) return undefined;
   return y;
 }
 
-/** Copies yesterday's answers for every question not asked always. */
+/** Copies yesterday's answers for every question not asked always, with the follow-ups they trigger. */
 export function copyFromYesterday(questions: QuestionView[], yesterday: Checkin): CheckinAnswers {
   const out: CheckinAnswers = {};
-  for (const q of questions) if (!q.always) out[q.id] = yesterday.answers[q.id];
+  for (const q of questions) {
+    if (q.always) continue;
+    out[q.id] = yesterday.answers[q.id];
+    const f = followUpFor(q, out[q.id]);
+    if (f) out[f.id] = yesterday.answers[f.id];
+  }
+  return out;
+}
+
+/**
+ * Today's answers: copied ones ("Enako kot včeraj") plus the submitted ones,
+ * each checked against its question; a triggered follow-up must be answered too.
+ * Returns undefined when an answer is missing or invalid.
+ */
+export function collectAnswers(
+  questions: QuestionView[],
+  submitted: Record<string, unknown>,
+  same: CheckinAnswers,
+): CheckinAnswers | undefined {
+  const out: CheckinAnswers = {};
+  const take = (q: QuestionView) => {
+    const v = same[q.id] !== undefined ? same[q.id] : cleanAnswer(q, submitted[q.id]);
+    if (v === undefined || v === null) return false;
+    out[q.id] = v;
+    return true;
+  };
+  for (const q of questions) {
+    if (!take(q)) return undefined;
+    const f = followUpFor(q, out[q.id]);
+    if (f && !take(f)) return undefined;
+  }
   return out;
 }
 

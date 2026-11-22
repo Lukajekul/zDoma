@@ -4,14 +4,12 @@
 // patient's actions (T-05/T-06/T-07), but access = approved family access.
 // Rows are saved as the zadolženec (entered_by = auth.uid(), enforced by RLS).
 import { refresh } from "next/cache";
-import { cleanAnswer, copyFromYesterday } from "@/app/patient/_lib/checkin-plan";
+import { insertCheckin } from "@/app/patient/_lib/checkin-save";
 import { loadCheckinContext } from "@/app/patient/_lib/checkins";
-import { cleanPhotoPaths } from "@/app/patient/_lib/photo-paths";
 import { isScheduledOn, TIME_ORDER } from "@/app/patient/_lib/schedule";
 import type { CheckinInput } from "@/app/patient/[rehabId]/pregled/actions";
 import { createClient } from "@/lib/supabase/server";
-import { oceniPregled } from "@/lib/triage";
-import type { CheckinAnswers, Medication, TimeOfDay } from "@/lib/types";
+import type { Medication, TimeOfDay } from "@/lib/types";
 import { getCarerRehab } from "../_lib/access";
 
 type Result = { error?: string };
@@ -130,50 +128,9 @@ export async function carerSaveCheckin(rehabId: string, input: CheckinInput): Pr
   if (!c) return { error: CLOSED };
   const ctx = await loadCheckinContext(c.patient.id, c.rehab.id);
   if (!ctx || !ctx.active) return { error: CLOSED };
-  if (ctx.todayCheckin) {
-    refresh();
-    return {};
-  }
-
-  const same = input.sameAsYesterday && ctx.sameSource ? copyFromYesterday(ctx.questions, ctx.sameSource) : {};
-  const answers: CheckinAnswers = { ...ctx.known, ...same };
-  for (const q of ctx.questions) {
-    if (same[q.id] !== undefined) continue;
-    const v = cleanAnswer(q, input.answers[q.id]);
-    if (v === undefined) return { error: "Manjka odgovor. Pojdite nazaj in odgovorite na vsa vprašanja." };
-    answers[q.id] = v;
-  }
-  const photos = cleanPhotoPaths(ctx.rehab.id, input.photoPaths);
-
-  const ocena = oceniPregled({
-    predloga: ctx.predloga,
-    vrednosti: ctx.values,
-    danes: { datum: ctx.today, odgovori: answers },
-    prejsnji: ctx.history.map((h) => ({ datum: h.checkin_date, odgovori: h.answers })),
-    izbranaVprasanja: ctx.rehab.questions.length ? ctx.rehab.questions : undefined,
-  });
-
-  const supabase = await createClient();
-  const { data: saved, error } = await supabase
-    .from("checkins")
-    .insert({
-      rehab_id: ctx.rehab.id,
-      checkin_date: ctx.today,
-      answers,
-      same_as_yesterday: Object.keys(same).length > 0,
-      triage_status: ocena.status,
-      reasons: ocena.razlogi.map((r) => r.besedilo),
-      ...photos,
-    })
-    .select("id")
-    .single();
-  if (error || !saved) return { error: TRY_AGAIN };
-
-  if (ocena.status !== "zeleno") {
-    const status = ocena.status;
-    await supabase.from("alerts").insert(
-      ocena.razlogi.map((r) => ({ rehab_id: ctx.rehab.id, checkin_id: saved.id, status, reason: r.besedilo, source: "checkin" as const })),
-    );
+  if (!ctx.todayCheckin) {
+    const res = await insertCheckin(ctx, input);
+    if (res.error) return res;
   }
   refresh();
   return {};

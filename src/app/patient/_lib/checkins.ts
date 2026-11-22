@@ -1,8 +1,10 @@
 import "server-only";
 
 import { predlogaZaRehab, privzeteVrednosti, vrednostiIzZdravil } from "@/lib/templates";
+import { getApprovedPlan } from "@/lib/plans-server";
 import { createClient } from "@/lib/supabase/server";
-import { isRehabActive, todayLjubljana, type Checkin, type PatientValues, type Uuid } from "@/lib/types";
+import { isRehabActive, todayLjubljana, type Checkin, type CheckinAnswers, type PatientValues, type Uuid } from "@/lib/types";
+import { danOkrevanja, planQuestions, predlogaIzNacrta } from "./checkin-nacrt";
 import { dueQuestions, sameAsYesterdaySource, toViews } from "./checkin-plan";
 import { getMedsAndLogs } from "./doses";
 import { answersFromPills } from "./med-answers";
@@ -17,12 +19,13 @@ const HISTORY_DAYS = 14;
  */
 export async function loadCheckinContext(patientId: Uuid, rehabId: string) {
   const rehab = await getMyRehab(patientId, rehabId);
-  const predloga = rehab ? predlogaZaRehab(rehab) : undefined;
-  if (!rehab || !predloga) return null;
+  const template = rehab ? predlogaZaRehab(rehab) : undefined;
+  if (!rehab || !template) return null;
 
   const today = todayLjubljana();
   const supabase = await createClient();
-  const [{ data, error }, { meds, logs }] = await Promise.all([
+  const [approved, { data, error }, { meds, logs }] = await Promise.all([
+    getApprovedPlan(rehab.id),
     supabase
       .from("checkins")
       .select("*")
@@ -38,7 +41,28 @@ export async function loadCheckinContext(patientId: Uuid, rehabId: string) {
   const history = all.filter((c) => c.checkin_date < today);
   // Medicine names in questions come from the rehabilitacija's current medicines (T-70).
   const current = meds.filter((m) => m.change !== "ukinjeno");
-  const values: PatientValues = { ...privzeteVrednosti(predloga), ...rehab.patient_values, ...vrednostiIzZdravil(predloga, current) };
+  const values: PatientValues = { ...privzeteVrednosti(template), ...rehab.patient_values, ...vrednostiIzZdravil(template, current) };
+
+  // An approved plan (T-80) replaces the template's questions and rules.
+  if (approved) {
+    const predloga = predlogaIzNacrta(template, approved.plan);
+    const questions = planQuestions(predloga, approved.plan, today, values, history);
+    return {
+      rehab,
+      predloga,
+      plan: { nacrt: approved.plan, version: approved.version, dan: danOkrevanja(approved.plan, today) },
+      today,
+      active: isRehabActive(rehab, today),
+      history,
+      todayCheckin,
+      questions,
+      known: {} as CheckinAnswers,
+      values,
+      sameSource: sameAsYesterdaySource(questions, history, today),
+    };
+  }
+
+  const predloga = template;
   // Questions the pill list already answers aren't asked (unless nothing else would be left).
   const due = dueQuestions(predloga, rehab, history, today);
   const fromPills = answersFromPills(predloga, due, meds, logs, today);
@@ -49,6 +73,7 @@ export async function loadCheckinContext(patientId: Uuid, rehabId: string) {
   return {
     rehab,
     predloga,
+    plan: undefined,
     today,
     active: isRehabActive(rehab, today),
     history,

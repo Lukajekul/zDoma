@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react";
 import { ArrowLeft, Copy } from "lucide-react";
 import { BigButton } from "@/components/shell";
-import type { Emergency, QuestionView } from "@/app/patient/_lib/checkin-plan";
+import { withFollowUps, type Emergency, type QuestionView } from "@/app/patient/_lib/checkin-plan";
 import type { CheckinInput } from "@/app/patient/[rehabId]/pregled/actions";
 import { WithChange } from "./change-mark";
 import { EmergencyScreen } from "./emergency-screen";
@@ -32,11 +32,16 @@ export function CheckinFlow({ rehabId, today, questions, canRepeat, save }: Prop
   const [error, setError] = useState<string>();
   const [saving, startSaving] = useTransition();
 
-  const queue = mode === "same" ? questions.filter((q) => q.always) : questions;
+  // A follow-up joins the queue right after its parent once the answer triggers it (T-80).
+  const base = mode === "same" ? questions.filter((q) => q.always) : questions;
+  const queueFor = (a: Answers) => withFollowUps(base, a);
+  const queue = queueFor(answers);
   const q = queue[index];
 
-  function submit(final: Answers, photos = photoPaths) {
+  function submit(all: Answers, photos = photoPaths) {
     setError(undefined);
+    // Drop answers to follow-ups no longer triggered (the parent was changed after going back).
+    const final = Object.fromEntries(queueFor(all).flatMap((x) => (all[x.id] === undefined ? [] : [[x.id, all[x.id]]])));
     startSaving(async () => {
       const res = await save({ answers: final, sameAsYesterday: mode === "same", photoPaths: photos });
       if (res.error) setError(res.error);
@@ -44,7 +49,7 @@ export function CheckinFlow({ rehabId, today, questions, canRepeat, save }: Prop
   }
 
   function next(final: Answers, photos?: string[]) {
-    if (index + 1 < queue.length) setIndex(index + 1);
+    if (index + 1 < queueFor(final).length) setIndex(index + 1);
     else submit(final, photos);
   }
 
