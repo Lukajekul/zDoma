@@ -88,7 +88,7 @@ export const kolkKoleno: Predloga = {
   vajeOpomba: vsebina.vajeOpomba,
   opazanja: [
     { id: "meca", besedilo: "Otekla, topla ali boleča meča", pravilo: "meca" },
-    { id: "dusenje-prsi", besedilo: "Nenadoma težko diha ali ga boli v prsih", pravilo: "dusenje-prsi-112" },
+    { id: "dusenje-prsi", besedilo: "Nenadoma težko diha ali ga/jo boli v prsih", pravilo: "dusenje-prsi-112" },
     ...OPAZANJA_SPLOSNA,
   ],
 };

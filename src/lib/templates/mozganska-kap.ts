@@ -122,7 +122,7 @@ export const mozganskaKap: Predloga = {
   vajeOpomba: vsebina.vajeOpomba,
   opazanja: [
     { id: "znaki-kapi", besedilo: "Povešen kot ust, šibka roka ali noga ali težave z govorom", pravilo: "znaki-kapi-112" },
-    { id: "padec", besedilo: "Padel je", pravilo: "padec" },
+    { id: "padec", besedilo: "Padel/a je", pravilo: "padec" },
     { id: "poziranje", besedilo: "Kašlja ali se duši pri jedi ali pitju", pravilo: "poziranje" },
     ...OPAZANJA_SPLOSNA,
   ],
