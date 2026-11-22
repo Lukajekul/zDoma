@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { FamilyObservations } from "@/components/patient/family-observations";
 import { AppShell, BigButton } from "@/components/shell";
 import { requireProfile } from "@/lib/auth";
 import { listAccessForPatient, personLabel } from "@/lib/family-access";
@@ -92,6 +93,7 @@ async function AccessList() {
           })}
         </ul>
       )}
+      <FamilyObservations patientId={profile.id} />
     </>
   );
 }

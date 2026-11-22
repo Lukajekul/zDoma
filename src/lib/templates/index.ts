@@ -8,7 +8,7 @@ import { srcnoPopuscanje } from "./srcno-popuscanje";
 import type { Predloga, PredlogaId, Pravilo } from "./types";
 
 export type * from "./types";
-export { NAJVEC_DNEVNIH_VPRASANJ } from "./types";
+export { NAJVEC_DNEVNIH_VPRASANJ, NAJVEC_ZNAKOV_OPAZANJA } from "./types";
 export * from "./vrednosti";
 
 /** All templates, heart failure first (main template and demo story). */

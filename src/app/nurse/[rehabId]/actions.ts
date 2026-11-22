@@ -86,3 +86,29 @@ export async function setAppointmentStatus(id: string, status: unknown): Promise
   refresh();
   return { ok: true };
 }
+
+/** T-73: "Prebrano" on a zadolženec's observation. Written to audit_log. */
+export async function markObservationRead(id: string): Promise<{ error?: string }> {
+  const staff = await requireStaff();
+  if (typeof id !== "string" || !uuid.test(id)) return { error: "Opažanje ni najdeno." };
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("carer_observations")
+    .update({ read_at: new Date().toISOString(), read_by: staff.id })
+    .eq("id", id)
+    .is("read_at", null)
+    .select("rehab_id")
+    .maybeSingle();
+  if (error) return { error: "Ni uspelo shraniti. Poskusite znova." };
+  if (data) {
+    await supabase.from("audit_log").insert({
+      actor_id: staff.id,
+      action: "opazanje_prebrano",
+      entity: "carer_observations",
+      entity_id: id,
+      details: { rehab_id: data.rehab_id },
+    });
+  }
+  refresh();
+  return {};
+}

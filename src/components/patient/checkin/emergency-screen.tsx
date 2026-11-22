@@ -3,10 +3,23 @@
 import { Phone } from "lucide-react";
 import type { Emergency } from "@/app/patient/_lib/checkin-plan";
 
-type Props = { emergency: Emergency; onContinue: () => void; onBack: () => void };
+type Props = {
+  emergency: Emergency;
+  onContinue: () => void;
+  onBack: () => void;
+  /** Defaults fit the daily check-in; the zadolženec's observation (T-73) passes its own. */
+  continueLabel?: string;
+  backLabel?: string;
+};
 
 /** Full-screen "Pokličite 112" (or the ward phone), shown before anything is saved. */
-export function EmergencyScreen({ emergency, onContinue, onBack }: Props) {
+export function EmergencyScreen({
+  emergency,
+  onContinue,
+  onBack,
+  continueLabel = "Nadaljuj dnevni pregled",
+  backLabel = "Nazaj – popravi odgovor",
+}: Props) {
   const is112 = emergency.kind === "klic112";
   const number = is112 ? "112" : emergency.phone;
   return (
@@ -35,10 +48,10 @@ export function EmergencyScreen({ emergency, onContinue, onBack }: Props) {
         <p className="text-xl">Vaši odgovori še niso poslani.</p>
         <div className="mt-6 flex flex-col gap-3">
           <button type="button" onClick={onContinue} className="min-h-16 rounded-2xl border-2 border-white text-xl font-bold">
-            Nadaljuj dnevni pregled
+            {continueLabel}
           </button>
           <button type="button" onClick={onBack} className="min-h-14 rounded-xl text-xl font-semibold underline">
-            Nazaj – popravi odgovor
+            {backLabel}
           </button>
         </div>
       </div>

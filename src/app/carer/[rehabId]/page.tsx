@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { notFound } from "next/navigation";
-import { ClipboardCheck, Dumbbell, Pill } from "lucide-react";
+import { ClipboardCheck, Dumbbell, Eye, Pill } from "lucide-react";
 import { getMedsAndLogs } from "@/app/patient/_lib/doses";
 import { getExercisesForDay } from "@/app/patient/_lib/exercises";
 import { getMarkerNames } from "@/app/patient/_lib/marker-names";
@@ -135,6 +135,15 @@ async function Overview({ params }: RehabParams) {
           </BigButton>
         )}
       </Card>
+
+      {active && c.helper === "family" && (
+        <Card icon={<Eye />} title="Ste kaj opazili?">
+          <p className="text-lg">Če opazite spremembo, ki je pacient morda ne opazi, jo lahko sporočite sestri. Ni obvezno.</p>
+          <BigButton href={`${base}/opazanje`} variant="secondary">
+            Sporočite opažanje
+          </BigButton>
+        </Card>
+      )}
 
       <p className="text-lg text-muted-foreground">
         Kar označite, se shrani z vašim imenom.

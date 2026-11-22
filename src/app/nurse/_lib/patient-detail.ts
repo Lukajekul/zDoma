@@ -3,6 +3,7 @@ import "server-only";
 import { getRing } from "@/app/patient/_lib/ring";
 import { addDays } from "@/app/patient/_lib/schedule";
 import { getAppointments } from "@/lib/appointments-server";
+import { getObservations } from "@/lib/observations-server";
 import { createClient } from "@/lib/supabase/server";
 import { predlogaZaRehab } from "@/lib/templates";
 import { laceScore, tedenskiPovzetek } from "@/lib/triage";
@@ -27,7 +28,7 @@ export async function getPatientDetail(id: string, today: string) {
   const template = predlogaZaRehab(rehab);
   const end = rehab.end_date < today ? rehab.end_date : today;
   const start = addDays(end, -6);
-  const [checkins, openAlerts, closedAlerts, photoRows, participation, appointments] = await Promise.all([
+  const [checkins, openAlerts, closedAlerts, photoRows, participation, appointments, observations] = await Promise.all([
     supabase
       .from("checkins")
       .select("checkin_date, answers, triage_status")
@@ -60,6 +61,7 @@ export async function getPatientDetail(id: string, today: string) {
       .limit(3),
     template ? getRing(rehab, template, today) : null,
     getAppointments(id).catch(() => null),
+    getObservations(rehab).catch(() => null),
   ]);
 
   if (checkins.error || openAlerts.error || closedAlerts.error) {
@@ -123,6 +125,7 @@ export async function getPatientDetail(id: string, today: string) {
     photos: photos.map(({ date, paths }) => ({ date, urls: paths.map((p) => (p ? urls.get(p) ?? null : null)) })),
     photosUnavailable: Boolean(photoRows.error),
     appointments,
+    observations,
     today,
   };
 }

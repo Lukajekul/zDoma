@@ -3,6 +3,7 @@ import { AppShell, BigButton, StatusBadge } from "@/components/shell";
 import { formatDate } from "@/lib/format";
 import { PatientAlerts } from "./patient-alerts";
 import { PatientAppointments } from "./patient-appointments";
+import { PatientObservations } from "./patient-observations";
 import { PatientPhotos } from "./patient-photos";
 import { PatientTrends } from "./patient-trends";
 
@@ -39,6 +40,7 @@ export function PatientOverview({ detail, back }: { detail: PatientDetail; back:
         </div>
       </div>
       <PatientAlerts active={detail.active} openAlerts={detail.openAlerts} closedAlerts={detail.closedAlerts} />
+      <PatientObservations observations={detail.observations} />
       {detail.appointments ? (
         <PatientAppointments rehabId={detail.rehabId} appointments={detail.appointments} today={detail.today} />
       ) : <p className="rounded-3xl bg-card p-4 shadow-soft" role="alert">Kontrol ni bilo mogoče naložiti. Osvežite stran.</p>}
