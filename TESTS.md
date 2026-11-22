@@ -9,8 +9,9 @@ Things that still need someone to try them in a browser. Tick a box when it work
 ## T-74 · "Dodaj zdravilo" from the EMA list
 
 ### Search results
-- [ ] Type `biso`: four groups appear in this order: "Iz predlog (z običajnimi odmerki)", "Drugo ime za priporočeno zdravilo" (Byol, Concor, Borez, Sobycor …), "Druga zdravila" (Bisonessa, Bisoprolol/Amlodipin Krka …), and last "Dodaj »biso« kot novo zdravilo".
-- [ ] Search ignores accents and capitals: `furosemid`, `FUROSEMID` and `Furosemide` give the same results.
+- [ ] With a template that doesn't list bisoprolol (e.g. Nov kolk ali koleno), type `biso`: four groups appear in this order: "Iz predlog (z običajnimi odmerki)" (Bisoprolol), "Drugo ime za priporočeno zdravilo" (Byol, Concor, Borez, Sobycor …), "Druga zdravila" (Bisonessa, Bisoprolol/Amlodipin Krka …), and last "Dodaj »biso« kot novo zdravilo".
+- [ ] With Srčno popuščanje, `biso` shows no "Iz predlog" group, because Bisoprolol is already in the list above (expected).
+- [ ] Search ignores capitals and č/š/ž: `furosemid` and `FUROSEMID` give the same results; `Bisolvón` finds Bisolvon.
 - [ ] Searching by active substance works: `sakubitril` finds Entresto and its other brands.
 - [ ] A medicine already in the list (e.g. Lasix in the heart failure template) does not show up again.
 - [ ] Type the exact name `Byol`: no "kot novo zdravilo" row (it's a known medicine).
