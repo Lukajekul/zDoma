@@ -152,4 +152,4 @@ Migrations for these tasks are pre-approved by the human: merge to `main`, then 
 
 ## Demo (22. 11. 2026)
 
-- [~] **T-87** (Tian Istenič, `feat/T-87-demo-seed`) Smaller seed for the 3-minute pitch demo: keep the demo story (Janez, Marija, Stanko, Ana, Vesna, študent Luka) with the same davčne številke, only 5 fixed filler patients (one red, two yellow, two green, one "Nedodeljeni"), staff only Mojca (patronažna sestra, all občine) and Tina (bolnišnica), no nadomeščanje; re-run the seed and the T-80 demo plan; update `docs/demo-accounts.md`.
+- [x] **T-87** (Tian Istenič, `feat/T-87-demo-seed`; *done: 8 patients, Mojca + Tina, fixed davčne, seed also runs the T-80 plan; re-seeded 22. 11. 2026*) Smaller seed for the 3-minute pitch demo: keep the demo story (Janez, Marija, Stanko, Ana, Vesna, študent Luka) with the same davčne številke, only 5 fixed filler patients (one red, two yellow, two green, one "Nedodeljeni"), staff only Mojca (patronažna sestra, all občine) and Tina (bolnišnica), no nadomeščanje; re-run the seed and the T-80 demo plan; update `docs/demo-accounts.md`.
