@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { StatusBadge } from "@/components/shell";
 import type { VisitRow } from "@/app/nurse/_patronaza/visits";
+import { formatAppointmentWhen } from "@/lib/appointments";
 
 /** One patient on "Danes obiščite": name, status word, address, "Prvi obisk" if not set up yet. */
 export function VisitRowCard({ r }: { r: VisitRow }) {
@@ -11,6 +12,11 @@ export function VisitRowCard({ r }: { r: VisitRow }) {
         <StatusBadge status={r.status} short />
       </div>
       <p className="text-lg text-muted-foreground">{[r.address, r.naselje].filter(Boolean).join(", ") || r.obcina}</p>
+      {r.appointment && (
+        <p className="text-lg">
+          Kontrola: <strong>{formatAppointmentWhen({ appt_date: r.appointment.date, appt_time: r.appointment.time })}</strong> · {r.appointment.place}
+        </p>
+      )}
       {r.coveringFor && <p className="text-lg">Nadomeščate: {r.coveringFor}</p>}
       <div className="flex flex-wrap gap-2">
         <Link href={`/nurse/obisk/${r.rehabId}`} className="inline-flex min-h-12 items-center rounded-2xl bg-primary px-5 text-lg font-bold text-primary-foreground hover:bg-primary/90">

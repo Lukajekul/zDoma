@@ -1,5 +1,6 @@
 import "server-only";
 
+import { getNextAppointments } from "@/lib/appointments-server";
 import { createClient } from "@/lib/supabase/server";
 import type { TriageStatus } from "@/lib/types";
 
@@ -11,6 +12,8 @@ export type VisitRow = {
   address: string | null;
   status: TriageStatus;
   installed: boolean;
+  /** Next kontrolni pregled (T-64), optional. */
+  appointment?: { date: string; time: string; place: string };
   /** Patient of a colleague this nurse is substituting for. */
   coveringFor?: string;
 };
@@ -63,6 +66,11 @@ export async function getVisits(nurseId: string, today: string) {
       coveringFor: r.assigned_nurse_id !== nurseId ? nameOf(r.assigned_nurse_id) : undefined,
     }))
     .sort((a, b) => RANK[a.status] - RANK[b.status] || a.name.localeCompare(b.name, "sl"));
+  const appts = await getNextAppointments(rows.map((r) => r.rehabId), today);
+  for (const r of rows) {
+    const a = appts.get(r.rehabId);
+    if (a) r.appointment = { date: a.appt_date, time: a.appt_time, place: a.place };
+  }
 
   const groups = new Map<string, VisitRow[]>();
   for (const r of rows) groups.set(r.obcina, [...(groups.get(r.obcina) ?? []), r]);

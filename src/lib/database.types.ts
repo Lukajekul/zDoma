@@ -95,6 +95,70 @@ export type Database = {
           },
         ]
       }
+      appointments: {
+        Row: {
+          appt_date: string
+          appt_time: string
+          created_at: string
+          created_by: string | null
+          doctor: string | null
+          id: string
+          note: string | null
+          place: string
+          rehab_id: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          appt_date: string
+          appt_time: string
+          created_at?: string
+          created_by?: string | null
+          doctor?: string | null
+          id?: string
+          note?: string | null
+          place: string
+          rehab_id: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          appt_date?: string
+          appt_time?: string
+          created_at?: string
+          created_by?: string | null
+          doctor?: string | null
+          id?: string
+          note?: string | null
+          place?: string
+          rehab_id?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "appointments_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "appointments_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "staff_directory"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "appointments_rehab_id_fkey"
+            columns: ["rehab_id"]
+            isOneToOne: false
+            referencedRelation: "rehabilitacije"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       audit_log: {
         Row: {
           action: string

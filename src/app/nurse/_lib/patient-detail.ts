@@ -2,6 +2,7 @@ import "server-only";
 
 import { getRing } from "@/app/patient/_lib/ring";
 import { addDays } from "@/app/patient/_lib/schedule";
+import { getAppointments } from "@/lib/appointments-server";
 import { createClient } from "@/lib/supabase/server";
 import { getPredloga } from "@/lib/templates";
 import { laceScore, tedenskiPovzetek } from "@/lib/triage";
@@ -26,7 +27,7 @@ export async function getPatientDetail(id: string, today: string) {
   const template = getPredloga(rehab.template_id);
   const end = rehab.end_date < today ? rehab.end_date : today;
   const start = addDays(end, -6);
-  const [checkins, openAlerts, closedAlerts, photoRows, participation] = await Promise.all([
+  const [checkins, openAlerts, closedAlerts, photoRows, participation, appointments] = await Promise.all([
     supabase
       .from("checkins")
       .select("checkin_date, answers, triage_status")
@@ -58,6 +59,7 @@ export async function getPatientDetail(id: string, today: string) {
       .order("checkin_date", { ascending: false })
       .limit(2),
     template ? getRing(rehab, template, today) : null,
+    getAppointments(id).catch(() => null),
   ]);
 
   if (checkins.error || openAlerts.error || closedAlerts.error) {
@@ -119,6 +121,8 @@ export async function getPatientDetail(id: string, today: string) {
     },
     photos: photos.map(({ date, path }) => ({ date, url: path ? urls.get(path) ?? null : null })),
     photosUnavailable: Boolean(photoRows.error),
+    appointments,
+    today,
   };
 }
 

@@ -1,7 +1,9 @@
 import { Suspense } from "react";
 import { notFound } from "next/navigation";
+import { AppointmentCard } from "@/components/appointment-card";
 import { rehabDay, rehabTitle } from "@/components/patient/rehab-info";
 import { AppShell, BigButton } from "@/components/shell";
+import { getNextAppointment } from "@/lib/appointments-server";
 import { requireProfile } from "@/lib/auth";
 import { formatDate } from "@/lib/format";
 import { createClient } from "@/lib/supabase/server";
@@ -46,10 +48,10 @@ async function Rehab({ params }: Pick<PageProps<"/patient/[rehabId]">, "params">
   }
 
   const supabase = await createClient();
-  const { count } = await supabase
-    .from("checkins")
-    .select("id", { count: "exact", head: true })
-    .eq("rehab_id", rehab.id);
+  const [{ count }, appointment] = await Promise.all([
+    supabase.from("checkins").select("id", { count: "exact", head: true }).eq("rehab_id", rehab.id),
+    getNextAppointment(rehab.id, today),
+  ]);
 
   return (
     <AppShell title={rehabTitle(rehab)} back={BACK}>
@@ -57,6 +59,7 @@ async function Rehab({ params }: Pick<PageProps<"/patient/[rehabId]">, "params">
         To okrevanje je zaključeno {formatDate(rehab.end_date)}. Pregledov ne pošiljate več, podatke
         pa lahko še vedno pregledate.
       </p>
+      {appointment && <AppointmentCard appointment={appointment} today={today} heading="Vaša naslednja kontrola pri zdravniku" />}
       <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 text-xl">
         <dt className="text-muted-foreground">Začetek</dt>
         <dd>{formatDate(rehab.start_date)}</dd>

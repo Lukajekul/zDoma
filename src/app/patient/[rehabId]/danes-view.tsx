@@ -1,5 +1,6 @@
 import { cookies } from "next/headers";
 import Link from "next/link";
+import { AppointmentCard } from "@/components/appointment-card";
 import { QuietLogout } from "@/components/auth/quiet-logout";
 import { NextActionCard } from "@/components/patient/danes/next-action-card";
 import { NurseUpdateCard } from "@/components/patient/danes/nurse-update-card";
@@ -7,6 +8,7 @@ import { ProgressRing } from "@/components/patient/progress-ring";
 import { rehabDay, rehabTitle } from "@/components/patient/rehab-info";
 import { Activity, Bell, ClipboardCheck, Phone, Pill, RefreshCw, Scale, Users } from "lucide-react";
 import { AppShell, BigButton, Card, IconTile } from "@/components/shell";
+import { getNextAppointment } from "@/lib/appointments-server";
 import { countPendingRequests } from "@/lib/family-access";
 import { formatDate, formatNumber, formatShortDay, greeting } from "@/lib/format";
 import { createClient } from "@/lib/supabase/server";
@@ -31,14 +33,14 @@ export async function DanesView({ ctx, profile, back }: { ctx: Ctx; profile: Pro
   const base = `/patient/${rehab.id}`;
   const supabase = await createClient();
 
-  const [{ meds, logs: loaded }, exercises, pending, { ring, extendedUntil }, nurse, nurseUpdate] = await Promise.all([
-
+  const [{ meds, logs: loaded }, exercises, pending, { ring, extendedUntil }, nurse, nurseUpdate, appointment] = await Promise.all([
     getMedsAndLogs(rehab.id),
     getExercisesForDay(rehab, today),
     countPendingRequests(supabase, profile.id),
     getRing(rehab, ctx.predloga, today),
     getMyNurse(rehab.assigned_nurse_id, today),
     getLatestNurseUpdate(supabase, rehab.id),
+    getNextAppointment(rehab.id, today),
   ]);
   const logs = await logMissedDoses(rehab, meds, loaded, today);
 
@@ -128,6 +130,7 @@ export async function DanesView({ ctx, profile, back }: { ctx: Ctx; profile: Pro
                 </span>
               </Link>
             )}
+            {appointment && <AppointmentCard appointment={appointment} today={today} heading="Vaša naslednja kontrola pri zdravniku" />}
             {nurseUpdate && <NurseUpdateCard update={nurseUpdate} />}
             {nurse && (
               <Card className="flex-row items-center">

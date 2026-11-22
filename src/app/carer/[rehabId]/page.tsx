@@ -5,9 +5,11 @@ import { getMedsAndLogs } from "@/app/patient/_lib/doses";
 import { getExercisesForDay } from "@/app/patient/_lib/exercises";
 import { getMarkerNames } from "@/app/patient/_lib/marker-names";
 import { addDays, dosesOn, TIME_LABEL, unloggedDoses } from "@/app/patient/_lib/schedule";
+import { AppointmentCard } from "@/components/appointment-card";
 import { PickupWarning } from "@/components/carer/pickup-warning";
 import { rehabDay, rehabTitle } from "@/components/patient/rehab-info";
 import { AppShell, BigButton, StatusBadge } from "@/components/shell";
+import { getNextAppointment } from "@/lib/appointments-server";
 import { createClient } from "@/lib/supabase/server";
 import type { Checkin } from "@/lib/types";
 import { type RehabParams, getCarerRehab, patientName } from "../_lib/access";
@@ -37,7 +39,7 @@ async function Overview({ params }: RehabParams) {
   const base = c.base;
 
   const supabase = await createClient();
-  const [{ data: checkinRows }, { meds, logs }, exercises] = await Promise.all([
+  const [{ data: checkinRows }, { meds, logs }, exercises, appointment] = await Promise.all([
     supabase
       .from("checkins")
       .select("*")
@@ -46,6 +48,7 @@ async function Overview({ params }: RehabParams) {
       .order("checkin_date", { ascending: false }),
     getMedsAndLogs(rehab.id),
     getExercisesForDay(rehab, today),
+    getNextAppointment(rehab.id, today),
   ]);
   const checkins = (checkinRows ?? []) as Checkin[];
   const todayCheckin = checkins.find((x) => x.checkin_date === today);
@@ -79,6 +82,10 @@ async function Overview({ params }: RehabParams) {
       {active && <PickupWarning meds={meds} odpust={rehab.start_date} danes={today} ime={patient.first_name} />}
 
       <StatusBadge status={rehab.current_status} />
+
+      {appointment && (
+        <AppointmentCard appointment={appointment} today={today} />
+      )}
 
       <Card icon={<ClipboardCheck />} title="Današnji pregled">
         {todayCheckin ? (
