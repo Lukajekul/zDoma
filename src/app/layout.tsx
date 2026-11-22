@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Atkinson_Hyperlegible_Next } from "next/font/google";
 import "./globals.css";
 
@@ -14,6 +14,14 @@ const atkinson = Atkinson_Hyperlegible_Next({
 export const metadata: Metadata = {
   title: "zDoma",
   description: "Spremljanje okrevanja na domu po odpustu iz bolnišnice",
+  applicationName: "zDoma",
+  // iPhone "Add to Home Screen": opens full screen with this name under the icon.
+  appleWebApp: { capable: true, title: "zDoma", statusBarStyle: "default" },
+  formatDetection: { telephone: false },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#1d7d3e",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
