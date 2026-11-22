@@ -1,5 +1,5 @@
 // Možganska kap. Questions and rules: docs/checkin-questions.md §5.
-import { CILJNI_TLAK, DA_NE, NE_DA, PRAVILO_BREZ_MERILNIKA, vprasanjeTlak } from "./skupno";
+import { CILJNI_TLAK, DA_NE, NE_DA, PRAVILO_BREZ_MERILNIKA, vprasanjeTlak, OPAZANJA_SPLOSNA } from "./skupno";
 import * as vsebina from "./vsebina/mozganska-kap";
 import type { Predloga, Vir } from "./types";
 
@@ -120,4 +120,10 @@ export const mozganskaKap: Predloga = {
   zdravilaOpomba: vsebina.zdravilaOpomba,
   vaje: vsebina.vaje,
   vajeOpomba: vsebina.vajeOpomba,
+  opazanja: [
+    { id: "znaki-kapi", besedilo: "Povešen kot ust, šibka roka ali noga ali težave z govorom", pravilo: "znaki-kapi-112" },
+    { id: "padec", besedilo: "Padel je", pravilo: "padec" },
+    { id: "poziranje", besedilo: "Kašlja ali se duši pri jedi ali pitju", pravilo: "poziranje" },
+    ...OPAZANJA_SPLOSNA,
+  ],
 };

@@ -1,5 +1,5 @@
 // Nov kolk ali koleno. Questions and rules: docs/checkin-questions.md §3.
-import { AGENTS_112, NE_DA, PRAVILO_RANA, PRAVILO_VROCINA, vprasanjeRana, vprasanjeVrocina } from "./skupno";
+import { AGENTS_112, NE_DA, PRAVILO_RANA, PRAVILO_VROCINA, vprasanjeRana, vprasanjeVrocina, OPAZANJA_SPLOSNA } from "./skupno";
 import * as vsebina from "./vsebina/kolk-koleno";
 import type { Predloga, Vir } from "./types";
 
@@ -86,4 +86,9 @@ export const kolkKoleno: Predloga = {
   zdravilaOpomba: vsebina.zdravilaOpomba,
   vaje: vsebina.vaje,
   vajeOpomba: vsebina.vajeOpomba,
+  opazanja: [
+    { id: "meca", besedilo: "Otekla, topla ali boleča meča", pravilo: "meca" },
+    { id: "dusenje-prsi", besedilo: "Nenadoma težko diha ali ga boli v prsih", pravilo: "dusenje-prsi-112" },
+    ...OPAZANJA_SPLOSNA,
+  ],
 };

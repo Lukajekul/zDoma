@@ -1,5 +1,5 @@
 // Pieces several templates share (docs/checkin-questions.md). Data only.
-import type { Odgovor, Pravilo, VprasanjeIzbira, VrednostPacienta, Vir } from "./types";
+import type { Odgovor, Opazanje, Pravilo, VprasanjeIzbira, VrednostPacienta, Vir } from "./types";
 
 export const NE_DA: Odgovor[] = [
   { id: "ne", besedilo: "Ne" },
@@ -115,3 +115,14 @@ export const PRAVILO_VROCINA: Pravilo = {
   razlog: "Vročina 38 °C ali več",
   vir: ECDC_VROCINA,
 };
+
+// --- Opažanja svojcev (T-73): plain notes, no threshold, no alert unless the
+// zadolženec asks for a nurse to look ("Da, prosim, naj sestra pogleda").
+export const OPAZANJA_SPLOSNA: Opazanje[] = [
+  { id: "zmeden", besedilo: "Bolj zmeden ali pozabljiv" },
+  { id: "manj-je", besedilo: "Manj je ali pije" },
+  { id: "slabse-spi", besedilo: "Slabše spi" },
+  { id: "manj-se-giblje", besedilo: "Manj se giblje kot prej" },
+  { id: "zalosten", besedilo: "Bolj žalosten ali brez volje" },
+  { id: "zdravila-neredno", besedilo: "Zdravil ne jemlje redno" },
+];

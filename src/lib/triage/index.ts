@@ -3,6 +3,8 @@
 export { LACE_TVEGANJE_BESEDILO, laceScore, laceTveganje } from "./lace";
 export type { LaceRezultat, LaceTveganje } from "./lace";
 export { oceniPregled, statusIzRazlogov } from "./ocena";
+export { oceniOpazanje, vprasajSkrb } from "./opazanje";
+export type { OcenaOpazanja } from "./opazanje";
 export type { OcenaPregleda, OcenaVhod, Razlog } from "./ocena";
 export { oceniPravilo } from "./pravila";
 export type { DanOdgovori, Kontekst } from "./pravila";

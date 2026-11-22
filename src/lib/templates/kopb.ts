@@ -1,6 +1,6 @@
 // KOPB. Questions and rules: docs/checkin-questions.md §4.
 // Weakest-sourced template: no threshold was read in a primary text (T-42).
-import { NE_DA, PRAVILO_VROCINA, vprasanjeVrocina } from "./skupno";
+import { NE_DA, PRAVILO_VROCINA, vprasanjeVrocina, OPAZANJA_SPLOSNA } from "./skupno";
 import * as vsebina from "./vsebina/kopb";
 import type { Predloga, Vir } from "./types";
 
@@ -131,4 +131,11 @@ export const kopb: Predloga = {
   zdravilaOpomba: vsebina.zdravilaOpomba,
   vaje: vsebina.vaje,
   vajeOpomba: vsebina.vajeOpomba,
+  opazanja: [
+    { id: "povedi", besedilo: "Ne more povedati cele povedi", pravilo: "dusenje-112" },
+    { id: "dusenje-mnogo", besedilo: "Mnogo težje diha kot običajno", pravilo: "dusenje-mnogo" },
+    { id: "izmecek", besedilo: "Izmeček se je spremenil", pravilo: "izmecek" },
+    { id: "inhalator", besedilo: "Inhalator za olajšanje rabi pogosteje", pravilo: "inhalator" },
+    ...OPAZANJA_SPLOSNA,
+  ],
 };

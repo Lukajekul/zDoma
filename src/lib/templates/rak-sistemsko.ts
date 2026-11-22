@@ -1,6 +1,6 @@
 // Rak na sistemskem zdravljenju. Questions and rules: docs/checkin-questions.md §6.
 // Symptoms and grades follow UKONS 24-hour triage tool v3 (text not copied).
-import { NE_DA } from "./skupno";
+import { NE_DA, OPAZANJA_SPLOSNA } from "./skupno";
 import * as vsebina from "./vsebina/rak-sistemsko";
 import type { Predloga, Vir } from "./types";
 
@@ -150,4 +150,12 @@ export const rakSistemsko: Predloga = {
   zdravilaOpomba: vsebina.zdravilaOpomba,
   vaje: vsebina.vaje,
   vajeOpomba: vsebina.vajeOpomba,
+  opazanja: [
+    { id: "vrocina", besedilo: "Vročina 38 °C ali več", pravilo: "vrocina-oddelek" },
+    { id: "bruhanje", besedilo: "Bruha 3-krat ali več na dan", pravilo: "bruhanje" },
+    { id: "driska", besedilo: "Huda driska", pravilo: "driska" },
+    { id: "hrana", besedilo: "Skoraj ne je in ne pije", pravilo: "hrana" },
+    { id: "nujno", besedilo: "Huda težka sapa, bolečina v prsih ali krvavitev", pravilo: "nujno-112" },
+    ...OPAZANJA_SPLOSNA,
+  ],
 };

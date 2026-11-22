@@ -102,5 +102,14 @@ export function preveriPredlogo(p: Predloga): string[] {
     if (v.slika && !v.slikaOpis?.trim()) napake.push(`${v.id}: picture needs slikaOpis`);
   }
 
+  for (const id of podvojeni(p.opazanja.map((o) => o.id))) napake.push(`duplicate observation id ${id}`);
+  for (const o of p.opazanja) {
+    if (!o.besedilo.trim()) napake.push(`${o.id}: empty observation text`);
+    if (o.pravilo === undefined) continue;
+    const r = p.pravila.find((x) => x.id === o.pravilo);
+    if (!r) napake.push(`${o.id}: unknown rule ${o.pravilo}`);
+    else if (r.tip !== "odgovor") napake.push(`${o.id}: observation rule must be a single-answer rule`);
+  }
+
   return napake;
 }

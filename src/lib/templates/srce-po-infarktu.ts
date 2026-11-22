@@ -8,6 +8,7 @@ import {
   vprasanjeRana,
   vprasanjeTlak,
   vprasanjeVrocina,
+  OPAZANJA_SPLOSNA,
 } from "./skupno";
 import * as vsebina from "./vsebina/srce-po-infarktu";
 import type { Predloga, Vir } from "./types";
@@ -128,4 +129,10 @@ export const srcePoInfarktu: Predloga = {
   zdravilaOpomba: vsebina.zdravilaOpomba,
   vaje: vsebina.vaje,
   vajeOpomba: vsebina.vajeOpomba,
+  opazanja: [
+    { id: "prsi-traja", besedilo: "Bolečina ali pritisk v prsih, ki še traja", pravilo: "prsi-112" },
+    { id: "prsi-minila", besedilo: "Bolečina v prsih, ki je minila", pravilo: "prsi-minila" },
+    { id: "dusenje-zelo", besedilo: "Zelo težko diha, tudi v mirovanju", pravilo: "dusenje-zelo" },
+    ...OPAZANJA_SPLOSNA,
+  ],
 };

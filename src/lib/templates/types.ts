@@ -191,6 +191,12 @@ export interface Predloga {
   vaje: Vaja[];
   /** Staff note for the exercise step. */
   vajeOpomba?: string;
+  /**
+   * Things a zadolženec may notice and report (T-73), shown as chips. Without
+   * `pravilo` it is a plain note (stopnja opomba); with it, the chip takes that
+   * rule's stopnja, razlog and vir, so no new medical thresholds live here.
+   */
+  opazanja: Opazanje[];
   /** Doctors' own questions merged in by `zLastnimi` (T-69); also listed in `vprasanja`. */
   lastnaVprasanja?: LastnoVprasanje[];
   /** Doctors' own exercises merged in by `zLastnimi` (T-69); also listed in `vaje`. */
@@ -217,6 +223,18 @@ export interface LastnaVaja {
   koraki: string[];
   ponovitve: string;
 }
+
+/** One chip on "Sporočite opažanje" (T-73). */
+export interface Opazanje {
+  id: string;
+  /** Short third-person text the zadolženec taps, e.g. "Bolj otekle noge ali gležnji". */
+  besedilo: string;
+  /** Id of a single-answer rule in `pravila` this chip stands for. */
+  pravilo?: string;
+}
+
+/** Max length of a zadolženec's free-text observation (T-73). */
+export const NAJVEC_ZNAKOV_OPAZANJA = 280;
 
 /** At most this many daily questions (AGENTS.md §5a). */
 export const NAJVEC_DNEVNIH_VPRASANJ = 6;

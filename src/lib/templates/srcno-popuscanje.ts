@@ -1,5 +1,5 @@
 // Srčno popuščanje (main template). Questions and rules: docs/checkin-questions.md §1.
-import { AGENTS_112, CILJNI_TLAK, DA_NE, NE_DA, PRAVILO_BREZ_MERILNIKA, vprasanjeTlak } from "./skupno";
+import { AGENTS_112, CILJNI_TLAK, DA_NE, NE_DA, PRAVILO_BREZ_MERILNIKA, vprasanjeTlak, OPAZANJA_SPLOSNA } from "./skupno";
 import * as vsebina from "./vsebina/srcno-popuscanje";
 import type { Predloga, Vir } from "./types";
 
@@ -149,4 +149,10 @@ export const srcnoPopuscanje: Predloga = {
   zdravilaOpomba: vsebina.zdravilaOpomba,
   vaje: vsebina.vaje,
   vajeOpomba: vsebina.vajeOpomba,
+  opazanja: [
+    { id: "dusenje-lezanje", besedilo: "Težje diha leže ali ponoči", pravilo: "dusenje-lezanje" },
+    { id: "otekline", besedilo: "Bolj otekle noge ali gležnji", pravilo: "otekline" },
+    { id: "prsi", besedilo: "Bolečina v prsih ali omedlevica", pravilo: "prsi-112" },
+    ...OPAZANJA_SPLOSNA,
+  ],
 };
