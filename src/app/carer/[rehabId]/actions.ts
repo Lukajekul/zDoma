@@ -47,7 +47,7 @@ export async function carerMarkTaken(rehabId: string, medicationId: string, time
   return {};
 }
 
-/** "Razveljavi" a "Vzeto" this zadolženec entered today. Never the patient's own entries. */
+/** "Razveljavi" any "Vzeto" today, also one the patient marked (T-93; RLS allows today only). */
 export async function carerUndoTaken(rehabId: string, logId: string): Promise<Result> {
   const c = await getCarerRehab(rehabId);
   if (!c) return { error: TRY_AGAIN };
@@ -58,8 +58,7 @@ export async function carerUndoTaken(rehabId: string, logId: string): Promise<Re
     .eq("id", logId)
     .eq("rehab_id", c.rehab.id)
     .eq("scheduled_date", c.today)
-    .eq("status", "vzeto")
-    .eq("entered_by", c.profile.id);
+    .eq("status", "vzeto");
   if (error) return { error: TRY_AGAIN };
   refresh();
   return {};

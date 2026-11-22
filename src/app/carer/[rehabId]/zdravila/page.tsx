@@ -63,7 +63,7 @@ async function Pills({ params }: RehabParams) {
                 purpose={m.purpose}
                 taken={log?.status === "vzeto"}
                 markedBy={log ? who(log.entered_by) : undefined}
-                canUndo={!!log && log.entered_by === c.profile.id}
+                canUndo={log?.status === "vzeto"}
                 onTake={carerMarkTaken.bind(null, c.rehab.id, m.id, time)}
                 onUndo={carerUndoTaken.bind(null, c.rehab.id, log?.id ?? "")}
               />
