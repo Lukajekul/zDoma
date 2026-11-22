@@ -24,7 +24,7 @@ Po odpustu gre pacient domov skoraj brez nadzora. Zapleti, kot so poslabšanje s
 | Zdravila od lekarne do tablete | Ali je zdravilo prevzeto (eRecept, na hekatonu simuliran), ali je vzeto in kdaj ga bo zmanjkalo. Ob odpustu: Novo / Spremenjeno / Ukinjeno. |
 | Opozorila z razlogom | Nadzorna plošča prikaže samo paciente, ki potrebujejo pozornost, npr. »Teža +2,5 kg v 3 dneh«. Posodablja se sproti. |
 | Šest predlog, ena koda | Srčno popuščanje (glavna), po infarktu, nov kolk ali koleno, KOPB, možganska kap, rak. Predloga je podatkovna datoteka, nova skupina ne potrebuje novega zaslona. |
-| Svojci in patronaža | Svojec po odobritvi pacienta spremlja in označuje naloge, patronažna sestra dobi paciente po naslovu in jih obišče z istimi zasloni. |
+| Svojci, patronaža in študenti | Svojec po odobritvi pacienta spremlja in označuje naloge, patronažna sestra dobi paciente po naslovu in jih obišče z istimi zasloni. Študente medicine razporedi na zemljevidu po potrebi po pomoči; študent vidi današnje obiske po vrsti, z naslovom in potjo. |
 | Varnost najprej | Pri bolečini v prsih, hudem težkem dihanju ali znakih kapi celozaslonsko »Pokličite 112«. Podpora odločanju, ne diagnoza. Brez umetne inteligence. |
 
 ## Arhitektura

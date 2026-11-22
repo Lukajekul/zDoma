@@ -52,13 +52,16 @@ Vsi računi in gesla: `docs/demo-accounts.md`. Geslo za vse demo račune: `zdoma
 > »Pacient, ki smo ga pravkar ustvarili, je že na njenem seznamu – dodeljen po naslovu.«
 
 ### 2:45–3:00 Študenti in zaključek
-- En zaslon: Lukov seznam `/student`.
-> »Študenti medicine na praksi pomagajo pacientom brez svojcev pri družinskih opravilih. Pacient jih odobri, dostop se konča s prakso.«
+- Mojca → **»Študenti«**: zemljevid ob seznamu, tap na pacienta pod »Potrebujejo pomoč« → trije predlagani študenti. **Ne pritisni »Dodeli«** (spremeni živo bazo).
+> »Sestra razporedi študente po potrebi po pomoči, ne po resnosti: rdeči gredo najprej k njej.«
+- Lukov `/student` za 3 s: »Danes po vrsti« z naslovom in gumbom »Pot«.
+> »Študenti medicine na praksi pomagajo pacientom brez svojcev. Pacient jih odobri, dostop se konča s prakso.«
 > »zDoma: aplikacija preganja pacienta, zato sestra vidi samo tiste, ki jo potrebujejo.«
 
 ## Če zmanjka časa
 1. Najprej izpusti Opažanje pri svojcu. Opozorilo o neprevzetih zdravilih obdrži.
 2. Pri sestri izpusti »Danes obiščite«.
-3. Odpiranja rehabilitacije in skeniranja QR ne krajšaj: to je glavni trenutek.
+3. Pri študentih pokaži samo zemljevid »Študenti«, Lukov zaslon izpusti.
+4. Odpiranja rehabilitacije in skeniranja QR ne krajšaj: to je glavni trenutek.
 
 Vadi s štoparico.

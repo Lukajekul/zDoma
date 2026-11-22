@@ -117,6 +117,7 @@ To je bil drugi najpomembnejši cilj. Rešili smo ga z več plastmi:
 - Študent ima svoj seznam bolnikov; vnosi so označeni z »(študent)«.
 - Pri rumenem ali rdečem stanju študent vidi opozorilo, naj pokliče sestro.
 - 30 minut pred obiskom dobi opomnik; če zamudi, sta obveščena on in sestra.
+- **»Danes po vrsti«:** na začetni strani vidi vse današnje obiske po uri, z naslovom, oznako »zamuja« in gumbom **»Pot«**, ki odpre navigacijo v telefonu. Ob seznamu je zemljevid z oštevilčenimi oznakami v vrstnem redu obiskov.
 - Dostop se samodejno konča z zadnjim dnem prakse.
 
 ## 9. Osebje: čim manj dela
@@ -141,6 +142,7 @@ Ali je nekdo patronažna sestra, določijo podatki (ima teren), ne posebna vloga
 - **»Prvi obisk«**: seznam za prvi obisk doma (skeniranje listka, dodajanje na začetni zaslon, dovoljenje za obvestila, prvi pregled skupaj).
 - **»Obisk«**: kadar bolnik ne zmore sam, sestra opravi pregled, tablete in vaje z njim na istih zaslonih; vnosi so označeni z njenim imenom.
 - **»Nadomeščanje«**: med odsotnostjo preda bolnike kolegici do določenega datuma, potem se vrnejo sami.
+- **»Študenti«**: bolniki brez študenta, razvrščeni po potrebi po pomoči (brez pregleda, zdravila niso prevzeta, nima svojcev v aplikaciji), ne po resnosti bolezni. Rdeči gredo najprej k sestri. Ob tapu trije predlagani študenti (isto območje, največ 3 bolniki na študenta), en dotik »Dodeli«, bolnik potrdi. »Predlagaj razporeditev« predlaga vse pare naenkrat. Na tablici in računalniku je ob seznamu zemljevid, na telefonu preklop »Seznam / Zemljevid«. Oznake imajo obliko in besedo, ne le barve; zaenkrat stojijo v središču občine.
 
 ## 10. Varnost in zasebnost
 

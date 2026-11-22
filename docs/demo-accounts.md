@@ -8,7 +8,7 @@ Seed data from `npm run seed` (T-10) on the shared zDoma project. **All people a
 - **Bolničarji** and **študenti** log in at `/prijava` → "Osebje" with the **e-pošta** below (T-67, T-86). **Zadolženci** log in at `/prijava` → "Svojci" with their davčna številka. **Patients (odpuščenci)** log in at `/prijava/pacient` ("Sem pacient" on the home page).
 - This repo is public, so anyone can use this password on the live site. Data is synthetic. To change it: set a new `SEED_PASSWORD` in `.env.local`, run `npm run seed`, and update this line.
 - **To show the QR login:** as a bolničar open a patient and press "Nova koda QR". The printed QR logs the patient in once, then asks them to set their own password (T-54); after that the demo password above no longer works for that patient until the seed is re-run.
-- The seed is kept small for the 3-minute demo (T-87): 8 patients, 2 bolničarji, 2 zadolženci, 1 študent. `npm run seed` also gives Stanko Zupančič his approved plan (T-80). Re-running it keeps every davčna številka below; only dates and addresses move with today (last run: 22. 11. 2026). Generated check-ins end yesterday, so every patient's dnevni pregled is still open today (T-90).
+- The seed is kept small for the 3-minute demo (T-87): 8 patients, 2 bolničarji, 2 zadolženci, 3 študenti (T-98). `npm run seed` also gives Stanko Zupančič his approved plan (T-80). Re-running it keeps every davčna številka below; only dates and addresses move with today (last run: 22. 11. 2026). Generated check-ins end yesterday, so every patient's dnevni pregled is still open today (T-90).
 
 ## Demo story
 
@@ -21,11 +21,13 @@ Seed data from `npm run seed` (T-10) on the shared zDoma project. **All people a
 | 99000652 | `zdoma-eupRh0qTB1SQ` | **Vesna Zupančič** (zadolženec) | Stanko's daughter, approved. "Skrbim za" shows "Zdravila niso prevzeta v lekarni" on his card and the red warning with Furosemid on his page (T-48, T-62). |
 | 99000083 | `zdoma-eupRh0qTB1SQ` | Marija Kos (patient, Celje) | Two rehabilitacije: kolk/koleno (zaključena) + po infarktu (aktivna). |
 
-## Študent pomočnik (T-86)
+## Študenti pomočniki (T-86, T-98)
 
 | E-pošta (login) | Davčna | Geslo | Name | What to show |
 |---|---|---|---|---|
-| luka.kranjc@zdoma.demo | 99000679 | `zdoma-eupRh0qTB1SQ` | **Luka Kranjc** (študent medicine, praksa 60 dni od seeda) | Logs in at `/prijava` → "Osebje" with the e-pošta and lands on `/student`. Marija Kos approved him: open her card, mark pills or the check-in ("Označil: Luka (študent)"). Stanko Zupančič still has to approve him: log in as Stanko → "Svojci" → Dovoli / Zavrni. As Mojca Kovač, the detail page of Marija Kos shows the "Študent pomočnik" card. |
+| luka.kranjc@zdoma.demo | 99000679 | `zdoma-eupRh0qTB1SQ` | **Luka Kranjc** (študent medicine, praksa 60 dni od seeda; občine Šentjur, Celje) | Logs in at `/prijava` → "Osebje" with the e-pošta and lands on `/student`: "Danes po vrsti" with times, addresses, "Pot" and the numbered map (T-99). Marija Kos approved him: open her card, mark pills or the check-in ("Označil: Luka (študent)"). Stanko Zupančič still has to approve him: log in as Stanko → "Svojci" → Dovoli / Zavrni. As Mojca Kovač, the detail page of Marija Kos shows the "Študent pomočnik" card. |
+| nika.zupan@zdoma.demo | 99000121 | `zdoma-eupRh0qTB1SQ` | **Nika Zupan** (študentka, praksa 45 dni; Slovenske Konjice, Vojnik) | No patients in the seed: free places for "Razporedi študente" (T-98). As Mojca Kovač → "Študenti" → Olga Vidmar suggests Nika. |
+| tim.golob@zdoma.demo | 99000130 | `zdoma-eupRh0qTB1SQ` | **Tim Golob** (študent, praksa 30 dni; Laško, Žalec) | No patients in the seed; suggested for Milena Rozman (Laško). Added to a live seed without wiping by `scripts/seed/studenti-razporedi.mts`. |
 
 ## Bolničarji
 
