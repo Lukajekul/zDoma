@@ -4,11 +4,13 @@ import { ChevronRight, MapPin, Phone } from "lucide-react";
 import { getMedsAndLogs } from "@/app/patient/_lib/doses";
 import { dosesOn, TIME_LABEL } from "@/app/patient/_lib/schedule";
 import { LogoutButton } from "@/components/auth/logout-button";
+import { RouteToday } from "@/components/student/route-today";
 import { AppShell, StatusBadge } from "@/components/shell";
 import { requireStudent } from "@/lib/auth";
 import { formatDate } from "@/lib/format";
 import { clock, visitMinutes, visitSlots } from "@/lib/student/visits";
 import { createClient } from "@/lib/supabase/server";
+import { fullAddress, nowMinutesLjubljana, todayRoute } from "./_lib/route";
 import { isActiveStudent, isRehabActive, todayLjubljana, type Profile, type Rehabilitacija } from "@/lib/types";
 
 export const metadata = { title: "Moji pacienti – Študent pomočnik – zDoma" };
@@ -80,6 +82,14 @@ async function StudentHome() {
   // Patients still waiting for something today come first.
   const finished = (c: (typeof cards)[number]) => Number(c.slots.length > 0 && c.slots.every((s) => s.done));
   cards.sort((a, b) => finished(a) - finished(b));
+  const route = todayRoute(
+    cards.map(({ p, rehab, slots }) => ({
+      p: { name: `${p.first_name} ${p.last_name}`.trim(), address: p.address, obcina: p.obcina, checkin_time: p.checkin_time },
+      rehabId: rehab?.id ?? null,
+      slots,
+    })),
+    nowMinutesLjubljana(),
+  );
 
   return (
     <>
@@ -93,6 +103,9 @@ async function StudentHome() {
         <p className="text-xl">Še nimate dodeljenih pacientov. Dodeli vam jih sestra ali zdravnik.</p>
       )}
 
+      {cards.some((c) => c.rehab) && <RouteToday stops={route.stops} pins={route.pins} />}
+
+      {cards.length > 0 && <h2 className="mt-4 text-2xl font-bold">Vsi pacienti</h2>}
       <div className="grid items-start gap-6 lg:grid-cols-2">
         {cards.map(({ p, rehab, slots, alerts }) => {
           const name = `${p.first_name} ${p.last_name}`.trim();
@@ -103,7 +116,7 @@ async function StudentHome() {
               {(p.address || p.obcina) && (
                 <p className="flex items-start gap-2 text-lg">
                   <MapPin aria-hidden className="mt-1 size-5 shrink-0" />
-                  {p.address && p.obcina && !p.address.includes(p.obcina) ? `${p.address}, ${p.obcina}` : p.address || p.obcina}
+                  {fullAddress(p.address, p.obcina)}
                 </p>
               )}
               {p.phone && (
