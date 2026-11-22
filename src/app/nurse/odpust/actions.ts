@@ -14,6 +14,8 @@ import { TIME_ORDER } from "@/app/patient/_lib/schedule";
 import type { PatientValues } from "@/lib/types";
 import type { Json } from "@/lib/database.types";
 import { dailyCount, medicineChange, type MedLine } from "./_lib/plan";
+import type { OdobritevVnos } from "./_lib/dejstva";
+import { preveriOdobritev, shraniNacrt } from "./_lib/nacrt-server";
 
 export type PreviousMed = ZdraviloPrej;
 
@@ -79,6 +81,8 @@ export type OpenRehabInput = {
   startDate: string;
   endDate: string;
   nurseId: string | null;
+  /** Optional modular plan approved in the wizard (T-79). Without it the template questions are used. */
+  plan?: OdobritevVnos | null;
 };
 
 const isDate = (s: string) => /^\d{4}-\d{2}-\d{2}$/.test(s) && !Number.isNaN(Date.parse(s));
@@ -131,6 +135,12 @@ export async function openRehab(input: OpenRehabInput): Promise<{ error: string 
     if (!m.selected) continue;
     if (!m.dose.trim()) return { error: `${m.name}: izberite odmerek.` };
     if ((!m.times.length && !m.asNeeded) || m.times.some((t) => !TIME_ORDER.includes(t))) return { error: `${m.name}: izberite čas jemanja.` };
+  }
+
+  if (input.plan) {
+    input.plan.dejstva.odpust = input.startDate;
+    const planProblem = preveriOdobritev(input.plan);
+    if (planProblem) return { error: planProblem };
   }
 
   const { patientId, created } = await ensurePatientAccount({ davcna, firstName: input.firstName, lastName: input.lastName });
@@ -206,9 +216,11 @@ export async function openRehab(input: OpenRehabInput): Promise<{ error: string 
       details: { lastnaVprasanja: lastni.vprasanja, lastneVaje: lastni.vaje } as unknown as Json,
     });
   }
+  const nacrt = input.plan ? await shraniNacrt(rehab.id, input.plan, staff) : null;
   // Always land on the result page, so a retry can't open a second rehabilitacija.
   const q = new URLSearchParams();
   if (created) q.set("nov", "1");
   if (m.error || x.error) q.set("napaka", "1");
+  if (nacrt) q.set("nacrt", "version" in nacrt ? String(nacrt.version) : "napaka");
   redirect(`/nurse/odpust/${rehab.id}${q.size ? `?${q}` : ""}`);
 }

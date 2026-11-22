@@ -7,6 +7,7 @@ import { requireStaff } from "@/lib/auth";
 import { formatDate } from "@/lib/format";
 import { createClient } from "@/lib/supabase/server";
 import { getPredloga } from "@/lib/templates";
+import { getApprovedPlan } from "@/lib/plans-server";
 import { changeRehabEnd } from "./actions";
 import { todayLjubljana } from "@/lib/types";
 
@@ -34,6 +35,7 @@ async function RehabAdmin({ params, searchParams }: PageProps<"/nurse/odpust/[re
     .maybeSingle();
   if (!r || !r.patient) notFound();
 
+  const plan = await getApprovedPlan(r.id).catch(() => null);
   const name = `${r.patient.first_name} ${r.patient.last_name}`;
   const listek = `/prijava/listek/${r.patient_id}`;
   const today = todayLjubljana();
@@ -42,6 +44,14 @@ async function RehabAdmin({ params, searchParams }: PageProps<"/nurse/odpust/[re
       {sp.nov !== undefined || sp.napaka !== undefined ? (
         <p className="rounded-xl bg-status-zeleno-bg p-4 text-2xl font-bold text-status-zeleno">Rehabilitacija odprta ✓</p>
       ) : null}
+      {typeof sp.nacrt === "string" && sp.nacrt !== "napaka" && (
+        <p className="rounded-xl bg-status-zeleno-bg p-4 text-xl font-bold text-status-zeleno">Načrt vprašanj odobren ✓ (različica {sp.nacrt})</p>
+      )}
+      {sp.nacrt === "napaka" && (
+        <p role="alert" className="rounded-xl bg-status-rdece-bg p-4 text-lg font-semibold text-status-rdece">
+          Načrta vprašanj ni bilo mogoče shraniti. Odprite »Načrt vprašanj« spodaj in ga odobrite znova.
+        </p>
+      )}
       {sp.napaka !== undefined && (
         <p role="alert" className="rounded-xl bg-status-rdece-bg p-4 text-lg font-semibold text-status-rdece">
           Zdravil ali vaj ni bilo mogoče shraniti. Preverite jih v načrtu.
@@ -64,6 +74,18 @@ async function RehabAdmin({ params, searchParams }: PageProps<"/nurse/odpust/[re
       ) : (
         <BigButton href={listek} variant="secondary">Prijavni listek znova</BigButton>
       )}
+
+      <section className="mt-4 flex flex-col gap-3">
+        <h2 className="text-2xl font-bold">Načrt vprašanj</h2>
+        <p className="text-lg">
+          {plan ? `Odobren, različica ${plan.version}.` : "Ni odobrenega načrta. Pacient dobi vprašanja predloge."}
+        </p>
+        {r.status === "aktivna" && (
+          <BigButton href={`/nurse/odpust/${r.id}/nacrt`} variant="secondary">
+            {plan ? "Spremeni načrt vprašanj" : "Sestavi načrt vprašanj"}
+          </BigButton>
+        )}
+      </section>
 
       <section className="mt-4 flex flex-col gap-3">
         <h2 className="text-2xl font-bold">Podaljšaj ali skrajšaj</h2>

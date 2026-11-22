@@ -16,8 +16,10 @@ import { StepTemplate, StepValues } from "./step-plan";
 import { StepMedicines } from "./step-medicines";
 import { StepConfirm, StepExercises, StepNurse } from "./step-rest";
 import { ErrorText, StepTitle } from "./ui";
+import { PlanReview } from "./plan-review";
+import { zacetnaDejstva, type OdobritevVnos } from "@/app/nurse/odpust/_lib/dejstva";
 
-const TITLES = ["Pacient", "Skupina pacientov", "Vrednosti in vprašanja", "Zdravila", "Vaje in trajanje", "Patronažna sestra", "Potrditev"];
+const TITLES = ["Pacient", "Skupina pacientov", "Vrednosti in vprašanja", "Zdravila", "Načrt vprašanj (neobvezno)", "Vaje in trajanje", "Patronažna sestra", "Potrditev"];
 
 type Props = { today: string; nurses: NurseOption[]; subs: Pick<Nadomescanje, "nurse_id" | "substitute_id" | "until_date">[]; catalogue: Zdravilo[]; /** Templates with staff defaults applied (T-24). */ templates: Predloga[] };
 
@@ -35,6 +37,10 @@ export function DischargeWizard({ today, nurses, subs, catalogue, templates }: P
   const [end, setEnd] = useState("");
   const [nurseId, setNurseId] = useState<string | null>(null);
   const [error, setError] = useState<string>();
+  // Modular plan (T-79): draft while reviewing, `plan` once approved; null = template questions only.
+  const [planDraft, setPlanDraft] = useState<OdobritevVnos>();
+  const [brezAtc, setBrezAtc] = useState<string[]>([]);
+  const [plan, setPlan] = useState<OdobritevVnos | null>(null);
   const [saving, start] = useTransition();
 
   const base = templates.find((t) => t.id === templateId);
@@ -57,6 +63,14 @@ export function DischargeWizard({ today, nurses, subs, catalogue, templates }: P
     next();
   }
 
+  /** Medicines → plan: pre-fill facts from the template and the chosen medicines, keep diagnoses already set. */
+  function goToPlan() {
+    const z = zacetnaDejstva(templateId, meds.filter((m) => m.selected), today);
+    setBrezAtc(z.brezAtc);
+    setPlanDraft((prej) => (prej ? { ...prej, dejstva: { ...prej.dejstva, zdravila: z.dejstva.zdravila } } : { dejstva: z.dejstva, odstrani: [] }));
+    next();
+  }
+
   function goToNurse() {
     setNurseId(suggestion?.nurse.id ?? null);
     next();
@@ -69,7 +83,7 @@ export function DischargeWizard({ today, nurses, subs, catalogue, templates }: P
       const res = await openRehab({
         davcna: patient.davcna, firstName: patient.firstName, lastName: patient.lastName,
         address: patient.address, obcina: patient.obcina, naselje: patient.naselje,
-        templateId, values, questions, meds, startDate: today, endDate: end, nurseId, customQuestions: ownQ, customExercises: ownV,
+        templateId, values, questions, meds, startDate: today, endDate: end, nurseId, customQuestions: ownQ, customExercises: ownV, plan,
         exercises: predloga.vaje.filter((v) => exercises.includes(v.id)).map((v) => ({ id: v.id, title: v.naslov, repetitions: v.ponovitve })),
       });
       if (res?.error) setError(res.error);
@@ -96,8 +110,18 @@ export function DischargeWizard({ today, nurses, subs, catalogue, templates }: P
           }
         />
       )}
-      {step === 3 && predloga && <StepMedicines lines={meds} catalogue={catalogue} note={predloga.zdravilaOpomba} onChange={setMeds} onNext={next} />}
-      {step === 4 && predloga && (
+      {step === 3 && predloga && <StepMedicines lines={meds} catalogue={catalogue} note={predloga.zdravilaOpomba} onChange={setMeds} onNext={goToPlan} />}
+      {step === 4 && planDraft && (
+        <PlanReview
+          value={planDraft}
+          brezAtc={brezAtc}
+          onChange={setPlanDraft}
+          approveLabel="Odobri načrt in naprej"
+          onApprove={() => { setPlan(planDraft); next(); }}
+          onSkip={() => { setPlan(null); next(); }}
+        />
+      )}
+      {step === 5 && predloga && (
         <StepExercises predloga={predloga} exercises={exercises} start={today} end={end} onExercises={setExercises} onEnd={setEnd} onNext={goToNurse}
           extra={
             <>
@@ -107,8 +131,8 @@ export function DischargeWizard({ today, nurses, subs, catalogue, templates }: P
           }
         />
       )}
-      {step === 5 && <StepNurse suggestion={suggestion} nurses={nurses} nurseId={nurseId} onPick={setNurseId} onNext={next} />}
-      {step === 6 && predloga && (
+      {step === 6 && <StepNurse suggestion={suggestion} nurses={nurses} nurseId={nurseId} onPick={setNurseId} onNext={next} />}
+      {step === 7 && predloga && (
         <>
           <StepConfirm
             name={`${patient.firstName} ${patient.lastName}`}
@@ -120,6 +144,7 @@ export function DischargeWizard({ today, nurses, subs, catalogue, templates }: P
             start={today}
             end={end}
             nurse={nurses.find((n) => n.id === nurseId)?.name ?? "Nedodeljeni"}
+            plan={plan ? "Odobren" : "Ne – samo vprašanja predloge"}
             saving={saving}
             onConfirm={confirm}
           />

@@ -94,6 +94,8 @@ type ConfirmProps = {
   start: string;
   end: string;
   nurse: string;
+  /** Modular plan status (T-79). */
+  plan: string;
   saving: boolean;
   onConfirm: () => void;
 };
@@ -118,6 +120,8 @@ export function StepConfirm(p: ConfirmProps) {
         <dd>{p.exercises}</dd>
         <dt className="text-muted-foreground">Sestra</dt>
         <dd>{p.nurse}</dd>
+        <dt className="text-muted-foreground">Načrt vprašanj</dt>
+        <dd>{p.plan}</dd>
       </dl>
       <BigButton onClick={p.onConfirm} disabled={p.saving}>{p.saving ? "Shranjujem …" : "Odpri rehabilitacijo"}</BigButton>
     </div>

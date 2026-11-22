@@ -56,6 +56,9 @@ export function PatientOverview({ detail, back }: { detail: PatientDetail; back:
             </ul>
           ) : <p>Povzetek ni na voljo.</p>}
           <BigButton href={`/nurse/odpust/${detail.rehabId}`} variant="secondary">Upravljaj rehabilitacijo</BigButton>
+          {detail.active && (
+            <BigButton href={`/nurse/odpust/${detail.rehabId}/nacrt`} variant="secondary">Načrt vprašanj</BigButton>
+          )}
         </section>
       </div>
       <PatientPhotos photos={detail.photos} photosUnavailable={detail.photosUnavailable} />
