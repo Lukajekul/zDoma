@@ -204,6 +204,84 @@ export type Database = {
           },
         ]
       }
+      carer_observations: {
+        Row: {
+          chips: string[]
+          concern: boolean
+          created_at: string
+          entered_by: string
+          id: string
+          note: string | null
+          read_at: string | null
+          read_by: string | null
+          reasons: string[]
+          rehab_id: string
+          status: Database["public"]["Enums"]["triage_status"]
+        }
+        Insert: {
+          chips?: string[]
+          concern?: boolean
+          created_at?: string
+          entered_by?: string
+          id?: string
+          note?: string | null
+          read_at?: string | null
+          read_by?: string | null
+          reasons?: string[]
+          rehab_id: string
+          status?: Database["public"]["Enums"]["triage_status"]
+        }
+        Update: {
+          chips?: string[]
+          concern?: boolean
+          created_at?: string
+          entered_by?: string
+          id?: string
+          note?: string | null
+          read_at?: string | null
+          read_by?: string | null
+          reasons?: string[]
+          rehab_id?: string
+          status?: Database["public"]["Enums"]["triage_status"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "carer_observations_entered_by_fkey"
+            columns: ["entered_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "carer_observations_entered_by_fkey"
+            columns: ["entered_by"]
+            isOneToOne: false
+            referencedRelation: "staff_directory"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "carer_observations_read_by_fkey"
+            columns: ["read_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "carer_observations_read_by_fkey"
+            columns: ["read_by"]
+            isOneToOne: false
+            referencedRelation: "staff_directory"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "carer_observations_rehab_id_fkey"
+            columns: ["rehab_id"]
+            isOneToOne: false
+            referencedRelation: "rehabilitacije"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       checkins: {
         Row: {
           answers: Json
