@@ -6,7 +6,7 @@
 
 <p align="center"><b>Spletna stran:</b> <a href="https://zdoma.tian-istenic34.workers.dev/">zdoma.tian-istenic34.workers.dev</a></p>
 
-<p align="center"><b>Za ocenjevalce:</b> <a href="docs/PREGLED.md">pregled vseh funkcionalnosti (docs/PREGLED.md)</a></p>
+<p align="center"><b>Za ocenjevalce:</b> <a href="docs/PREGLED.md">razlaga rešitve, računi in viri (docs/PREGLED.md)</a><br>Geslo za vse demo račune: <code>zdoma2026</code></p>
 
 <p align="center"><a href="./LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-22C55E?style=flat-square"></a> <img alt="Next.js 16" src="https://img.shields.io/badge/Next.js-16-3776AB?style=flat-square"> <img alt="Supabase" src="https://img.shields.io/badge/Supabase-Postgres-3776AB?style=flat-square"> <img alt="Cloudflare Workers" src="https://img.shields.io/badge/Cloudflare-Workers-4B5563?style=flat-square"> <a href="https://zdoma.tian-istenic34.workers.dev/"><img alt="Demo" src="https://img.shields.io/badge/Demo-v%C5%BEivo-0891B2?style=flat-square"></a></p>
 
@@ -45,15 +45,17 @@ Po odpustu gre pacient domov skoraj brez nadzora. Zapleti, kot so poslabšanje s
 - **Triaža** (`src/lib/triage/`) so čiste funkcije TypeScript brez I/O: preverijo odgovore po pravilih predloge in vrnejo status in razlog.
 - **Opomniki:** sprožilec cron v `worker.mjs` vsakih 15 minut pokliče `/api/cron/opomniki`, ki pošlje dnevne opomnike kot spletna potisna obvestila.
 
-## Hitri začetek
+## Preizkus
 
-### Preizkus v živo
+Vse deluje na spletni strani, namestitev ni potrebna.
 
 Odprite [zdoma.tian-istenic34.workers.dev/demo](https://zdoma.tian-istenic34.workers.dev/demo) in pritisnite gumb za začetek. Postanete pacient s srčnim popuščanjem, odpuščen pred dvema dnevoma, in opravite dnevni pregled stanja. Kodo QR na strani lahko skenirate tudi s telefonom.
 
-Za pogled sestre, svojca ali študenta se prijavite z enim od demo računov iz [docs/demo-accounts.md](docs/demo-accounts.md). Potek 3-minutne predstavitve je v [DEMO.md](DEMO.md). Vsi podatki so izmišljeni.
+Za pogled sestre, svojca ali študenta se prijavite z enim od demo računov iz [docs/PREGLED.md](docs/PREGLED.md#1-prijava) (geslo za vse: `zdoma2026`). Potek 3-minutne predstavitve je v [DEMO.md](DEMO.md). Vsi podatki so izmišljeni.
 
-### Lokalni zagon
+## Za razvijalce
+
+### Lokalni zagon (ni potreben za ocenjevanje)
 
 Potrebujete Node.js, npm in [Supabase CLI](https://supabase.com/docs/guides/cli) z dostopom do projekta zDoma.
 
@@ -67,7 +69,7 @@ npm run dev
 
 Aplikacija teče na `http://localhost:3000`. Ključe Supabase za `.env.local` dobite z ukazom Supabase CLI, opisanim v [AGENTS.md §9](AGENTS.md#9-safety). Ključev nikoli ne objavite.
 
-## Ukazi
+### Ukazi
 
 | Ukaz | Kaj naredi |
 |---|---|
@@ -79,7 +81,7 @@ Aplikacija teče na `http://localhost:3000`. Ključe Supabase za `.env.local` do
 | `npm run preview` | Lokalni predogled gradnje za Cloudflare Workers |
 | `npm run deploy` | Gradnja, odstranitev strežniških skrivnosti iz paketa in objava na Cloudflare Workers |
 
-## Konfiguracija
+### Konfiguracija
 
 Spremenljivke v `.env.local` (seznam imen je v [.env.example](.env.example)):
 
@@ -102,6 +104,7 @@ Next.js 16 (App Router) in TypeScript, Tailwind CSS in shadcn/ui, Supabase (Auth
 | Tema | Kaj vsebuje | Povezava |
 |---|---|---|
 | Potek predstavitve | Scenarij za 3-minutno predstavitev s prosojnicami | [DEMO.md](DEMO.md) |
+| Pregled za ocenjevalce | Razlaga rešitve, računi, gesla in viri | [docs/PREGLED.md](docs/PREGLED.md) |
 | Demo računi | Prijave in zgodba za predstavitev | [docs/demo-accounts.md](docs/demo-accounts.md) |
 | Raziskave | Skupine bolnikov, mejne vrednosti in viri | [docs/research.md](docs/research.md) |
 | Številke za predstavitev | Preverjeni podatki in viri | [docs/pitch.md](docs/pitch.md) |
