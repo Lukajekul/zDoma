@@ -77,6 +77,8 @@ Za novega pacienta in svojca uporabite izmišljeni davčni številki **`99123401
 
 Ta potek smo 22. 11. 2026 preizkusili na spletni strani od začetka do konca, nato smo podatke ponastavili.
 
+> **Opomba o podatkih.** Po vsakem pregledu v bazi ostaneta testni pacient in svojec, ki ju je ustvaril ocenjevalec. Zato ima vsak naslednji ocenjevalec svoj par davčnih številk (zgoraj). Če želi ekipa bazo vrniti v začetno stanje, zažene `npm run seed`. Seed pobriše samo račune, označene kot seed ali demo, ne pa računov, ustvarjenih v čarovniku za odpust ali z registracijo svojca. Te mora najprej označiti kot seed (v Supabase pod *Authentication → Users* dodati `"seed": true` v `user_metadata`) in nato zagnati `npm run seed`.
+
 ## 3. Skupine uporabnikov
 
 | V aplikaciji | Kdo je | Kaj dela |
