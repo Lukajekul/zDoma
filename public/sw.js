@@ -2,11 +2,19 @@
 // T-89: when a page can't load (no signal), shows the cached "Ni povezave" page.
 // Nothing else is cached: patient data always comes fresh from the server.
 
-const CACHE = "zdoma-offline-v1";
+const CACHE = "zdoma-offline-v2";
 const OFFLINE_URL = "/offline.html";
 
 self.addEventListener("install", (event) => {
-  event.waitUntil(caches.open(CACHE).then((cache) => cache.add(new Request(OFFLINE_URL, { cache: "reload" }))));
+  // Cloudflare redirects /offline.html to /offline. A redirected response can't answer a
+  // page load, so store a fresh copy of the body under OFFLINE_URL.
+  event.waitUntil(
+    (async () => {
+      const res = await fetch(OFFLINE_URL, { cache: "reload" });
+      const page = new Response(await res.blob(), { headers: { "Content-Type": "text/html; charset=utf-8" } });
+      await (await caches.open(CACHE)).put(OFFLINE_URL, page);
+    })(),
+  );
   self.skipWaiting();
 });
 
