@@ -3,10 +3,10 @@
 import { useState } from "react";
 import { BigButton } from "@/components/shell";
 import { formatNumber } from "@/lib/format";
-import type { Change } from "@/app/patient/_lib/answer-change";
+import type { Mark } from "@/app/patient/_lib/answer-change";
 import { WithChange } from "./change-mark";
 
-type Props = { options: number[]; changes?: (Change | null)[]; onAnswer: (kg: number) => void };
+type Props = { options: number[]; changes?: (Mark | null)[]; onAnswer: (kg: number) => void };
 
 /** Weight as big buttons around the last weight; "Drugo" opens a number field. */
 export function WeightScreen({ options, changes, onAnswer }: Props) {

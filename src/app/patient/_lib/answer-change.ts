@@ -1,10 +1,16 @@
-// Pure (no I/O): would an answer be worse or better than the patient's last
-// answer to the same question (T-66)? Reads only the template's rules and
+// Pure (no I/O): is an answer good or bad, and worse or better than the patient's last
+// answer to the same question (T-66, T-91)? Reads only the template's rules and
 // option order, never condition-specific ids.
 import type { Predloga, Stopnja, VprasanjeIzbira, VprasanjeTeza } from "@/lib/templates";
 import type { Checkin } from "@/lib/types";
 
-export type Change = "slabse" | "boljse";
+/**
+ * Mark on one answer button (T-91): `tone` says whether the answer is good (blue)
+ * or bad (red); `word` compares it with the last answer when there is one
+ * ("boljše" / "slabše" / "enako"), otherwise repeats the tone ("dobro" / "slabo").
+ */
+export type Tone = "dobro" | "slabo";
+export type Mark = { tone: Tone; word: "boljse" | "slabse" | "enako" | Tone };
 
 const RANK: Record<Stopnja, number> = { opomba: 0, opozorilo: 1, klicOddelek: 2, klic112: 2 };
 
@@ -39,23 +45,33 @@ export function optionSeverity(predloga: Predloga, q: VprasanjeIzbira): Map<stri
   return out;
 }
 
-/** Worse or better than the last answer, per option of a choice question. */
-export function choiceChanges(predloga: Predloga, q: VprasanjeIzbira, last: unknown): Record<string, Change> {
+/**
+ * Mark per option of a choice question. The least severe options are good, the
+ * rest bad; against the last answer the word says better, worse or the same.
+ * No marks when the template has no rule for this question (nothing to go by).
+ */
+export function choiceChanges(predloga: Predloga, q: VprasanjeIzbira, last: unknown): Record<string, Mark> {
   const sev = optionSeverity(predloga, q);
+  const values = [...sev.values()];
+  const out: Record<string, Mark> = {};
+  if (values.length < 2 || values.every((v) => v === values[0])) return out;
+  const best = Math.min(...values);
   const before = typeof last === "string" ? sev.get(last) : undefined;
-  const out: Record<string, Change> = {};
-  if (before === undefined) return out;
   for (const [id, s] of sev) {
-    if (s > before) out[id] = "slabse";
-    else if (s < before) out[id] = "boljse";
+    const tone: Tone = s === best ? "dobro" : "slabo";
+    if (before === undefined) out[id] = { tone, word: tone };
+    else if (s > before) out[id] = { tone: "slabo", word: "slabse" };
+    else if (s < before) out[id] = { tone: "dobro", word: "boljse" };
+    else out[id] = { tone, word: "enako" };
   }
   return out;
 }
 
 /**
- * Worse or better than the last weight, per weight button. Only when the template
- * flags a rising number (porastVDneh / nadVrednostjo): up is worse, down is better
- * unless it goes below the patient's own value (e.g. dry weight).
+ * Mark per weight button against the last weight. Only when the template flags a
+ * rising number (porastVDneh / nadVrednostjo): up is worse, down is better unless it
+ * goes below the patient's own value (e.g. dry weight). The same weight is good,
+ * or bad while it is still over the template's limit above that value.
  */
 export function numberChanges(
   predloga: Predloga,
@@ -63,14 +79,16 @@ export function numberChanges(
   options: number[],
   last: unknown,
   target?: number,
-): (Change | null)[] {
-  const rising = predloga.pravila.some(
-    (p) => p.vprasanje === q.id && (p.tip === "porastVDneh" || p.tip === "nadVrednostjo"),
-  );
+): (Mark | null)[] {
+  const rules = predloga.pravila.filter((p) => p.vprasanje === q.id);
+  const rising = rules.some((p) => p.tip === "porastVDneh" || p.tip === "nadVrednostjo");
+  const over = rules.find((p) => p.tip === "nadVrednostjo");
+  const tooHigh = (v: number) => !!over && target !== undefined && v - target > over.vecKot;
   return options.map((v) => {
+    if (!rising || typeof last !== "number") return null;
     // A button within half a step of the last weight is "the same".
-    if (!rising || typeof last !== "number" || Math.abs(v - last) < q.korak / 2) return null;
-    if (v > last) return "slabse";
-    return target === undefined || v >= target ? "boljse" : null;
+    if (Math.abs(v - last) < q.korak / 2) return { tone: tooHigh(v) ? "slabo" : "dobro", word: "enako" };
+    if (v > last) return { tone: "slabo", word: "slabse" };
+    return target === undefined || v >= target ? { tone: "dobro", word: "boljse" } : null;
   });
 }

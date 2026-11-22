@@ -3,7 +3,7 @@
 // reads only the template, never condition-specific ids.
 import { NAJVEC_DNEVNIH_VPRASANJ, vstaviVrednosti, type Predloga, type Vprasanje } from "@/lib/templates";
 import type { Checkin, CheckinAnswers, IsoDate, PatientValues, Rehabilitacija } from "@/lib/types";
-import { choiceChanges, lastAnswer, numberChanges, type Change } from "./answer-change";
+import { choiceChanges, lastAnswer, numberChanges, type Mark } from "./answer-change";
 import { addDays } from "./schedule";
 
 export type Emergency = { kind: "klic112" | "klicOddelek"; reason: string; phone?: string };
@@ -22,8 +22,8 @@ export type QuestionView = (
       text: string;
       always: boolean;
       photo: boolean;
-      /** `change`: worse or better than the last answer (T-66). */
-      options: { id: string; text: string; emergency?: Emergency; change?: Change }[];
+      /** `change`: good or bad, and against the last answer (T-66, T-91). */
+      options: { id: string; text: string; emergency?: Emergency; change?: Mark }[];
     }
   | {
       id: string;
@@ -32,8 +32,8 @@ export type QuestionView = (
       always: true;
       photo: false;
       options: number[];
-      /** Per option: worse or better than the last weight (T-66). */
-      changes: (Change | null)[];
+      /** Per option: good or bad against the last weight (T-66, T-91). */
+      changes: (Mark | null)[];
     }
 ) & { followUp?: FollowUp };
 
