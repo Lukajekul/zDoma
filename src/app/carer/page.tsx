@@ -119,7 +119,7 @@ async function rehabsWithPickupWarning(rehabs: Rehabilitacija[], today: string):
     rehabs
       .filter((r) =>
         oceniPrevzem(meds.filter((m) => m.rehab_id === r.id), r.start_date, today).some((o) =>
-          prevzemDosegel(o, "zadolzenec"),
+          prevzemDosegel(o, "pacient"),
         ),
       )
       .map((r) => r.id),

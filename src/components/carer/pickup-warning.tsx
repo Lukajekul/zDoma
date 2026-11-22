@@ -5,9 +5,10 @@ import type { IsoDate } from "@/lib/types";
 const dniPoOdpustu = (dni: number) => (dni === 1 ? "1 dan po odpustu" : `${dni} dni po odpustu`);
 
 /**
- * T-48: warning at the top of the zadolženec's overview when new or changed
- * medicines are still not picked up at the pharmacy (T-31's "zadolzenec" step).
- * Names the medicines in the app only; no dose advice. Renders nothing otherwise.
+ * T-48: warning for the zadolženec when new or changed medicines are still not
+ * picked up at the pharmacy. Shown from the same day as the patient's reminder
+ * (T-92), on the overview and on "Zdravila". Names the medicines in the app only;
+ * no dose advice. Renders nothing otherwise.
  */
 export function PickupWarning({
   meds,
@@ -21,7 +22,7 @@ export function PickupWarning({
   /** Patient's first name. */
   ime: string;
 }) {
-  const manjka = oceniPrevzem(meds, odpust, danes).filter((o) => prevzemDosegel(o, "zadolzenec"));
+  const manjka = oceniPrevzem(meds, odpust, danes).filter((o) => prevzemDosegel(o, "pacient"));
   if (manjka.length === 0) return null;
 
   return (

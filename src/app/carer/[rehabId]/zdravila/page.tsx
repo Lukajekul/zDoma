@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { getMedsAndLogs } from "@/app/patient/_lib/doses";
 import { getMarkerNames } from "@/app/patient/_lib/marker-names";
 import { dosesOn, TIME_LABEL } from "@/app/patient/_lib/schedule";
+import { PickupWarning } from "@/components/carer/pickup-warning";
 import { DoseCard } from "@/components/patient/dose-card";
 import { AppShell } from "@/components/shell";
 import { type RehabParams, getCarerRehab, patientName } from "../../_lib/access";
@@ -47,6 +48,7 @@ async function Pills({ params }: RehabParams) {
 
   return (
     <AppShell title="Zdravila danes" back={back}>
+      <PickupWarning meds={meds} odpust={c.rehab.start_date} danes={c.today} ime={c.patient.first_name} />
       <TogetherNote name={patientName(c.patient)} />
       {groups.length === 0 && <p className="rounded-3xl bg-card shadow-soft p-4 text-xl">Danes ni predpisanih tablet.</p>}
       {groups.map(({ time, doses }) => (
