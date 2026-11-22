@@ -5,7 +5,7 @@ import { BigButton } from "@/components/shell";
 import { formatDate } from "@/lib/format";
 import type { Predloga } from "@/lib/templates";
 import { TIME_LABEL, type MedLine, type NurseOption, type suggestNurse } from "@/app/nurse/odpust/_lib/plan";
-import { Field } from "./ui";
+import { EndStepper } from "./end-stepper";
 
 type ExProps = {
   predloga: Predloga;
@@ -40,8 +40,8 @@ export function StepExercises({ predloga, exercises, start, end, onExercises, on
         ))}
       </ul>
       {extra}
-      <p className="text-lg">Začetek: {formatDate(start)} (danes)</p>
-      <Field label="Konec rehabilitacije" type="date" value={end} onChange={onEnd} hint={`Privzeto ${predloga.privzetoTrajanjeDni} dni.`} />
+      <h3 className="text-xl font-bold">Trajanje rehabilitacije</h3>
+      <EndStepper start={start} end={end} defaultDays={predloga.privzetoTrajanjeDni} onEnd={onEnd} />
       <BigButton onClick={onNext} disabled={!end || end < start}>Naprej</BigButton>
     </div>
   );
