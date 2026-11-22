@@ -4,6 +4,8 @@
 
 <p align="center">Spremljanje pacientov doma po odpustu iz bolnišnice: pacient in svojci rešijo, kar lahko, sestra vidi samo tisto, kar ostane, vedno z razlogom.</p>
 
+<p align="center"><b>Spletna stran:</b> <a href="https://zdoma.tian-istenic34.workers.dev/">zdoma.tian-istenic34.workers.dev</a></p>
+
 <p align="center"><b>Za ocenjevalce:</b> <a href="docs/PREGLED.md">pregled vseh funkcionalnosti (docs/PREGLED.md)</a></p>
 
 <p align="center"><a href="./LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-22C55E?style=flat-square"></a> <img alt="Next.js 16" src="https://img.shields.io/badge/Next.js-16-3776AB?style=flat-square"> <img alt="Supabase" src="https://img.shields.io/badge/Supabase-Postgres-3776AB?style=flat-square"> <img alt="Cloudflare Workers" src="https://img.shields.io/badge/Cloudflare-Workers-4B5563?style=flat-square"> <a href="https://zdoma.tian-istenic34.workers.dev/"><img alt="Demo" src="https://img.shields.io/badge/Demo-v%C5%BEivo-0891B2?style=flat-square"></a></p>
