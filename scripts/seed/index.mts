@@ -11,7 +11,7 @@ import { adminClient, cleanSeed, createAccount, ok, type Person } from "./db";
 import { withFallback } from "./fallback";
 import { addDays } from "./generate";
 import { buildRehab, emptyRows, type RehabSpec, type Rows } from "./rehab";
-import { addDemoStudent } from "./student";
+import { addDemoStudent, addExtraStudents } from "./student";
 
 const password = process.env.SEED_PASSWORD ?? "";
 if (password.length < 8) throw new Error("Set SEED_PASSWORD (at least 8 characters) in .env.local.");
@@ -127,6 +127,9 @@ const student = await addDemoStudent(admin, {
   davcna: DEMO_DAVCNE.student, password, today, assignedBy: staff.mojca, approvedPatient: marija.id, pendingPatient: stanko.id,
 });
 summary.push(`študent   ${student.person.davcna}  Luka Kranjc (praksa do ${student.until}; Marija Kos odobrila, Stanko čaka)`);
+for (const x of await addExtraStudents(admin, { davcne: nextDavcna, password, today })) {
+  summary.push(`študent   ${x.person.davcna}  ${x.person.first} ${x.person.last} (praksa do ${x.until}, brez pacientov)`);
+}
 
 // Demo: Ana marked the evening pills; yesterday's morning diuretic was missed.
 const demoMeds = rows.medications.filter((m) => m.rehab_id === demo.rehabId);
