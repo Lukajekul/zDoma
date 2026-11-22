@@ -763,6 +763,7 @@ export type Database = {
           obcina: string | null
           phone: string | null
           photo_url: string | null
+          student_obcine: string[]
           student_until: string | null
         }
         Insert: {
@@ -778,6 +779,7 @@ export type Database = {
           obcina?: string | null
           phone?: string | null
           photo_url?: string | null
+          student_obcine?: string[]
           student_until?: string | null
         }
         Update: {
@@ -793,6 +795,7 @@ export type Database = {
           obcina?: string | null
           phone?: string | null
           photo_url?: string | null
+          student_obcine?: string[]
           student_until?: string | null
         }
         Relationships: []
