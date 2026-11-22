@@ -132,6 +132,11 @@ export async function setPassword(_prev: FormState, formData: FormData): Promise
   } catch {
     return { error: "Gesla ni bilo mogoče shraniti. Poskusite znova čez minuto." };
   }
+  // The admin password change signs the account out of every session (so a QR login on another phone ends too),
+  // including this one. Sign this device straight back in with the new password so the patient lands home.
+  const supabase = await createClient();
+  const { error } = await supabase.auth.signInWithPassword({ email: davcnaEmail(profile.davcna), password });
+  if (error) redirect(PATIENT_LOGIN_PATH);
   return goHome();
 }
 
