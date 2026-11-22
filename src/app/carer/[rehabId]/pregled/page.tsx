@@ -64,7 +64,6 @@ async function Checkin({ params }: RehabParams) {
         rehabId={ctx.rehab.id}
         today={ctx.today}
         questions={ctx.questions}
-        canRepeat={!!ctx.sameSource}
         save={carerSaveCheckin.bind(null, ctx.rehab.id)}
       />
     </>,

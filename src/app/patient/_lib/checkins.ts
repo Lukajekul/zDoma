@@ -5,7 +5,7 @@ import { getApprovedPlan } from "@/lib/plans-server";
 import { createClient } from "@/lib/supabase/server";
 import { isRehabActive, todayLjubljana, type Checkin, type PatientValues, type Uuid } from "@/lib/types";
 import { brezOdgovorovIzZdravil, danOkrevanja, planQuestions, predlogaIzNacrta } from "./checkin-nacrt";
-import { dueQuestions, sameAsYesterdaySource, toViews } from "./checkin-plan";
+import { dueQuestions, toViews } from "./checkin-plan";
 import { getMedsAndLogs } from "./doses";
 import { answersFromPills, answersFromPillsNacrt } from "./med-answers";
 import { getMyRehab } from "./rehabs";
@@ -61,7 +61,6 @@ export async function loadCheckinContext(patientId: Uuid, rehabId: string) {
       questions,
       known,
       values,
-      sameSource: sameAsYesterdaySource(questions, history, today),
     };
   }
 
@@ -86,6 +85,5 @@ export async function loadCheckinContext(patientId: Uuid, rehabId: string) {
     known,
     /** Patient values with medicine names filled in, for texts and triage. */
     values,
-    sameSource: sameAsYesterdaySource(questions, history, today),
   };
 }

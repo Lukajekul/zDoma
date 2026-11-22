@@ -1,5 +1,5 @@
 // Pure check-in planning (no I/O): which questions today, their texts with the
-// patient's own values, emergency answers, and "Enako kot včeraj". Generic:
+// patient's own values and emergency answers. Generic:
 // reads only the template, never condition-specific ids.
 import { NAJVEC_DNEVNIH_VPRASANJ, vstaviVrednosti, type Predloga, type Vprasanje } from "@/lib/templates";
 import type { Checkin, CheckinAnswers, IsoDate, PatientValues, Rehabilitacija } from "@/lib/types";
@@ -62,7 +62,7 @@ export function dueQuestions(predloga: Predloga, rehab: Pick<Rehabilitacija, "qu
     const since = addDays(today, -(WEEKLY_GAP_DAYS - 1));
     return !history.some((c) => c.checkin_date >= since && c.answers[q.id] !== undefined);
   });
-  // Always-asked questions first: on an "Enako kot včeraj" day they are all that's left.
+  // Always-asked questions first.
   return [...due.filter((q) => q.vednoVprasaj), ...due.filter((q) => !q.vednoVprasaj)].slice(0, NAJVEC_DNEVNIH_VPRASANJ);
 }
 
@@ -140,40 +140,13 @@ export function canSkip(q: QuestionView): boolean {
 }
 
 /**
- * Yesterday's check-in can be repeated with one tap when it was green and
- * answered every question that today's "Enako kot včeraj" would fill.
- */
-export function sameAsYesterdaySource(questions: QuestionView[], history: Checkin[], today: IsoDate): Checkin | undefined {
-  const y = history.find((c) => c.checkin_date === addDays(today, -1));
-  if (!y || y.triage_status !== "zeleno") return undefined;
-  const filled = questions.filter((q) => !q.always);
-  if (!filled.length) return undefined;
-  const copied = copyFromYesterday(questions, y);
-  if (withFollowUps(filled, copied).some((q) => copied[q.id] === undefined)) return undefined;
-  return y;
-}
-
-/** Copies yesterday's answers for every question not asked always, with the follow-ups they trigger. */
-export function copyFromYesterday(questions: QuestionView[], yesterday: Checkin): CheckinAnswers {
-  const out: CheckinAnswers = {};
-  for (const q of questions) {
-    if (q.always) continue;
-    out[q.id] = yesterday.answers[q.id];
-    const f = followUpFor(q, out[q.id]);
-    if (f) out[f.id] = yesterday.answers[f.id];
-  }
-  return out;
-}
-
-/**
- * Today's answers: copied ones ("Enako kot včeraj") plus the submitted ones,
- * each checked against its question; a triggered follow-up must be answered too.
+ * Today's submitted answers, each checked against its question; a triggered
+ * follow-up must be answered too (or skipped where allowed, T-94).
  * Returns undefined when an answer is missing or invalid.
  */
 export function collectAnswers(
   questions: QuestionView[],
   submitted: Record<string, unknown>,
-  same: CheckinAnswers,
   /** T-94: ids the patient skipped ("Preskoči"); only skippable ones count. */
   skipped: string[] = [],
   /** Filled with the questions actually skipped, for the nurse's reason. */
@@ -181,11 +154,11 @@ export function collectAnswers(
 ): CheckinAnswers | undefined {
   const out: CheckinAnswers = {};
   const take = (q: QuestionView) => {
-    if (same[q.id] === undefined && skipped.includes(q.id) && canSkip(q)) {
+    if (skipped.includes(q.id) && canSkip(q)) {
       skippedOut.push(q);
       return true;
     }
-    const v = same[q.id] !== undefined ? same[q.id] : cleanAnswer(q, submitted[q.id]);
+    const v = cleanAnswer(q, submitted[q.id]);
     if (v === undefined || v === null) return false;
     out[q.id] = v;
     return true;

@@ -4,7 +4,7 @@ import { getPredloga } from "@/lib/templates";
 import type { Checkin, CheckinAnswers, DoseLog, Medication } from "@/lib/types";
 import { brezOdgovorovIzZdravil, planQuestions, predlogaIzNacrta } from "./checkin-nacrt";
 import { answersFromPillsNacrt } from "./med-answers";
-import { collectAnswers, copyFromYesterday, sameAsYesterdaySource, withFollowUps } from "./checkin-plan";
+import { collectAnswers, withFollowUps } from "./checkin-plan";
 
 // Heart failure on a diuretic, discharged 20. 11. 2026, checked in on day 3.
 const nacrt = odobriNacrt(
@@ -22,15 +22,11 @@ const yesterday = (extra: CheckinAnswers = {}) =>
 const today = (history: Checkin[]) => planQuestions(predloga, nacrt, "2026-11-23", { suhaTeza: 72 }, history);
 
 describe("check-in from an approved plan", () => {
-  it("asks the red flag first and never fills it with 'Enako kot včeraj'", () => {
+  it("asks the red flag first and marks it always asked", () => {
     const qs = today([yesterday()]);
     expect(qs[0].id).toBe("jedro.nujno.v1");
     expect(qs[0].always).toBe(true);
     expect(qs.find((q) => q.id === "sp.teza.v1")?.always).toBe(true);
-    const same = copyFromYesterday(qs, sameAsYesterdaySource(qs, [yesterday()], "2026-11-23")!);
-    expect(same["jedro.nujno.v1"]).toBeUndefined();
-    expect(same["sp.teza.v1"]).toBeUndefined();
-    expect(same["sp.dusenje.v1"]).toBe("enako");
   });
 
   it("puts the follow-up right after its parent only when triggered, and requires its answer", () => {
@@ -41,8 +37,8 @@ describe("check-in from an approved plan", () => {
     expect(worse[worse.indexOf("sp.dusenje.v1") + 1]).toBe("sp.dusenje-lezanje.v1");
 
     const answers = Object.fromEntries(qs.map((q) => [q.id, q.kind === "teza" ? 72 : q.options[0].id]));
-    expect(collectAnswers(qs, { ...answers, "sp.dusenje.v1": "slabse" }, {})).toBeUndefined();
-    expect(collectAnswers(qs, { ...answers, "sp.dusenje.v1": "slabse", "sp.dusenje-lezanje.v1": "da" }, {})).toBeDefined();
+    expect(collectAnswers(qs, { ...answers, "sp.dusenje.v1": "slabse" })).toBeUndefined();
+    expect(collectAnswers(qs, { ...answers, "sp.dusenje.v1": "slabse", "sp.dusenje-lezanje.v1": "da" })).toBeDefined();
   });
 
   it("offers the 112 screen on the red-flag answer", () => {

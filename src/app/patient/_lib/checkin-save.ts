@@ -5,7 +5,7 @@ import { oceniNacrt } from "@/lib/moduli";
 import { createClient } from "@/lib/supabase/server";
 import { dodajPacientoveOznake, oceniPregled } from "@/lib/triage";
 import type { TriageStatus } from "@/lib/types";
-import { collectAnswers, copyFromYesterday, type QuestionView } from "./checkin-plan";
+import { collectAnswers, type QuestionView } from "./checkin-plan";
 import type { loadCheckinContext } from "./checkins";
 import { cleanPhotoPaths } from "./photo-paths";
 
@@ -21,10 +21,8 @@ const MISSING = "Manjka odgovor. Pojdite nazaj in odgovorite na vsa vprašanja."
  * The row is saved as the logged-in user (entered_by, RLS).
  */
 export async function insertCheckin(ctx: Ctx, input: CheckinInput): Promise<{ error?: string }> {
-  // Recompute on the server: never trust copied answers from the client.
-  const same = input.sameAsYesterday && ctx.sameSource ? copyFromYesterday(ctx.questions, ctx.sameSource) : {};
   const skipped: QuestionView[] = [];
-  const collected = collectAnswers(ctx.questions, input.answers, same, input.skipped ?? [], skipped);
+  const collected = collectAnswers(ctx.questions, input.answers, input.skipped ?? [], skipped);
   if (!collected) return { error: MISSING };
   const answers = { ...ctx.known, ...collected };
   const prejsnji = ctx.history.map((c) => ({ datum: c.checkin_date, odgovori: c.answers }));
@@ -62,7 +60,7 @@ export async function insertCheckin(ctx: Ctx, input: CheckinInput): Promise<{ er
       rehab_id: ctx.rehab.id,
       checkin_date: ctx.today,
       answers,
-      same_as_yesterday: Object.keys(same).length > 0,
+      same_as_yesterday: false,
       triage_status: status,
       reasons,
       plan_version: ctx.plan?.version ?? null,

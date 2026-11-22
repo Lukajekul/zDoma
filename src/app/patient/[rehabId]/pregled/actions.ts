@@ -7,7 +7,6 @@ import { loadCheckinContext } from "../../_lib/checkins";
 
 export type CheckinInput = {
   answers: Record<string, string | number>;
-  sameAsYesterday: boolean;
   /** Up to two uploaded wound photos (T-72). */
   photoPaths?: string[];
   /** T-94: questions the patient skipped ("Preskoči"), flagged for the nurse. */

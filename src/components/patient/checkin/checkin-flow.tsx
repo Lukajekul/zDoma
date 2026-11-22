@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { Copy } from "lucide-react";
 import { BigButton } from "@/components/shell";
 import { canSkip, withFollowUps, type Emergency, type QuestionView } from "@/app/patient/_lib/checkin-plan";
 import type { CheckinInput } from "@/app/patient/[rehabId]/pregled/actions";
@@ -16,16 +15,13 @@ type Props = {
   rehabId: string;
   today: string;
   questions: QuestionView[];
-  /** Yesterday was green: offer "Enako kot včeraj" first. */
-  canRepeat: boolean;
   save: (input: CheckinInput) => Promise<{ error?: string }>;
 };
 
 type Answers = Record<string, string | number>;
 
 /** One question per screen, one tap per answer. Saves after the last one. */
-export function CheckinFlow({ rehabId, today, questions, canRepeat, save }: Props) {
-  const [mode, setMode] = useState<"choose" | "same" | "all">(canRepeat ? "choose" : "all");
+export function CheckinFlow({ rehabId, today, questions, save }: Props) {
   const [index, setIndex] = useState(0);
   const [answers, setAnswers] = useState<Answers>({});
   const [photoFor, setPhotoFor] = useState<string>();
@@ -39,8 +35,8 @@ export function CheckinFlow({ rehabId, today, questions, canRepeat, save }: Prop
   const [saving, startSaving] = useTransition();
 
   // A follow-up joins the queue right after its parent once the answer triggers it (T-80).
-  const base = mode === "same" ? questions.filter((q) => q.always) : questions;
-  const queueFor = (a: Answers) => withFollowUps(base, a);
+  // T-95: no "Enako kot včeraj": every question is answered (or skipped, T-94) every day.
+  const queueFor = (a: Answers) => withFollowUps(questions, a);
   const queue = queueFor(answers);
   const q = queue[index];
 
@@ -52,7 +48,6 @@ export function CheckinFlow({ rehabId, today, questions, canRepeat, save }: Prop
       const asked = new Set(queueFor(all).map((x) => x.id));
       const res = await save({
         answers: final,
-        sameAsYesterday: mode === "same",
         photoPaths: photos,
         skipped: skipped.filter((id) => asked.has(id) && all[id] === undefined),
         otherProblem,
@@ -81,34 +76,6 @@ export function CheckinFlow({ rehabId, today, questions, canRepeat, save }: Prop
     setAnswers(updated);
     setSkipped((s) => (s.includes(question.id) ? s : [...s, question.id]));
     next(updated);
-  }
-
-  function chooseSame() {
-    setMode("same");
-    // Nothing left to ask: save straight away.
-    if (!questions.some((x) => x.always)) {
-      startSaving(async () => {
-        const res = await save({ answers: {}, sameAsYesterday: true });
-        if (res.error) setError(res.error);
-      });
-    }
-  }
-
-  if (mode === "choose") {
-    return (
-      <div className="flex flex-col gap-4">
-        <p className="text-xl">Včeraj je bilo vse v redu. Je danes vse enako?</p>
-        <BigButton icon={<Copy />} onClick={() => chooseSame()}>
-          Enako kot včeraj
-        </BigButton>
-        <BigButton variant="secondary" onClick={() => setMode("all")}>
-          Ne, odgovorim na vprašanja
-        </BigButton>
-        {questions.some((x) => x.always) && (
-          <p className="text-lg text-muted-foreground">Nekatere meritve vas vprašamo vsak dan, tudi tako.</p>
-        )}
-      </div>
-    );
   }
 
   if (saving || (!q && !error)) return <p className="text-2xl font-semibold">Shranjujem …</p>;

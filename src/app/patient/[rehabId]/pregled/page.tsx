@@ -84,7 +84,6 @@ async function CheckinScreen({ params }: Pick<PageProps<"/patient/[rehabId]/preg
       rehabId={ctx.rehab.id}
       today={ctx.today}
       questions={ctx.questions}
-      canRepeat={!!ctx.sameSource}
       save={saveCheckin.bind(null, ctx.rehab.id)}
     />,
   );
