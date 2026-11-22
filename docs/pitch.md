@@ -121,3 +121,5 @@ Omersa et al., ESC Heart Fail 2019 (see "Headline" above).
 
 ### 10. Zakaj bo delovalo
 From `docs/research.md` "What failed before": 30-second check-in, family sees missed check-ins, no end date, staff see only patients who need action, a bathroom scale instead of devices.
+
+Present the modular questions honestly: items and thresholds not yet clinically confirmed are questions the engine suggests, and a specialist must review them before real use (prototype decision, 22. 11. 2026; T-77).
