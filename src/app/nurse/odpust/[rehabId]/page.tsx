@@ -7,7 +7,8 @@ import { requireStaff } from "@/lib/auth";
 import { formatDate } from "@/lib/format";
 import { createClient } from "@/lib/supabase/server";
 import { getPredloga } from "@/lib/templates";
-import { extendRehab } from "./actions";
+import { changeRehabEnd } from "./actions";
+import { todayLjubljana } from "@/lib/types";
 
 export const metadata = { title: "Rehabilitacija – zDoma" };
 
@@ -35,6 +36,7 @@ async function RehabAdmin({ params, searchParams }: PageProps<"/nurse/odpust/[re
 
   const name = `${r.patient.first_name} ${r.patient.last_name}`;
   const listek = `/prijava/listek/${r.patient_id}`;
+  const today = todayLjubljana();
   return (
     <>
       {sp.nov !== undefined || sp.napaka !== undefined ? (
@@ -64,8 +66,14 @@ async function RehabAdmin({ params, searchParams }: PageProps<"/nurse/odpust/[re
       )}
 
       <section className="mt-4 flex flex-col gap-3">
-        <h2 className="text-2xl font-bold">Podaljšaj</h2>
-        <ExtendForm currentEnd={r.end_date} onExtend={extendRehab.bind(null, r.id)} />
+        <h2 className="text-2xl font-bold">Podaljšaj ali skrajšaj</h2>
+        <ExtendForm
+          currentEnd={r.end_date}
+          startDate={r.start_date}
+          today={today}
+          ended={r.status === "zakljucena" || r.end_date < today}
+          onChange={changeRehabEnd.bind(null, r.id)}
+        />
       </section>
 
       <section className="mt-4 flex flex-col gap-3">
