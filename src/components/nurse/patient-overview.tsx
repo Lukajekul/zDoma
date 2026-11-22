@@ -1,6 +1,7 @@
 import type { PatientDetail } from "@/app/nurse/_lib/patient-detail";
 import { AppShell, BigButton, StatusBadge } from "@/components/shell";
 import { formatDate } from "@/lib/format";
+import { MissedCheckins } from "./alert-why";
 import { PatientAlerts } from "./patient-alerts";
 import { PatientAppointments } from "./patient-appointments";
 import { PatientObservations } from "./patient-observations";
@@ -39,7 +40,8 @@ export function PatientOverview({ detail, back }: { detail: PatientDetail; back:
           <BigButton href={`/prijava/listek/${detail.patientId}`} variant="secondary">Pokaži QR za prijavo</BigButton>
         </div>
       </div>
-      <PatientAlerts active={detail.active} openAlerts={detail.openAlerts} closedAlerts={detail.closedAlerts} />
+      {detail.zamujeno && <MissedCheckins zamujeno={detail.zamujeno} />}
+      <PatientAlerts active={detail.active} openAlerts={detail.openAlerts} closedAlerts={detail.closedAlerts} zakaj={detail.zakaj} />
       <PatientObservations observations={detail.observations} />
       {detail.appointments ? (
         <PatientAppointments rehabId={detail.rehabId} appointments={detail.appointments} today={detail.today} />

@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 import { predlogaZaRehab } from "@/lib/templates";
 import { laceScore, tedenskiPovzetek } from "@/lib/triage";
 import { isRehabActive } from "@/lib/types";
+import { getZakaj, type ZakajOpozorilo } from "./zakaj";
 import type { CheckinAnswers, Rehabilitacija } from "@/lib/types";
 
 const photoLifetimeSeconds = 300;
@@ -38,7 +39,7 @@ export async function getPatientDetail(id: string, today: string) {
       .order("checkin_date"),
     supabase
       .from("alerts")
-      .select("id, status, reason, created_at")
+      .select("id, status, reason, created_at, checkin_id")
       .eq("rehab_id", id)
       .eq("state", "odprto")
       .order("status", { ascending: false })
@@ -81,6 +82,16 @@ export async function getPatientDetail(id: string, today: string) {
     path && signedUrl ? [[path, signedUrl] as const] : [],
   ));
 
+  const active = isRehabActive(rehab, today);
+  const { zakaj, zamujeno } = await getZakaj({
+    rehabId: id,
+    startDate: rehab.start_date,
+    active,
+    today,
+    values: rehab.patient_values,
+    alerts: openAlerts.data,
+  }).catch(() => ({ zakaj: {} as Record<string, ZakajOpozorilo>, zamujeno: null }));
+
   const series = checkins.data.filter((checkin) => checkin.checkin_date >= start);
   const summary = template ? tedenskiPovzetek({
     predloga: template,
@@ -105,7 +116,7 @@ export async function getPatientDetail(id: string, today: string) {
     patient,
     patientId: rehab.patient_id,
     rehabId: rehab.id,
-    active: isRehabActive(rehab, today),
+    active,
     templateName: template?.ime,
     diagnosis: rehab.diagnosis,
     status: openAlerts.data[0]?.status ?? rehab.current_status,
@@ -113,6 +124,8 @@ export async function getPatientDetail(id: string, today: string) {
     endDate: rehab.end_date,
     openAlerts: openAlerts.data,
     closedAlerts: closedAlerts.data,
+    zakaj,
+    zamujeno,
     summary,
     lace: rehab.lace ? laceScore(rehab.lace).skupaj : null,
     participation: participation?.ring.answeredShare ?? null,

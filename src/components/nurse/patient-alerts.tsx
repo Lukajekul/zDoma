@@ -6,6 +6,7 @@ import { resolveAlert } from "@/app/nurse/[rehabId]/actions";
 import type { PatientDetail } from "@/app/nurse/_lib/patient-detail";
 import { StatusBadge } from "@/components/shell";
 import { formatDate, formatTime } from "@/lib/format";
+import { AlertWhy } from "./alert-why";
 import { alertOutcomes, isAlertOutcome } from "./alert-outcomes";
 import type { AlertOutcome } from "./alert-outcomes";
 
@@ -16,8 +17,8 @@ const feedback = {
   error: "Ukrep ni bil shranjen. Poskusite znova.",
 } as const;
 
-export function PatientAlerts({ active, openAlerts, closedAlerts }: Pick<
-  PatientDetail, "active" | "openAlerts" | "closedAlerts"
+export function PatientAlerts({ active, openAlerts, closedAlerts, zakaj }: Pick<
+  PatientDetail, "active" | "openAlerts" | "closedAlerts" | "zakaj"
 >) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
@@ -53,6 +54,7 @@ export function PatientAlerts({ active, openAlerts, closedAlerts }: Pick<
                 <StatusBadge short status={alert.status} />
               </div>
               <p className="text-muted-foreground">Odprto {formatDate(alert.created_at)} ob {formatTime(alert.created_at)}</p>
+              {zakaj[alert.id] && <AlertWhy zakaj={zakaj[alert.id]} />}
               {active && (
                 <fieldset className="flex flex-wrap gap-2" disabled={pending}>
                   <legend className="mb-2 font-semibold">Zabeleži ukrep</legend>
