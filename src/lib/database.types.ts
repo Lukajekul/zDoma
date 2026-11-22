@@ -1114,8 +1114,29 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "student_assignments_assigned_by_fkey"
+            columns: ["assigned_by"]
+            isOneToOne: false
+            referencedRelation: "staff_directory"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "student_assignments_patient_id_fkey"
             columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "student_assignments_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "staff_directory"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "student_assignments_student_id_fkey"
+            columns: ["student_id"]
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
@@ -1124,7 +1145,7 @@ export type Database = {
             foreignKeyName: "student_assignments_student_id_fkey"
             columns: ["student_id"]
             isOneToOne: false
-            referencedRelation: "profiles"
+            referencedRelation: "staff_directory"
             referencedColumns: ["id"]
           },
         ]
@@ -1263,11 +1284,11 @@ export type Database = {
     Functions: {
       can_log_rehab: { Args: { p_rehab: string }; Returns: boolean }
       can_read_rehab: { Args: { p_rehab: string }; Returns: boolean }
-      is_active_student: { Args: never; Returns: boolean }
-      is_student_of: { Args: { p_patient: string }; Returns: boolean }
       claim_rehab: { Args: { p_rehab_id: string }; Returns: boolean }
+      is_active_student: { Args: never; Returns: boolean }
       is_carer_of: { Args: { p_patient: string }; Returns: boolean }
       is_staff: { Args: never; Returns: boolean }
+      is_student_of: { Args: { p_patient: string }; Returns: boolean }
       request_family_access: {
         Args: { p_davcna: string; p_relation?: string }
         Returns: undefined
