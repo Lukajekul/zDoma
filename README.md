@@ -6,7 +6,7 @@
 
 <p align="center"><a href="./LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-22C55E?style=flat-square"></a> <img alt="Next.js 16" src="https://img.shields.io/badge/Next.js-16-3776AB?style=flat-square"> <img alt="Supabase" src="https://img.shields.io/badge/Supabase-Postgres-3776AB?style=flat-square"> <img alt="Cloudflare Workers" src="https://img.shields.io/badge/Cloudflare-Workers-4B5563?style=flat-square"> <a href="https://zdoma.tian-istenic34.workers.dev/"><img alt="Demo" src="https://img.shields.io/badge/Demo-v%C5%BEivo-0891B2?style=flat-square"></a></p>
 
-<p align="center"><a href="https://github.com/Lukajekul/zDoma/raw/main/docs/media/zdoma.mp4"><img src="docs/media/zdoma.gif" alt="zDoma v 22 sekundah" width="800"></a><br><sub>▶ <a href="https://github.com/Lukajekul/zDoma/raw/main/docs/media/zdoma.mp4">Video z zvokom (MP4)</a></sub></p>
+<p align="center"><a href="https://cdn.jsdelivr.net/gh/Lukajekul/zDoma@main/docs/media/zdoma.mp4"><img src="docs/media/zdoma.gif" alt="zDoma v 22 sekundah" width="800"></a><br><sub>▶ <a href="https://cdn.jsdelivr.net/gh/Lukajekul/zDoma@main/docs/media/zdoma.mp4">Video z zvokom (MP4)</a></sub></p>
 
 Projekt za ADAHack 2026, izziv 1: *Spremljanje pacientov na domu po odpustu iz bolnišnice.*
 
