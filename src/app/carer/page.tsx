@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import Link from "next/link";
-import { ChevronRight, HeartPulse, UserPlus } from "lucide-react";
+import { ChevronRight, HeartPulse, Pill, UserPlus } from "lucide-react";
 import { rehabDay, rehabTitle } from "@/components/patient/rehab-info";
 import { AppShell, BigButton, IconTile, StatusBadge } from "@/components/shell";
 import { LogoutButton } from "@/components/auth/logout-button";
@@ -8,7 +8,8 @@ import { requireProfile } from "@/lib/auth";
 import { formatDate } from "@/lib/format";
 import { listAccessForCarer } from "@/lib/family-access";
 import { createClient } from "@/lib/supabase/server";
-import { todayLjubljana } from "@/lib/types";
+import { oceniPrevzem, prevzemDosegel, type PrevzemZdravilo } from "@/lib/triage";
+import { todayLjubljana, type Rehabilitacija } from "@/lib/types";
 import { getCaredPatients, patientName } from "./_lib/access";
 
 /** "Skrbim za": the patients who approved this zadolženec (T-26), each with their rehabilitacije (T-20). */
@@ -36,6 +37,7 @@ async function CarerHome() {
   ]);
   const pending = requests.filter((r) => r.status === "pending").length;
   const today = todayLjubljana();
+  const notPickedUp = await rehabsWithPickupWarning(patients.flatMap((p) => p.active), today);
 
   return (
     <>
@@ -63,6 +65,12 @@ async function CarerHome() {
                     Dan {day} od {total}
                   </span>
                   <StatusBadge short status={r.current_status} />
+                  {notPickedUp.has(r.id) && (
+                    <span className="flex items-center gap-2 text-lg font-bold text-status-rdece">
+                      <Pill aria-hidden className="size-6 shrink-0" />
+                      Zdravila niso prevzeta v lekarni
+                    </span>
+                  )}
                 </span>
                 <span className="flex items-center text-lg font-semibold text-primary">
                   Odpri <ChevronRight aria-hidden className="size-7" />
@@ -94,5 +102,26 @@ async function CarerHome() {
         </p>
       )}
     </>
+  );
+}
+
+/** T-62: active rehabilitacije where T-48's pharmacy warning shows (same rule, one query for all). */
+async function rehabsWithPickupWarning(rehabs: Rehabilitacija[], today: string): Promise<Set<string>> {
+  if (!rehabs.length) return new Set();
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("medications")
+    .select("id, name, change, picked_up_at, rehab_id")
+    .in("rehab_id", rehabs.map((r) => r.id))
+    .is("picked_up_at", null);
+  const meds = (data ?? []) as (PrevzemZdravilo & { rehab_id: string })[];
+  return new Set(
+    rehabs
+      .filter((r) =>
+        oceniPrevzem(meds.filter((m) => m.rehab_id === r.id), r.start_date, today).some((o) =>
+          prevzemDosegel(o, "zadolzenec"),
+        ),
+      )
+      .map((r) => r.id),
   );
 }
