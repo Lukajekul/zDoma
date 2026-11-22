@@ -12,6 +12,7 @@ import { adminClient, cleanSeed, createAccount, ok, type Person } from "./db";
 import { withFallback } from "./fallback";
 import { addDays } from "./generate";
 import { buildRehab, emptyRows, type RehabSpec, type Rows } from "./rehab";
+import { addDemoStudent } from "./student";
 
 const password = process.env.SEED_PASSWORD ?? "";
 if (password.length < 8) throw new Error("Set SEED_PASSWORD (at least 8 characters) in .env.local.");
@@ -137,6 +138,12 @@ await addCarer({ davcna: nextDavcna(), first: r.pick(IMENA_M), last: patients[9]
 // T-63: family member of the eRecept patient, so "Skrbim za" shows the pharmacy warning (T-48/T-62).
 // Added last so the davčne številke above stay the same.
 await addCarer({ davcna: nextDavcna(), first: "Vesna", last: "Zupančič" }, patients[2].id, "hčerka", "approved");
+
+// T-84: študent pomočnik, approved by Marija Kos, waiting for Stanko Zupančič. Added last (davčne above stay the same).
+const student = await addDemoStudent(admin, {
+  davcna: nextDavcna(), password, today, assignedBy: staff.mojca, approvedPatient: patients[1].id, pendingPatient: patients[2].id,
+});
+summary.push(`študent   ${student.person.davcna}  Luka Kranjc (praksa do ${student.until}; Marija Kos odobrila, Stanko čaka)`);
 
 // Demo: Ana marked the evening pills; yesterday's morning diuretic was missed.
 const demoMeds = rows.medications.filter((m) => m.rehab_id === demo.rehabId);

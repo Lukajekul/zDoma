@@ -21,6 +21,12 @@ Seed data from `npm run seed` (T-10) on the shared zDoma project. **All people a
 | 99000652 | `zdoma-eupRh0qTB1SQ` | **Vesna Zupančič** (zadolženec) | Stanko's daughter, approved. "Skrbim za" shows "Zdravila niso prevzeta v lekarni" on his card and the red warning with Furosemid on his page (T-48, T-62). |
 | 99000083 | `zdoma-eupRh0qTB1SQ` | Marija Kos (patient, Celje) | Two rehabilitacije: kolk/koleno (zaključena) + po infarktu (aktivna). |
 
+## Študent pomočnik (T-84)
+
+| Davčna | Geslo | Name | What to show |
+|---|---|---|---|
+| 99000679 | `zdoma-eupRh0qTB1SQ` | **Luka Kranjc** (študent medicine, praksa 60 dni od seeda) | Logs in at `/prijava` → "Svojci" and lands on `/student`. Marija Kos approved him: open her card, mark pills or the check-in ("Označil: Luka (študent)"). Stanko Zupančič still has to approve him: log in as Stanko → "Svojci" → Dovoli / Zavrni. As Mojca Kovač, the detail page of Marija Kos shows the "Študent pomočnik" card. |
+
 ## Bolničarji
 
 | E-pošta (login) | Davčna | Geslo | Name | Role |
