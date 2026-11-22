@@ -51,6 +51,7 @@
   --color-status-rumeno-bg: var(--status-rumeno-bg);
   --color-status-rdece: var(--status-rdece);
   --color-status-rdece-bg: var(--status-rdece-bg);
+  --color-boljse: var(--boljse);
   /* Design v3 shapes: buttons, inputs and tiles 14 px, answer buttons 16 px, cards 20 px, bands 32 px. */
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
@@ -104,6 +105,8 @@
   --status-rumeno-bg: oklch(0.95 0.09 90);
   --status-rdece: oklch(0.5 0.19 27);
   --status-rdece-bg: oklch(0.94 0.04 27);
+  /* Check-in arrow "boljše" (T-66), always with the word. */
+  --boljse: oklch(0.48 0.16 255);
   --sidebar: oklch(0.97 0.006 240);
   --sidebar-foreground: oklch(0.27 0.03 255);
   --sidebar-primary: oklch(0.52 0.13 150);

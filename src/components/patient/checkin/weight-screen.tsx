@@ -3,11 +3,13 @@
 import { useState } from "react";
 import { BigButton } from "@/components/shell";
 import { formatNumber } from "@/lib/format";
+import type { Change } from "@/app/patient/_lib/answer-change";
+import { WithChange } from "./change-mark";
 
-type Props = { options: number[]; onAnswer: (kg: number) => void };
+type Props = { options: number[]; changes?: (Change | null)[]; onAnswer: (kg: number) => void };
 
 /** Weight as big buttons around the last weight; "Drugo" opens a number field. */
-export function WeightScreen({ options, onAnswer }: Props) {
+export function WeightScreen({ options, changes, onAnswer }: Props) {
   const [other, setOther] = useState(false);
   const [text, setText] = useState("");
   const [error, setError] = useState(false);
@@ -50,9 +52,9 @@ export function WeightScreen({ options, onAnswer }: Props) {
   return (
     <div className="flex flex-col gap-3">
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-        {options.map((kg) => (
+        {options.map((kg, i) => (
           <BigButton key={kg} variant="choice" onClick={() => onAnswer(kg)} className="px-2 text-2xl">
-            {formatNumber(kg)} kg
+            <WithChange change={changes?.[i]}>{formatNumber(kg)} kg</WithChange>
           </BigButton>
         ))}
       </div>

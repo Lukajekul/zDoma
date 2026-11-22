@@ -5,6 +5,7 @@ import { ArrowLeft, Copy } from "lucide-react";
 import { BigButton } from "@/components/shell";
 import type { Emergency, QuestionView } from "@/app/patient/_lib/checkin-plan";
 import type { CheckinInput } from "@/app/patient/[rehabId]/pregled/actions";
+import { WithChange } from "./change-mark";
 import { EmergencyScreen } from "./emergency-screen";
 import { PhotoScreen } from "./photo-screen";
 import { WeightScreen } from "./weight-screen";
@@ -125,7 +126,7 @@ export function CheckinFlow({ rehabId, today, questions, canRepeat, save }: Prop
       </div>
 
       {q.kind === "teza" ? (
-        <WeightScreen key={q.id} options={q.options} onAnswer={(kg) => answer(q, kg)} />
+        <WeightScreen key={q.id} options={q.options} changes={q.changes} onAnswer={(kg) => answer(q, kg)} />
       ) : (
         <div className="grid gap-3 md:grid-cols-2">
           {q.options.map((o) => (
@@ -134,7 +135,7 @@ export function CheckinFlow({ rehabId, today, questions, canRepeat, save }: Prop
               variant="choice"
               onClick={() => (o.emergency ? setEmergency({ q, optionId: o.id, e: o.emergency }) : answer(q, o.id))}
             >
-              {o.text}
+              <WithChange change={o.change}>{o.text}</WithChange>
             </BigButton>
           ))}
         </div>

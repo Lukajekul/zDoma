@@ -3,6 +3,7 @@
 // reads only the template, never condition-specific ids.
 import { NAJVEC_DNEVNIH_VPRASANJ, vstaviVrednosti, type Predloga, type Vprasanje } from "@/lib/templates";
 import type { Checkin, CheckinAnswers, IsoDate, PatientValues, Rehabilitacija } from "@/lib/types";
+import { choiceChanges, lastAnswer, numberChanges, type Change } from "./answer-change";
 import { addDays } from "./schedule";
 
 export type Emergency = { kind: "klic112" | "klicOddelek"; reason: string; phone?: string };
@@ -15,9 +16,19 @@ export type QuestionView =
       text: string;
       always: boolean;
       photo: boolean;
-      options: { id: string; text: string; emergency?: Emergency }[];
+      /** `change`: worse or better than the last answer (T-66). */
+      options: { id: string; text: string; emergency?: Emergency; change?: Change }[];
     }
-  | { id: string; kind: "teza"; text: string; always: true; photo: false; options: number[] };
+  | {
+      id: string;
+      kind: "teza";
+      text: string;
+      always: true;
+      photo: false;
+      options: number[];
+      /** Per option: worse or better than the last weight (T-66). */
+      changes: (Change | null)[];
+    };
 
 const WEEKLY_GAP_DAYS = 7;
 
@@ -75,11 +86,14 @@ export function toViews(predloga: Predloga, questions: Vprasanje[], values: Pati
   return questions.map((q) => {
     const text = vstaviVrednosti(q.besedilo, values);
     if (q.tip === "teza") {
-      const center = lastNumber(q.id, history, targetFor(predloga, q.id, values)) ?? 70;
+      const target = targetFor(predloga, q.id, values);
+      const center = lastNumber(q.id, history, target) ?? 70;
       const base = Math.round(center / q.korak) * q.korak;
       const options = [-2, -1, 0, 1, 2].map((i) => Math.round((base + i * q.korak) * 10) / 10);
-      return { id: q.id, kind: "teza", text, always: true, photo: false, options };
+      const changes = numberChanges(predloga, q, options, lastNumber(q.id, history), target);
+      return { id: q.id, kind: "teza", text, always: true, photo: false, options, changes };
     }
+    const changes = choiceChanges(predloga, q, lastAnswer(q.id, history));
     return {
       id: q.id,
       kind: "izbira",
@@ -90,6 +104,7 @@ export function toViews(predloga: Predloga, questions: Vprasanje[], values: Pati
         id: o.id,
         text: vstaviVrednosti(o.besedilo, values),
         emergency: emergencyFor(predloga, q, o.id, values),
+        change: changes[o.id],
       })),
     };
   });
