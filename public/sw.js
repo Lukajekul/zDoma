@@ -1,8 +1,39 @@
 // zDoma service worker (T-39): shows the daily reminder and opens the app on tap.
-// Notifications only; no offline caching.
+// T-89: when a page can't load (no signal), shows the cached "Ni povezave" page.
+// Nothing else is cached: patient data always comes fresh from the server.
 
-self.addEventListener("install", () => self.skipWaiting());
-self.addEventListener("activate", (event) => event.waitUntil(self.clients.claim()));
+const CACHE = "zdoma-offline-v1";
+const OFFLINE_URL = "/offline.html";
+
+self.addEventListener("install", (event) => {
+  event.waitUntil(caches.open(CACHE).then((cache) => cache.add(new Request(OFFLINE_URL, { cache: "reload" }))));
+  self.skipWaiting();
+});
+
+self.addEventListener("activate", (event) => {
+  event.waitUntil(
+    (async () => {
+      const keys = await caches.keys();
+      await Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k)));
+      if (self.registration.navigationPreload) await self.registration.navigationPreload.enable();
+      await self.clients.claim();
+    })(),
+  );
+});
+
+// Page loads only; every other request goes straight to the network as before.
+self.addEventListener("fetch", (event) => {
+  if (event.request.mode !== "navigate") return;
+  event.respondWith(
+    (async () => {
+      try {
+        return (await event.preloadResponse) || (await fetch(event.request));
+      } catch {
+        return (await caches.match(OFFLINE_URL)) || Response.error();
+      }
+    })(),
+  );
+});
 
 self.addEventListener("push", (event) => {
   let data = { title: "zDoma", body: "Čas je za današnji pregled.", url: "/patient" };

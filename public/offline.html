@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="sl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#1d7d3e">
+  <title>Ni povezave – zDoma</title>
+  <style>
+    body { margin: 0; min-height: 100vh; display: flex; flex-direction: column; align-items: center;
+      font-family: system-ui, sans-serif; font-size: 20px; line-height: 1.5; color: #1a1a1a; background: #f4f6f4; }
+    header { width: 100%; box-sizing: border-box; padding: 32px 20px 40px; text-align: center; color: #fff;
+      background: linear-gradient(135deg, #47a34e, #007e46); border-radius: 0 0 32px 32px; }
+    header p { margin: 8px 0 0; font-size: 30px; font-weight: 800; }
+    .logo { display: inline-grid; place-items: center; width: 64px; height: 64px; border-radius: 16px; background: #fff; }
+    main { max-width: 520px; padding: 28px 20px; }
+    h1 { margin: 0 0 12px; font-size: 28px; line-height: 1.2; color: #1d7d3e; }
+    button { width: 100%; min-height: 56px; margin-top: 20px; border: 0; border-radius: 16px; font: inherit;
+      font-weight: 700; color: #fff; background: #1d7d3e; cursor: pointer; }
+    button:focus-visible { outline: 3px solid #1a1a1a; outline-offset: 3px; }
+    a { color: #1d7d3e; }
+    .note { margin-top: 24px; padding: 16px; border-radius: 16px; background: #fff; }
+  </style>
+</head>
+<body>
+  <header>
+    <span class="logo" aria-hidden="true">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#1d7d3e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M11 20a10 10 0 0010-10 25.9 25.9 0 00-1.04-7.281 1 1 0 00-1.755-.325C15.833 5.5 13 5.5 9.8 6.1A7 7 0 0011 20"/>
+        <path d="M2 21a5 5 0 012.911-4.544C7.613 15.212 8.351 15.24 11 13"/>
+      </svg>
+    </span>
+    <p>zDoma</p>
+  </header>
+  <main>
+    <h1>Ni povezave z internetom</h1>
+    <p>Telefon trenutno ni povezan z internetom. Preverite, ali je vklopljen Wi-Fi ali mobilni podatki, in poskusite znova.</p>
+    <button type="button" onclick="location.reload()">Poskusi znova</button>
+    <p class="note"><strong>Ob hudih težavah</strong> (bolečina v prsih, hudo težko dihanje, izguba zavesti) takoj pokličite <a href="tel:112"><strong>112</strong></a>.</p>
+  </main>
+</body>
+</html>

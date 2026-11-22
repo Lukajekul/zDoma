@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Atkinson_Hyperlegible_Next } from "next/font/google";
+import { SwRegister } from "@/components/pwa/sw-register";
 import "./globals.css";
 
 // Designed by the Braille Institute for low-vision readers: many of our users are elderly.
@@ -30,7 +31,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="sl"
       className={`${atkinson.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        {children}
+        <SwRegister />
+      </body>
     </html>
   );
 }

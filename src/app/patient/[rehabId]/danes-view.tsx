@@ -2,6 +2,7 @@ import { cookies } from "next/headers";
 import Link from "next/link";
 import { AppointmentCard } from "@/components/appointment-card";
 import { QuietLogout } from "@/components/auth/quiet-logout";
+import { InstallHint } from "@/components/patient/install-hint";
 import { NextActionCard } from "@/components/patient/danes/next-action-card";
 import { NurseUpdateCard } from "@/components/patient/danes/nurse-update-card";
 import { ProgressRing } from "@/components/patient/progress-ring";
@@ -121,6 +122,7 @@ export async function DanesView({ ctx, profile, back }: { ctx: Ctx; profile: Pro
                 onSlotTaken={action.kind === "pills" ? markSlotTaken.bind(null, rehab.id, action.time) : undefined}
               />
             )}
+            <InstallHint />
             {pending > 0 && (
               <Link href="/patient/dostop" className="flex items-center gap-4 rounded-3xl bg-status-rumeno-bg p-5 text-xl font-semibold text-status-rumeno">
                 <IconTile tone="rumeno"><Users /></IconTile>
