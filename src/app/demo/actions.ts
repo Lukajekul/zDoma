@@ -6,7 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 
 export type DemoState = { error?: string };
 
-/** "Začni kot pacient": new demo patient, logged in like a QR scan, then "Danes". */
+/** "Začni kot pacient": new demo patient, logged in like a QR scan, then the check-in. */
 export async function startDemo(): Promise<DemoState> {
   let rehabId: string;
   try {
@@ -19,5 +19,5 @@ export async function startDemo(): Promise<DemoState> {
   } catch {
     return { error: "Demo trenutno ni na voljo. Poskusite znova čez minuto." };
   }
-  redirect(`/patient/${rehabId}`);
+  redirect(`/patient/${rehabId}/pregled`); // T-61: straight into the check-in
 }

@@ -88,7 +88,7 @@ async function Pills({ params }: Pick<PageProps<"/patient/[rehabId]/zdravila">, 
       )}
 
       {groups.map(({ time, doses }) => (
-        <section key={time} className="flex flex-col gap-3">
+        <section key={time} id={time} className="flex scroll-mt-4 flex-col gap-3">
           <h2 className="mt-2 text-2xl font-bold">{TIME_LABEL[time]}</h2>
           <ul className="grid items-start gap-3 lg:grid-cols-2">
             {doses.map(({ medication: m, log }) => (

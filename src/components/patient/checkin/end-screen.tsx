@@ -16,12 +16,14 @@ type Props = {
   /** "8:00" */
   nextTime: string;
   backHref: string;
+  /** T-61: pills due now, shown as the main button instead of "Nazaj na Danes". */
+  next?: { href: string; label: string };
   /** Progress ring (T-40), shown under "Dan X od Y". */
   ring?: ReactNode;
 };
 
 /** Check-in done: something back against the patient's own numbers, never a diagnosis. */
-export function EndScreen({ status, day, total, weight, target, trend, nextTime, backHref, ring }: Props) {
+export function EndScreen({ status, day, total, weight, target, trend, nextTime, backHref, next, ring }: Props) {
   const green = status === "zeleno";
   const min = Math.min(...trend.map((t) => t.kg));
   // At least a 3 kg span, so small day-to-day changes don't look dramatic.
@@ -80,7 +82,14 @@ export function EndScreen({ status, day, total, weight, target, trend, nextTime,
             <p className="text-xl">
               {green ? "Vse je zabeleženo." : "Sestra bo pogledala vaše podatke."} Jutri ob {nextTime} spet.
             </p>
-            <BigButton href={backHref}>Nazaj na Danes</BigButton>
+            {next ? (
+              <>
+                <BigButton href={next.href}>{next.label}</BigButton>
+                <BigButton href={backHref} variant="secondary">Nazaj na Danes</BigButton>
+              </>
+            ) : (
+              <BigButton href={backHref}>Nazaj na Danes</BigButton>
+            )}
           </Card>
         </div>
       </div>

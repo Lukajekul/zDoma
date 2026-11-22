@@ -7,7 +7,10 @@ import { rehabDay } from "@/components/patient/rehab-info";
 import { AppShell } from "@/components/shell";
 import { requireProfile } from "@/lib/auth";
 import type { Checkin } from "@/lib/types";
+import { pillsHref, slotDueNow } from "../../_lib/auto-start";
 import { targetFor } from "../../_lib/checkin-plan";
+import { SLOT_ADJ } from "../../_lib/danes";
+import { getMedsAndLogs } from "../../_lib/doses";
 import { loadCheckinContext } from "../../_lib/checkins";
 import { getRing } from "../../_lib/ring";
 import { addDays } from "../../_lib/schedule";
@@ -48,7 +51,11 @@ async function CheckinScreen({ params }: Pick<PageProps<"/patient/[rehabId]/preg
   if (ctx.todayCheckin) {
     const weightQ = ctx.predloga.vprasanja.find((q) => q.tip === "teza" && ctx.todayCheckin!.answers[q.id] !== undefined);
     const { day, total } = rehabDay(ctx.rehab, ctx.today);
-    const { ring, extendedUntil } = await getRing(ctx.rehab, ctx.predloga, ctx.today);
+    const [{ ring, extendedUntil }, { meds, logs }] = await Promise.all([
+      getRing(ctx.rehab, ctx.predloga, ctx.today),
+      getMedsAndLogs(ctx.rehab.id),
+    ]);
+    const pills = ctx.active ? slotDueNow(meds, logs, ctx.today) : null;
     return shell(
       <EndScreen
         status={ctx.todayCheckin.triage_status}
@@ -59,6 +66,7 @@ async function CheckinScreen({ params }: Pick<PageProps<"/patient/[rehabId]/preg
         trend={weightQ ? weightTrend(weightQ.id, [ctx.todayCheckin, ...ctx.history], ctx.today) : []}
         nextTime={shortTime(profile.checkin_time)}
         backHref={back}
+        next={pills ? { href: pillsHref(ctx.rehab.id, pills), label: `Naprej: ${SLOT_ADJ[pills]} tablete` } : undefined}
         ring={<ProgressRing data={ring} extendedUntil={extendedUntil} />}
       />,
     );
