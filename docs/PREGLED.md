@@ -4,7 +4,7 @@ zDoma spremlja bolnika doma po odpustu iz bolnišnice. Bolnik vsak dan pol minut
 
 - **Aplikacija:** [zdoma.tian-istenic34.workers.dev](https://zdoma.tian-istenic34.workers.dev/)
 - **Hiter preizkus brez gesla:** [/demo](https://zdoma.tian-istenic34.workers.dev/demo) → »Začni kot pacient«
-- **Predstavitev:** prosojnice [zDoma.pptx](zDoma.pptx), govor v [DEMO.md](../DEMO.md)
+- **Predstavitev:** [zDoma.pptx](zDoma.pptx) (3 minute), [zDoma-celotna.pptx](zDoma-celotna.pptx) (vse funkcionalnosti)
 
 Vsi ljudje, davčne številke in podatki so izmišljeni.
 
