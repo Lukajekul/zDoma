@@ -86,7 +86,7 @@ export function Razporedi({ patients, students }: { patients: RazporediPatient[]
           ))}
           <StudentList students={students} />
         </div>
-        <div className={cn("h-[65dvh] md:sticky md:top-4 md:h-[calc(100dvh-10rem)]", view === "seznam" && "hidden md:block")}>
+        <div className={cn("md:sticky md:top-4 md:h-[calc(100dvh-10rem)]", view === "seznam" && "hidden md:block")}>
           <Zemljevid patients={mapPatients} students={mapStudents} selected={selected} onSelect={setSelected} />
         </div>
       </div>
