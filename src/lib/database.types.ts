@@ -291,6 +291,7 @@ export type Database = {
           id: string
           photo_path: string | null
           photo_path_2: string | null
+          plan_version: number | null
           reasons: string[]
           rehab_id: string
           same_as_yesterday: boolean
@@ -304,6 +305,7 @@ export type Database = {
           id?: string
           photo_path?: string | null
           photo_path_2?: string | null
+          plan_version?: number | null
           reasons?: string[]
           rehab_id: string
           same_as_yesterday?: boolean
@@ -317,6 +319,7 @@ export type Database = {
           id?: string
           photo_path?: string | null
           photo_path_2?: string | null
+          plan_version?: number | null
           reasons?: string[]
           rehab_id?: string
           same_as_yesterday?: boolean
@@ -336,6 +339,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "staff_directory"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "checkins_plan_fk"
+            columns: ["rehab_id", "plan_version"]
+            isOneToOne: false
+            referencedRelation: "patient_plans"
+            referencedColumns: ["rehab_id", "version"]
           },
           {
             foreignKeyName: "checkins_rehab_id_fkey"
@@ -595,6 +605,113 @@ export type Database = {
             columns: ["substitute_id"]
             isOneToOne: false
             referencedRelation: "staff_directory"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      patient_facts: {
+        Row: {
+          created_at: string
+          discharge_date: string
+          entered_by: string
+          icd10: string[]
+          medicines: Json
+          procedures: string[]
+          rehab_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          discharge_date: string
+          entered_by?: string
+          icd10?: string[]
+          medicines?: Json
+          procedures?: string[]
+          rehab_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          discharge_date?: string
+          entered_by?: string
+          icd10?: string[]
+          medicines?: Json
+          procedures?: string[]
+          rehab_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "patient_facts_entered_by_fkey"
+            columns: ["entered_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "patient_facts_entered_by_fkey"
+            columns: ["entered_by"]
+            isOneToOne: false
+            referencedRelation: "staff_directory"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "patient_facts_rehab_id_fkey"
+            columns: ["rehab_id"]
+            isOneToOne: true
+            referencedRelation: "rehabilitacije"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      patient_plans: {
+        Row: {
+          approved_at: string
+          approved_by: string
+          bank_version: number
+          id: string
+          plan: Json
+          rehab_id: string
+          version: number
+        }
+        Insert: {
+          approved_at?: string
+          approved_by?: string
+          bank_version: number
+          id?: string
+          plan: Json
+          rehab_id: string
+          version: number
+        }
+        Update: {
+          approved_at?: string
+          approved_by?: string
+          bank_version?: number
+          id?: string
+          plan?: Json
+          rehab_id?: string
+          version?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "patient_plans_approved_by_fkey"
+            columns: ["approved_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "patient_plans_approved_by_fkey"
+            columns: ["approved_by"]
+            isOneToOne: false
+            referencedRelation: "staff_directory"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "patient_plans_rehab_id_fkey"
+            columns: ["rehab_id"]
+            isOneToOne: false
+            referencedRelation: "rehabilitacije"
             referencedColumns: ["id"]
           },
         ]
