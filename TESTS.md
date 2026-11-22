@@ -3,7 +3,7 @@
 Things that still need someone to try them in a browser. Tick a box when it works; if it doesn't, write what happened under the item and add a fix task to `TASKS.md`.
 
 **Where:** https://zdoma.tian-istenic34.workers.dev
-**Log in as hospital staff:** `/prijava` → "Osebje" → `marko.horvat@zdoma.demo` or `tina.bizjak@zdoma.demo`, password = `SEED_PASSWORD` from `.env.local`. (Mojca, Petra and Nina are patronažne sestre and don't open rehabilitacije.)
+**Log in as hospital staff:** `/prijava` → "Osebje" → `tina.bizjak@zdoma.demo`, password = `SEED_PASSWORD` from `.env.local`. (Mojca is the patronažna sestra and doesn't open rehabilitacije.)
 **Get to the medicines:** "Nova rehabilitacija" (`/nurse/odpust`) → "Pacient" (davčna številka, name if new) → "Skupina pacientov" (e.g. Srčno popuščanje) → "Vrednosti in vprašanja" → step 4 "Zdravila". Don't finish the last step "Potrditev" unless you are also testing saving: it creates a real rehabilitacija in the shared database.
 
 ## T-74 · "Dodaj zdravilo" from the EMA list

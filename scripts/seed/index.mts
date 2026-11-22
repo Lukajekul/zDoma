@@ -1,13 +1,12 @@
 // T-10 seed: `npm run seed`. Re-runnable: removes the previous seed users
-// (marked seed: true) and everything attached, then creates ~40 patients,
-// bolničarji with tereni, zadolženci and the demo story. Other users are untouched.
+// (marked seed: true) and everything attached, then creates the demo story,
+// a few filler patients, two bolničarji and the študent pomočnik (T-87: kept
+// small for the 3-minute demo). Other users are untouched.
 // Needs NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY and SEED_PASSWORD
-// (password for seeded staff and family accounts) in .env.local.
+// (password for every seeded account) in .env.local.
 import { predloge } from "@/lib/templates";
 import { todayLjubljana, type CheckinAnswers, type TemplateId, type TriageStatus } from "@/lib/types";
-import {
-  BOLNICARJI, IMENA_M, IMENA_Z, NADOMESCANJE, OBCINE, PRIIMKI, RAZDELITEV, SORODSTVO, davcne, rng, staffEmail,
-} from "./data";
+import { BOLNICARJI, DEMO_DAVCNE, OBCINE, POLNILA, davcne, rng, staffEmail } from "./data";
 import { adminClient, cleanSeed, createAccount, ok, type Person } from "./db";
 import { withFallback } from "./fallback";
 import { addDays } from "./generate";
@@ -20,31 +19,31 @@ if (password.length < 8) throw new Error("Set SEED_PASSWORD (at least 8 characte
 const admin = adminClient();
 const today = todayLjubljana();
 const r = rng(2026);
+// Fillers take the first free numbers; staff and the demo story keep fixed ones.
+const fixedDavcne = new Set<string>([...BOLNICARJI.map((b) => b.davcna), ...Object.values(DEMO_DAVCNE)]);
 const nextDavcna = (() => {
   const g = davcne();
-  return () => g.next().value as string;
+  return () => {
+    for (;;) {
+      const d = g.next().value as string;
+      if (!fixedDavcne.has(d)) return d;
+    }
+  };
 })();
 const tpl = (id: TemplateId) => withFallback(predloge[id]);
 
 console.log(`Removed ${await cleanSeed(admin)} previous seed users.`);
 
-// ---- Bolničarji, tereni, nadomeščanje ----
+// ---- Bolničarji, tereni ----
 const staff: Record<string, string> = {};
 const summary: string[] = [];
 for (const b of BOLNICARJI) {
-  const p: Person = { davcna: nextDavcna(), first: b.first, last: b.last };
+  const p: Person = { davcna: b.davcna, first: b.first, last: b.last };
   const email = staffEmail(b);
   staff[b.key] = await createAccount(admin, p, { password, staff: true, email });
   summary.push(`bolničar  ${email}  ${p.davcna}  ${p.first} ${p.last}${b.tereni.length ? ` (teren: ${b.tereni.join(", ")})` : ""}`);
 }
 ok(await admin.from("tereni").insert(BOLNICARJI.flatMap((b) => b.tereni.map((obcina) => ({ nurse_id: staff[b.key], obcina })))), "tereni");
-ok(
-  await admin.from("nadomescanje").insert({
-    nurse_id: staff[NADOMESCANJE.nurse], substitute_id: staff[NADOMESCANJE.substitute],
-    until_date: addDays(today, NADOMESCANJE.dniOdDanes), created_by: staff.tina,
-  }),
-  "nadomescanje",
-);
 const nurseFor = (obcina: string) => {
   const b = BOLNICARJI.find((x) => x.tereni.includes(obcina));
   return b ? staff[b.key] : null;
@@ -54,7 +53,6 @@ const nurseFor = (obcina: string) => {
 const rows: Rows = emptyRows();
 const patients: { id: string; person: Person; rehabId: string }[] = [];
 const counts: Record<TriageStatus, number> = { zeleno: 0, rumeno: 0, rdece: 0 };
-const usedNames = new Set(["Janez Novak"]);
 
 async function addPatient(person: Person, obcina: string, specs: Omit<RehabSpec, "patientId" | "createdBy" | "nurseId" | "today" | "r">[]) {
   const o = OBCINE.find((x) => x.obcina === obcina)!;
@@ -63,7 +61,7 @@ async function addPatient(person: Person, obcina: string, specs: Omit<RehabSpec,
   const id = await createAccount(admin, person, { password, address, obcina });
   let rehabId = "";
   for (const s of specs) {
-    const built = buildRehab({ ...s, patientId: id, createdBy: r.pick([staff.tina, staff.marko]), nurseId: nurseFor(obcina), today, r }, rows);
+    const built = buildRehab({ ...s, patientId: id, createdBy: staff.tina, nurseId: nurseFor(obcina), today, r }, rows);
     if (!s.zakljucena) {
       rehabId = built.id;
       counts[built.status]++;
@@ -81,67 +79,51 @@ const weights = [71.8, 71.9, 71.7, 72.0, 72.8, 73.6, 74.5];
 const demoFixed: Record<string, CheckinAnswers> = Object.fromEntries(
   weights.map((w, k): [string, CheckinAnswers] => [addDays(demoStart, k), k === 6 ? { teza: w, otekline: "da", diuretik: "ne" } : { teza: w }]),
 );
-const demo = await addPatient({ davcna: nextDavcna(), first: "Janez", last: "Novak" }, "Šentjur", [
+const demo = await addPatient({ davcna: DEMO_DAVCNE.janez, first: "Janez", last: "Novak" }, "Šentjur", [
   { predloga: tpl("srcno-popuscanje"), start: demoStart, profil: "zeleno", fixed: demoFixed,
     values: { suhaTeza: 72, zdraviloZaVodo: DIURETIK, ciljniTlak: "130/80" } },
 ]);
-summary.push(`DEMO      ${patients[0].person.davcna}  Janez Novak (srčno popuščanje, rdeče)`);
+summary.push(`DEMO      ${DEMO_DAVCNE.janez}  Janez Novak (srčno popuščanje, rdeče)`);
 
 // Two rehabilitacije, one finished.
 const kolkLen = predloge["kolk-koleno"].privzetoTrajanjeDni;
-await addPatient({ davcna: nextDavcna(), first: "Marija", last: "Kos" }, "Celje", [
+const marija = await addPatient({ davcna: DEMO_DAVCNE.marija, first: "Marija", last: "Kos" }, "Celje", [
   { predloga: tpl("kolk-koleno"), start: addDays(today, -(kolkLen + 60)), profil: "zeleno", zakljucena: true },
   { predloga: tpl("srce-po-infarktu"), start: addDays(today, -9), profil: "zeleno" },
 ]);
-summary.push(`2 rehab.  ${patients[1].person.davcna}  Marija Kos (kolk – zaključena, srce po infarktu – aktivna)`);
+summary.push(`2 rehab.  ${DEMO_DAVCNE.marija}  Marija Kos (kolk – zaključena, srce po infarktu – aktivna)`);
 
 // New medicine not picked up at the pharmacy (T-31).
-await addPatient({ davcna: nextDavcna(), first: "Stanko", last: "Zupančič" }, "Žalec", [
+const stanko = await addPatient({ davcna: DEMO_DAVCNE.stanko, first: "Stanko", last: "Zupančič" }, "Žalec", [
   { predloga: tpl("srcno-popuscanje"), start: addDays(today, -4), profil: "zeleno", notPickedUp: true },
 ]);
-summary.push(`eRecept   ${patients[2].person.davcna}  Stanko Zupančič (novo zdravilo ni prevzeto)`);
+summary.push(`eRecept   ${DEMO_DAVCNE.stanko}  Stanko Zupančič (novo zdravilo ni prevzeto)`);
 
-// The rest, spread over templates and občine; a few in Šmarje (no nurse → "Nedodeljeni").
-let k = 0;
-for (const [templateId, n] of RAZDELITEV) {
-  for (let j = 0; j < n; j++, k++) {
-    let first: string, last: string;
-    do {
-      first = r.pick(r.chance(0.5) ? IMENA_M : IMENA_Z);
-      last = r.pick(PRIIMKI);
-    } while (usedNames.has(`${first} ${last}`));
-    usedNames.add(`${first} ${last}`);
-    const obcina = k % 13 === 5 ? "Šmarje pri Jelšah" : r.pick(OBCINE.slice(0, 6)).obcina;
-    const x = r.next();
-    const start = addDays(today, -r.int(1, 24));
-    await addPatient({ davcna: nextDavcna(), first, last }, obcina, [
-      { predloga: tpl(templateId), start, profil: x < 0.6 ? "zeleno" : x < 0.85 ? "rumeno" : "rdece",
-        skipToday: r.chance(0.15), installed: start < addDays(today, -1) || r.chance(0.5) },
-    ]);
-  }
+// A few fixed fillers so the dashboard isn't empty (T-87).
+for (const f of POLNILA) {
+  const davcna = nextDavcna();
+  await addPatient({ davcna, first: f.first, last: f.last }, f.obcina, [
+    { predloga: tpl(f.predloga), start: addDays(today, -r.int(5, 15)), profil: f.profil, installed: true },
+  ]);
+  summary.push(`pacient   ${davcna}  ${f.first} ${f.last} (${f.obcina}, ${f.predloga}, ${f.profil})`);
 }
 
 // ---- Zadolženci ----
-async function addCarer(person: Person, patientId: string, relation: string, status: "approved" | "pending") {
+async function addCarer(person: Person, patientId: string, relation: string) {
   const id = await createAccount(admin, person, { password });
   ok(await admin.from("family_access").insert({
-    requester_id: id, patient_id: patientId, relation, status, decided_at: status === "approved" ? new Date().toISOString() : null,
+    requester_id: id, patient_id: patientId, relation, status: "approved", decided_at: new Date().toISOString(),
   }), "family_access");
-  summary.push(`svojec    ${person.davcna}  ${person.first} ${person.last} (${relation}, ${status === "approved" ? "odobren" : "čaka"})`);
+  summary.push(`svojec    ${person.davcna}  ${person.first} ${person.last} (${relation}, odobren)`);
   return id;
 }
-const ana = await addCarer({ davcna: nextDavcna(), first: "Ana", last: "Novak" }, demo.id, "hčerka", "approved");
-for (const p of patients.slice(3, 8)) {
-  await addCarer({ davcna: nextDavcna(), first: r.pick(IMENA_Z), last: p.person.last }, p.id, r.pick(SORODSTVO), "approved");
-}
-await addCarer({ davcna: nextDavcna(), first: r.pick(IMENA_M), last: patients[9].person.last }, patients[9].id, "sin", "pending");
+const ana = await addCarer({ davcna: DEMO_DAVCNE.ana, first: "Ana", last: "Novak" }, demo.id, "hčerka");
 // T-63: family member of the eRecept patient, so "Skrbim za" shows the pharmacy warning (T-48/T-62).
-// Added last so the davčne številke above stay the same.
-await addCarer({ davcna: nextDavcna(), first: "Vesna", last: "Zupančič" }, patients[2].id, "hčerka", "approved");
+await addCarer({ davcna: DEMO_DAVCNE.vesna, first: "Vesna", last: "Zupančič" }, stanko.id, "hčerka");
 
-// T-84: študent pomočnik, approved by Marija Kos, waiting for Stanko Zupančič. Added last (davčne above stay the same).
+// T-86: študent pomočnik, approved by Marija Kos, waiting for Stanko Zupančič.
 const student = await addDemoStudent(admin, {
-  davcna: nextDavcna(), password, today, assignedBy: staff.mojca, approvedPatient: patients[1].id, pendingPatient: patients[2].id,
+  davcna: DEMO_DAVCNE.student, password, today, assignedBy: staff.mojca, approvedPatient: marija.id, pendingPatient: stanko.id,
 });
 summary.push(`študent   ${student.person.davcna}  Luka Kranjc (praksa do ${student.until}; Marija Kos odobrila, Stanko čaka)`);
 
@@ -169,5 +151,5 @@ for (const rh of rows.rehabilitacije) {
 }
 
 console.log(`\nPatients: ${patients.length} active rehab statuses: ${JSON.stringify(counts)}`);
-console.log("Accounts (passwords: SEED_PASSWORD in .env.local; patients log in with their QR listek):");
+console.log("Accounts (password: SEED_PASSWORD in .env.local):");
 for (const line of summary) console.log(`  ${line}`);

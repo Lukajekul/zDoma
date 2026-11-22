@@ -1,5 +1,5 @@
 // Synthetic demo data for T-10. All people, numbers and addresses are made up.
-import type { TemplateId } from "@/lib/types";
+import type { TemplateId, TriageStatus } from "@/lib/types";
 
 /** Deterministic PRNG so every seed run gives the same data. */
 export function rng(seed: number) {
@@ -52,6 +52,8 @@ export interface Bolnicar {
   key: string;
   first: string;
   last: string;
+  /** Fixed, so logins in docs/demo-accounts.md stay the same after a re-seed. */
+  davcna: string;
   /** Občine this patronažna sestra covers; empty = hospital staff. */
   tereni: string[];
 }
@@ -62,32 +64,39 @@ export function staffEmail(b: Pick<Bolnicar, "first" | "last">): string {
   return `${slug(b.first)}.${slug(b.last)}@zdoma.demo`;
 }
 
+/** T-87: one patronažna sestra for every občina except Šmarje, and one hospital nurse. */
 export const BOLNICARJI: Bolnicar[] = [
-  { key: "mojca", first: "Mojca", last: "Kovač", tereni: ["Šentjur", "Celje"] },
-  { key: "petra", first: "Petra", last: "Golob", tereni: ["Laško", "Žalec"] },
-  { key: "nina", first: "Nina", last: "Kralj", tereni: ["Vojnik", "Slovenske Konjice"] },
-  { key: "tina", first: "Tina", last: "Bizjak", tereni: [] },
-  { key: "marko", first: "Marko", last: "Horvat", tereni: [] },
+  { key: "mojca", first: "Mojca", last: "Kovač", davcna: "99000016",
+    tereni: ["Šentjur", "Celje", "Laško", "Žalec", "Vojnik", "Slovenske Konjice"] },
+  { key: "tina", first: "Tina", last: "Bizjak", davcna: "99000059", tereni: [] },
 ];
 
-/** Petra is away: Mojca covers her patients until this many days from today. */
-export const NADOMESCANJE = { nurse: "petra", substitute: "mojca", dniOdDanes: 4 };
+/** Davčne številke of the demo story; kept from earlier seeds so docs and scripts/demo-plan.mts still match. */
+export const DEMO_DAVCNE = {
+  janez: "99000075",
+  marija: "99000083",
+  stanko: "99000091",
+  ana: "99000580",
+  vesna: "99000652",
+  student: "99000679",
+} as const;
 
-export const IMENA_M = ["Franc", "Jože", "Anton", "Marko", "Stanko", "Ivan", "Milan", "Bojan", "Alojz", "Peter", "Zdravko", "Rudi"];
-export const IMENA_Z = ["Marija", "Ana", "Frančiška", "Ivana", "Terezija", "Kristina", "Olga", "Zdenka", "Vera", "Milena", "Jožica", "Silva"];
-export const PRIIMKI = [
-  "Horvat", "Krajnc", "Zupančič", "Potočnik", "Kos", "Vidmar", "Golob", "Turk", "Kolar", "Mlakar",
-  "Kovačič", "Zupan", "Bizjak", "Hribar", "Kralj", "Rozman", "Jelen", "Petek", "Ožbolt", "Žagar",
-];
+export interface Polnilo {
+  first: string;
+  last: string;
+  obcina: string;
+  predloga: TemplateId;
+  profil: TriageStatus;
+}
 
-/** How many patients per template (heart failure is the main group). The demo patients come on top. */
-export const RAZDELITEV: [TemplateId, number][] = [
-  ["srcno-popuscanje", 18],
-  ["srce-po-infarktu", 6],
-  ["kolk-koleno", 6],
-  ["kopb", 5],
-  ["mozganska-kap", 4],
-  ["rak-sistemsko", 4],
+/** T-87: a few fixed patients around the demo story, so the dashboard looks real but stays short. */
+export const POLNILA: Polnilo[] = [
+  { first: "Franc", last: "Horvat", obcina: "Šentjur", predloga: "srcno-popuscanje", profil: "rdece" },
+  { first: "Olga", last: "Vidmar", obcina: "Slovenske Konjice", predloga: "kopb", profil: "rumeno" },
+  // Šmarje has no patronažna sestra: shows up under "Nedodeljeni".
+  { first: "Ivana", last: "Krajnc", obcina: "Šmarje pri Jelšah", predloga: "srce-po-infarktu", profil: "rumeno" },
+  { first: "Rudi", last: "Kolar", obcina: "Vojnik", predloga: "kolk-koleno", profil: "zeleno" },
+  { first: "Milena", last: "Rozman", obcina: "Laško", predloga: "mozganska-kap", profil: "zeleno" },
 ];
 
 export const DIAGNOZA: Record<TemplateId, string> = {
@@ -98,5 +107,3 @@ export const DIAGNOZA: Record<TemplateId, string> = {
   "mozganska-kap": "Po možganski kapi",
   "rak-sistemsko": "Rak – zdravljenje s tabletami ali infuzijami",
 };
-
-export const SORODSTVO = ["hčerka", "sin", "žena", "mož", "vnukinja", "snaha"];

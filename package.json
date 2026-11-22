@@ -11,7 +11,7 @@
     "preview": "opennextjs-cloudflare build && node scripts/strip-bundle-secrets.mjs && opennextjs-cloudflare preview",
     "deploy": "opennextjs-cloudflare build && node scripts/strip-bundle-secrets.mjs && opennextjs-cloudflare deploy",
     "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts",
-    "seed": "tsx --env-file=.env.local scripts/seed/index.mts"
+    "seed": "tsx --env-file=.env.local scripts/seed/index.mts && tsx --env-file=.env.local scripts/demo-plan.mts"
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",
