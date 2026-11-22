@@ -133,6 +133,9 @@ for (const p of patients.slice(3, 8)) {
   await addCarer({ davcna: nextDavcna(), first: r.pick(IMENA_Z), last: p.person.last }, p.id, r.pick(SORODSTVO), "approved");
 }
 await addCarer({ davcna: nextDavcna(), first: r.pick(IMENA_M), last: patients[9].person.last }, patients[9].id, "sin", "pending");
+// T-63: family member of the eRecept patient, so "Skrbim za" shows the pharmacy warning (T-48/T-62).
+// Added last so the davčne številke above stay the same.
+await addCarer({ davcna: nextDavcna(), first: "Vesna", last: "Zupančič" }, patients[2].id, "hčerka", "approved");
 
 // Demo: Ana marked the evening pills; yesterday's morning diuretic was missed.
 const demoMeds = rows.medications.filter((m) => m.rehab_id === demo.rehabId);
