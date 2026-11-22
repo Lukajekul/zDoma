@@ -30,7 +30,7 @@ Things that still need someone to try them in a browser. Tick a box when it work
 - [ ] Finish the wizard with one EMA medicine (e.g. Byol) and one own medicine. Both are saved with the right dose and times.
 - [ ] The patient's pill list shows both. The own medicine has no "Za:" line (expected).
 
-## T-76 · Keyboard in "Dodaj zdravilo" (PC)
+## T-82 (was T-76) · Keyboard in "Dodaj zdravilo" (PC)
 
 - [ ] Type `biso`: the first result has a frame and "Enter ↵" on the right.
 - [ ] ↓ moves the frame down through all groups, ↑ moves it up; from the last result ↓ goes back to the first and the other way round.

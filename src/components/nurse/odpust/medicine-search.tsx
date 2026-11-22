@@ -11,7 +11,7 @@ type Option = { id: string; name: string; detail: string; line: () => MedLine };
 type Props = { catalogue: Zdravilo[]; taken: string[]; onAdd: (line: MedLine) => void };
 
 /**
- * "Dodaj zdravilo" (T-74, T-76): search the template medicines and the EMA list.
+ * "Dodaj zdravilo" (T-74, T-82): search the template medicines and the EMA list.
  * Doctors use it on a PC, so ↑/↓ move, Enter adds the highlighted result, Esc clears.
  */
 export function MedicineSearch({ catalogue, taken, onAdd }: Props) {
