@@ -152,7 +152,7 @@ The user types are defined in `README.md` (*Tipi uporabnikov*). Use exactly thes
 | Odpuščenec | `odpuscenec` | the discharged patient, owner of their rehabilitacije |
 | Zadolženec | `zadolzenec` | a family member the patient approved to follow along and help (can mark tasks done with the patient, can't change the plan) |
 | Bolničar | `bolnicar` | a doctor or nurse (staff account) |
-| Študent pomočnik | `student` | a medical student on their internship, assigned to a patient by staff and approved by the patient; does what a family member would do (pill reminders, blood pressure, weight, watching exercises), never nursing work. Account and internship end date (`profiles.student_until`) set by an admin; access ends after that day. Entries show "(študent)". |
+| Študent pomočnik | `student` | a medical student on their internship, assigned to a patient by staff and approved by the patient; does what a family member would do (pill reminders, blood pressure, weight, watching exercises), never nursing work. Account (with a real email; logs in under "Osebje" like staff) and internship end date (`profiles.student_until`) set by an admin; access ends after that day. Entries show "(študent)". |
 
 Odpuščenec and zadolženec aren't account types. They describe a person's relation to a patient, so one person can be both.
 

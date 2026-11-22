@@ -47,8 +47,8 @@ export async function login(_prev: FormState, formData: FormData): Promise<FormS
 const STAFF_LOGIN_ERROR = "E-pošta ali geslo ni pravilno. Preverite in poskusite znova.";
 
 /**
- * Staff (bolničarji, patronažne sestre) log in with their email + password (T-67).
- * Only `is_staff` profiles get through; anyone else is signed out again, so this
+ * Staff (bolničarji, patronažne sestre) and študenti pomočniki log in with their email + password (T-67, T-86).
+ * Only `is_staff` profiles and students (`student_until` set) get through; anyone else is signed out, so this
  * form never logs in a patient or family member (the nurse area is still gated by requireStaff).
  */
 export async function loginStaff(_prev: FormState, formData: FormData): Promise<FormState> {
@@ -67,12 +67,16 @@ export async function loginStaff(_prev: FormState, formData: FormData): Promise<
   const { data, error } = await supabase.auth.signInWithPassword({ email, password });
   if (error || !data.user) return { error: STAFF_LOGIN_ERROR, values };
 
-  const { data: profile } = await supabase.from("profiles").select("is_staff").eq("id", data.user.id).maybeSingle();
-  if (!profile?.is_staff) {
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("is_staff, student_until")
+    .eq("id", data.user.id)
+    .maybeSingle();
+  if (!profile?.is_staff && !profile?.student_until) {
     await supabase.auth.signOut({ scope: "local" });
     return { error: "Ta prijava je samo za osebje. Svojci se prijavijo z davčno številko.", values };
   }
-  redirect("/nurse");
+  redirect(profile.is_staff ? "/nurse" : "/student");
 }
 
 /** Family member (zadolženec) registers themselves. Staff accounts are never self-registered. */
