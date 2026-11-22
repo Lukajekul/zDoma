@@ -3,7 +3,7 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { CalendarCheck, Clipboard, Leaf, Plus, Repeat, Users } from "lucide-react";
+import { CalendarCheck, Clipboard, GraduationCap, Leaf, Plus, Repeat, Users } from "lucide-react";
 import type { StaffKind } from "@/lib/staff";
 import { cn } from "@/lib/utils";
 
@@ -19,7 +19,8 @@ export const NAV_ITEMS = {
   patronaza: [
     patients("Moji pacienti"),
     { href: "/nurse/danes", label: "Danes obiščite", Icon: CalendarCheck, match: (p: string) => p.startsWith("/nurse/danes") || p.startsWith("/nurse/prvi-obisk") },
-    { href: "/nurse/nadomescanje", label: "Nadomeščanje", Icon: Repeat, match: (p: string) => p.startsWith("/nurse/nadomescanje") },
+    { href: "/nurse/studenti", label: "Študenti", Icon: GraduationCap, match: (p: string) => p.startsWith("/nurse/studenti") },
+    { href: "/nurse/nadomescanje", label: "Nadome\u00ADščanje", Icon: Repeat, match: (p: string) => p.startsWith("/nurse/nadomescanje") },
   ],
   bolnisnica: [
     patients("Pacienti"),
