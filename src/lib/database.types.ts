@@ -649,6 +649,7 @@ export type Database = {
           id: string
           rehab_id: string
           repetitions: string | null
+          steps: string[] | null
           times_per_day: number
           title: string
         }
@@ -659,6 +660,7 @@ export type Database = {
           id?: string
           rehab_id: string
           repetitions?: string | null
+          steps?: string[] | null
           times_per_day?: number
           title: string
         }
@@ -669,6 +671,7 @@ export type Database = {
           id?: string
           rehab_id?: string
           repetitions?: string | null
+          steps?: string[] | null
           times_per_day?: number
           title?: string
         }
@@ -750,6 +753,7 @@ export type Database = {
           created_at: string
           created_by: string | null
           current_status: Database["public"]["Enums"]["triage_status"]
+          custom_questions: Json
           diagnosis: string | null
           end_date: string
           id: string
@@ -768,6 +772,7 @@ export type Database = {
           created_at?: string
           created_by?: string | null
           current_status?: Database["public"]["Enums"]["triage_status"]
+          custom_questions?: Json
           diagnosis?: string | null
           end_date: string
           id?: string
@@ -786,6 +791,7 @@ export type Database = {
           created_at?: string
           created_by?: string | null
           current_status?: Database["public"]["Enums"]["triage_status"]
+          custom_questions?: Json
           diagnosis?: string | null
           end_date?: string
           id?: string
