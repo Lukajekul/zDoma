@@ -6,6 +6,8 @@
 
 <p align="center"><a href="./LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-22C55E?style=flat-square"></a> <img alt="Next.js 16" src="https://img.shields.io/badge/Next.js-16-3776AB?style=flat-square"> <img alt="Supabase" src="https://img.shields.io/badge/Supabase-Postgres-3776AB?style=flat-square"> <img alt="Cloudflare Workers" src="https://img.shields.io/badge/Cloudflare-Workers-4B5563?style=flat-square"> <a href="https://zdoma.tian-istenic34.workers.dev/"><img alt="Demo" src="https://img.shields.io/badge/Demo-v%C5%BEivo-0891B2?style=flat-square"></a></p>
 
+<p align="center"><a href="docs/media/zdoma.mp4"><img src="docs/media/zdoma.jpg" alt="zDoma v 22 sekundah: kliknite za ogled videa" width="720"></a><br><sub>▶ Kliknite sliko za 22-sekundni video.</sub></p>
+
 Projekt za ADAHack 2026, izziv 1: *Spremljanje pacientov na domu po odpustu iz bolnišnice.*
 
 Po odpustu gre pacient domov skoraj brez nadzora. Zapleti, kot so poslabšanje srčnega popuščanja ali napake pri zdravilih, pogosto ostanejo neopaženi, dokler se pacient ne vrne na urgenco. zDoma opazi, česar pacient sam ne sporoči: zdravila, ki jih ni prevzel v lekarni, izpuščene tablete, težo, ki počasi narašča. Najprej opomni pacienta in svojce, šele nato osebje. Dnevni pregled stanja traja 30 sekund.
