@@ -85,8 +85,8 @@ async function StudentHome() {
     <>
       {pending > 0 && (
         <p className="rounded-3xl bg-card shadow-soft p-4 text-lg">
-          {pending === 1 ? "En pacient še ni potrdil" : `Pacienti, ki še niso potrdili: ${pending}.`} Ko potrdi vašo
-          pomoč, se prikaže tukaj.
+          {pending === 1 ? "En pacient še ni potrdil vaše pomoči." : `Pacienti, ki še niso potrdili vaše pomoči: ${pending}.`} Ko
+          potrdi, se prikaže tukaj.
         </p>
       )}
       {cards.length === 0 && pending === 0 && (
@@ -103,7 +103,7 @@ async function StudentHome() {
               {(p.address || p.obcina) && (
                 <p className="flex items-start gap-2 text-lg">
                   <MapPin aria-hidden className="mt-1 size-5 shrink-0" />
-                  {[p.address, p.obcina].filter(Boolean).join(", ")}
+                  {p.address && p.obcina && !p.address.includes(p.obcina) ? `${p.address}, ${p.obcina}` : p.address || p.obcina}
                 </p>
               )}
               {p.phone && (
