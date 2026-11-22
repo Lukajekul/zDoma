@@ -4,6 +4,9 @@ import { useState, useTransition } from "react";
 import { BigButton } from "@/components/shell";
 import { NAJVEC_DNEVNIH_VPRASANJ, vstaviVrednosti, type Predloga } from "@/lib/templates";
 import { NAJVEC_DNI, preveriPrilagoditev, uporabiPrilagoditev, type Prilagoditev } from "@/lib/templates/overrides";
+import { zLastnimi } from "@/lib/templates/lastno";
+import { CustomExercises, CustomQuestions } from "@/components/nurse/lastno/custom-items";
+import { sinhronizirajIzbor } from "@/components/nurse/lastno/sync";
 import { shraniPrilagoditev } from "../actions";
 
 const HITRI_DNEVI = [14, 30, 60, 90];
@@ -20,13 +23,16 @@ export function TemplateEditor({ predloga, prilagoditev }: { predloga: Predloga;
   const [vaje, setVaje] = useState(
     Object.fromEntries(zacetna.vaje.map((v) => [v.id, { izbrana: v.privzetoIzbrano ?? true, ponovitve: v.ponovitve }])),
   );
+  const [lastnaQ, setLastnaQ] = useState(prilagoditev.lastnaVprasanja ?? []);
+  const [lastneV, setLastneV] = useState(prilagoditev.lastneVaje ?? []);
   const [sporocilo, setSporocilo] = useState<{ ok: boolean; text: string }>();
   const [potrdiPonastavitev, setPotrdiPonastavitev] = useState(false);
   const [pending, start] = useTransition();
 
-  const vnos: Prilagoditev = { privzetoTrajanjeDni: Number(dni), izbranaVprasanja: vprasanja, vaje };
+  const vnos: Prilagoditev = { privzetoTrajanjeDni: Number(dni), izbranaVprasanja: vprasanja, vaje, lastnaVprasanja: lastnaQ, lastneVaje: lastneV };
   const napake = preveriPrilagoditev(predloga, vnos);
-  const dnevna = predloga.vprasanja.filter((q) => q.pogostost === "dnevno" && vprasanja.includes(q.id)).length;
+  const b = zLastnimi(predloga, lastnaQ, lastneV);
+  const dnevna = b.vprasanja.filter((q) => q.pogostost === "dnevno" && vprasanja.includes(q.id)).length;
   const oznake = Object.fromEntries(predloga.vrednostiPacienta.map((v) => [v.kljuc, `«${v.oznaka.toLowerCase()}»`]));
   const toggle = (id: string) => setVprasanja((v) => (v.includes(id) ? v.filter((x) => x !== id) : [...v, id]));
 
@@ -39,6 +45,8 @@ export function TemplateEditor({ predloga, prilagoditev }: { predloga: Predloga;
         setDni(String(predloga.privzetoTrajanjeDni));
         setVprasanja(predloga.vprasanja.filter((q) => q.privzetoIzbrano).map((q) => q.id));
         setVaje(Object.fromEntries(predloga.vaje.map((v) => [v.id, { izbrana: v.privzetoIzbrano ?? true, ponovitve: v.ponovitve }])));
+        setLastnaQ([]);
+        setLastneV([]);
       }
       setPotrdiPonastavitev(false);
     });
@@ -73,7 +81,7 @@ export function TemplateEditor({ predloga, prilagoditev }: { predloga: Predloga;
         <p className={dnevna > NAJVEC_DNEVNIH_VPRASANJ ? "text-lg font-semibold text-status-rdece" : "text-lg"}>
           Dnevnih vprašanj: {dnevna} od največ {NAJVEC_DNEVNIH_VPRASANJ}
         </p>
-        {predloga.vprasanja.map((q) => (
+        {b.vprasanja.map((q) => (
           <label key={q.id} className={row}>
             <input type="checkbox" className="mt-1 size-6 shrink-0" checked={vprasanja.includes(q.id)} onChange={() => toggle(q.id)} />
             <span className="flex flex-col">
@@ -85,11 +93,20 @@ export function TemplateEditor({ predloga, prilagoditev }: { predloga: Predloga;
             </span>
           </label>
         ))}
+        <h3 className="text-xl font-bold">Lastna vprašanja</h3>
+        <CustomQuestions
+          items={lastnaQ}
+          onChange={(n) => {
+            setVprasanja(sinhronizirajIzbor(vprasanja, lastnaQ, n));
+            setLastnaQ(n);
+          }}
+          blocked={dnevna >= NAJVEC_DNEVNIH_VPRASANJ ? "Že 6 dnevnih vprašanj. Za novo vprašanje najprej odznačite eno zgoraj." : undefined}
+        />
       </section>
 
       <section className={box}>
         <h2 className="text-2xl font-bold">Vaje, ki so ob odpustu že označene</h2>
-        {predloga.vaje.map((v) => (
+        {b.vaje.map((v) => (
           <div key={v.id} className="flex flex-col gap-2 border-t-2 pt-3 first-of-type:border-t-0 first-of-type:pt-0">
             <label className={row}>
               <input
@@ -100,20 +117,22 @@ export function TemplateEditor({ predloga, prilagoditev }: { predloga: Predloga;
               />
               <span className="text-lg font-semibold">{v.naslov}</span>
             </label>
-            <label className="flex flex-col gap-1 text-lg">
+            {!v.id.startsWith("lastna-") && <label className="flex flex-col gap-1 text-lg">
               Ponovitve ali čas
               <input
                 className={input}
                 value={vaje[v.id]?.ponovitve ?? ""}
                 onChange={(e) => setVaje((s) => ({ ...s, [v.id]: { ...s[v.id], ponovitve: e.target.value } }))}
               />
-            </label>
+            </label>}
           </div>
         ))}
+        <h3 className="text-xl font-bold">Lastne vaje</h3>
+        <CustomExercises items={lastneV} onChange={setLastneV} />
       </section>
 
       <p className="rounded-3xl bg-card shadow-soft p-4 text-lg">
-        Opozorilna pravila, pragovi, besedila vprašanj in zdravila so zaklenjeni, ker izhajajo iz smernic. Sprememba velja
+        Opozorilna pravila, pragovi, besedila vprašanj in zdravila iz predloge so zaklenjeni, ker izhajajo iz smernic. Lastna vprašanja in vaje lahko dodate, spremenite ali odstranite. Sprememba velja
         za nove rehabilitacije; obstoječe ostanejo, kot so.
       </p>
 
