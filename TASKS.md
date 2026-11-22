@@ -149,3 +149,7 @@ Migrations for these tasks are pre-approved by the human: merge to `main`, then 
 ## Študent pomočnik (22. 11. 2026)
 
 - [~] **T-86** (Žan Luka Tušar, `feat/student-pomocnik`) Študent pomočnik: medical students on their internship help patients with family-level tasks. Migration (`profiles.student_until`, `student_assignments`, `student_reminders_sent`, student in `can_read_rehab`/`can_log_rehab`, no `patient_facts`/observations for students); nurse assigns on the patient detail, patient approves in "Svojci", only staff remove; `/student` list + reused helper screens with "(študent)" label and a call-the-nurse warning on yellow/red; push 30 min before a visit, late visit → student + nurse (push + alert). Deps: T-20, T-39, T-57. *Migration applied, types regenerated. Demo student Luka Kranjc (99000679) seeded. Waiting: preview check.*
+
+## Demo (22. 11. 2026)
+
+- [~] **T-87** (Tian Istenič, `feat/T-87-demo-seed`) Smaller seed for the 3-minute pitch demo: keep the demo story (Janez, Marija, Stanko, Ana, Vesna, študent Luka) with the same davčne številke, only 5 fixed filler patients (one red, two yellow, two green, one "Nedodeljeni"), staff only Mojca (patronažna sestra, all občine) and Tina (bolnišnica), no nadomeščanje; re-run the seed and the T-80 demo plan; update `docs/demo-accounts.md`.
