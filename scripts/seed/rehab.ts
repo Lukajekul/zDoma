@@ -39,6 +39,7 @@ export interface RehabSpec {
   zakljucena?: boolean;
   values?: PatientValues;
   fixed?: Record<IsoDate, CheckinAnswers>;
+  /** No check-in on the last seeded day (yesterday). */
   skipToday?: boolean;
   /** Leave the first "novo" medicine not picked up (T-31). */
   notPickedUp?: boolean;
@@ -51,7 +52,8 @@ export function buildRehab(s: RehabSpec, rows: Rows): { id: string; status: Tria
   const { predloga: p, r } = s;
   const id = randomUUID();
   const end = addDays(s.start, p.privzetoTrajanjeDni);
-  const last = s.zakljucena ? end : s.today;
+  // Active rehabs end at yesterday: today's dnevni pregled stays open for the live demo (T-90).
+  const last = s.zakljucena ? end : addDays(s.today, -1);
   const questions = p.vprasanja.filter((q) => q.privzetoIzbrano).map((q) => q.id).slice(0, 6);
   const values = patientValues(p, r, s.values);
 

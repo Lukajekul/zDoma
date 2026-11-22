@@ -8,13 +8,13 @@ Seed data from `npm run seed` (T-10) on the shared zDoma project. **All people a
 - **Bolničarji** and **študenti** log in at `/prijava` → "Osebje" with the **e-pošta** below (T-67, T-86). **Zadolženci** log in at `/prijava` → "Svojci" with their davčna številka. **Patients (odpuščenci)** log in at `/prijava/pacient` ("Sem pacient" on the home page).
 - This repo is public, so anyone can use this password on the live site. Data is synthetic. To change it: set a new `SEED_PASSWORD` in `.env.local`, run `npm run seed`, and update this line.
 - **To show the QR login:** as a bolničar open a patient and press "Nova koda QR". The printed QR logs the patient in once, then asks them to set their own password (T-54); after that the demo password above no longer works for that patient until the seed is re-run.
-- The seed is kept small for the 3-minute demo (T-87): 8 patients, 2 bolničarji, 2 zadolženci, 1 študent. `npm run seed` also gives Stanko Zupančič his approved plan (T-80). Re-running it keeps every davčna številka below; only dates and addresses move with today (last run: 22. 11. 2026).
+- The seed is kept small for the 3-minute demo (T-87): 8 patients, 2 bolničarji, 2 zadolženci, 1 študent. `npm run seed` also gives Stanko Zupančič his approved plan (T-80). Re-running it keeps every davčna številka below; only dates and addresses move with today (last run: 22. 11. 2026). Generated check-ins end yesterday, so every patient's dnevni pregled is still open today (T-90).
 
 ## Demo story
 
 | Davčna / e-pošta | Geslo | Who | What to show |
 |---|---|---|---|
-| 99000075 | `zdoma-eupRh0qTB1SQ` | **Janez Novak** (patient, Šentjur) | Srčno popuščanje, day 7. Dry weight 72 kg → 74,5 kg today, swollen ankles, diuretic missed yesterday → **Rdeče** with 4 reasons ("Teža +2,5 kg v 3 dneh" …). |
+| 99000075 | `zdoma-eupRh0qTB1SQ` | **Janez Novak** (patient, Šentjur) | Srčno popuščanje, day 8. Dry weight 72 kg → 74,5 kg yesterday, swollen ankles, diuretic missed → **Rdeče** with 4 reasons ("Teža +2,5 kg v 3 dneh" …). |
 | 99000580 | `zdoma-eupRh0qTB1SQ` | **Ana Novak** (zadolženec) | Janez's daughter, approved. Marks his evening pills ("Označila: Ana (hčerka)"). |
 | mojca.kovac@zdoma.demo | `zdoma-eupRh0qTB1SQ` | **Mojca Kovač** (bolničar) | The only patronažna sestra: covers every občina except Šmarje pri Jelšah, so Janez and every other patient (except "Nedodeljeni") is hers. |
 | 99000091 | `zdoma-eupRh0qTB1SQ` | Stanko Zupančič (patient, Žalec) | New Furosemid **not picked up** at the pharmacy → open alert "Furosemid ni prevzet 4 dni po odpustu" (T-31). Has an approved plan (T-80), so his check-in runs from the modular questionnaire. |

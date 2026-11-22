@@ -74,7 +74,8 @@ async function addPatient(person: Person, obcina: string, specs: Omit<RehabSpec,
 // Demo story: heart failure, dry weight 72 kg → 74,5 kg, swollen ankles, one missed diuretic.
 // The diuretic is the heart-failure template's first medicine (e.g. Lasix / furosemid).
 const DIURETIK = tpl("srcno-popuscanje").zdravila[0].ime;
-const demoStart = addDays(today, -6);
+// The story ends yesterday, so Janez can still do today's check-in live (T-90).
+const demoStart = addDays(today, -7);
 const weights = [71.8, 71.9, 71.7, 72.0, 72.8, 73.6, 74.5];
 const demoFixed: Record<string, CheckinAnswers> = Object.fromEntries(
   weights.map((w, k): [string, CheckinAnswers] => [addDays(demoStart, k), k === 6 ? { teza: w, otekline: "da", diuretik: "ne" } : { teza: w }]),
