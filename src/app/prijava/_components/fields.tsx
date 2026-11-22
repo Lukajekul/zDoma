@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type ComponentProps } from "react";
+import { DavcnaInput } from "@/components/davcna-input";
 import { cn } from "@/lib/utils";
 
 const inputClass =
@@ -32,19 +33,9 @@ export function Field({ label, hint, id, name, ...props }: FieldProps) {
   );
 }
 
+/** Davčna field for the prijava forms: the shared 8-digit input (T-68). */
 export function DavcnaField({ defaultValue }: { defaultValue?: string }) {
-  return (
-    <Field
-      label="Davčna številka"
-      hint="8 številk"
-      name="davcna"
-      inputMode="numeric"
-      autoComplete="username"
-      maxLength={9}
-      required
-      defaultValue={defaultValue}
-    />
-  );
+  return <DavcnaInput defaultValue={defaultValue} />;
 }
 
 /** Password with a labelled "Pokaži geslo" toggle (no icon-only button). */

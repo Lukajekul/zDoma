@@ -3,6 +3,8 @@
 import { useState, useTransition } from "react";
 import { BigButton } from "@/components/shell";
 import { lookupPatient, type PatientLookup } from "@/app/nurse/odpust/actions";
+import { DavcnaInput } from "@/components/davcna-input";
+import { davcnaError } from "@/lib/davcna";
 import { ErrorText, Field } from "./ui";
 
 export type PatientState = {
@@ -21,10 +23,13 @@ type Props = { value: PatientState; onChange: (v: PatientState) => void; onNext:
 export function StepPatient({ value: v, onChange, onNext }: Props) {
   const [error, setError] = useState<string>();
   const [pending, start] = useTransition();
+  const [tried, setTried] = useState(false);
   const set = (patch: Partial<PatientState>) => onChange({ ...v, ...patch });
 
   function find() {
     setError(undefined);
+    setTried(true);
+    if (davcnaError(v.davcna)) return;
     start(async () => {
       const res = await lookupPatient(v.davcna);
       if ("error" in res) return setError(res.error);
@@ -35,7 +40,13 @@ export function StepPatient({ value: v, onChange, onNext }: Props) {
   if (!v.found) {
     return (
       <div className="flex flex-col gap-4">
-        <Field label="Davčna številka pacienta" inputMode="numeric" value={v.davcna} onChange={(davcna) => set({ davcna })} hint="8 številk" />
+        <DavcnaInput
+          label="Davčna številka pacienta"
+          autoComplete="off"
+          value={v.davcna}
+          onChange={(davcna) => set({ davcna })}
+          showError={tried}
+        />
         <ErrorText>{error}</ErrorText>
         <BigButton onClick={find} disabled={pending}>{pending ? "Iščem …" : "Naprej"}</BigButton>
       </div>

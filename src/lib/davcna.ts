@@ -20,3 +20,23 @@ export function isValidDavcna(input: string): boolean {
   if (!/^[0-9]{8}$/.test(d)) return false;
   return davcnaCheckDigit(d.slice(0, 7)) === Number(d[7]);
 }
+
+/** What a davčna input keeps while typing or pasting: digits only, at most 8. */
+export function cleanDavcnaInput(input: string): string {
+  return input.replace(/\D/g, "").slice(0, 8);
+}
+
+/**
+ * Slovenian error that tells the user what to do, or undefined when valid.
+ * Used both in the browser (before submit) and in server actions.
+ */
+export function davcnaError(input: string): string | undefined {
+  const d = normalizeDavcna(input);
+  if (d === "") return "Vpišite davčno številko. Ima 8 števk.";
+  if (!/^[0-9]+$/.test(d)) return "Davčna številka ima samo števke. Preverite jo in vpišite znova.";
+  if (d.length !== 8) {
+    return `Davčna številka ima 8 števk, vpisanih je ${d.length}. Preverite jo in vpišite znova.`;
+  }
+  if (!isValidDavcna(d)) return "Ta davčna številka ne obstaja. Ena od števk je napačna – preverite jo in vpišite znova.";
+  return undefined;
+}

@@ -1,7 +1,7 @@
 "use server";
 
 import { requireProfile } from "@/lib/auth";
-import { isValidDavcna, normalizeDavcna } from "@/lib/davcna";
+import { davcnaError, normalizeDavcna } from "@/lib/davcna";
 import { isRelation } from "@/lib/family-access";
 import { createClient } from "@/lib/supabase/server";
 
@@ -16,8 +16,9 @@ export async function requestAccess(_prev: RequestState, formData: FormData): Pr
   const davcna = normalizeDavcna(String(formData.get("davcna") ?? ""));
   const relation = String(formData.get("relation") ?? "");
 
-  if (!isValidDavcna(davcna)) {
-    return { error: "Davčna številka ni pravilna. Preverite, da ste vpisali vseh 8 številk.", davcna };
+  const davcnaProblem = davcnaError(davcna);
+  if (davcnaProblem) {
+    return { error: davcnaProblem, davcna };
   }
 
   const supabase = await createClient();

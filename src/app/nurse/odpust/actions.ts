@@ -2,7 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { requireStaff } from "@/lib/auth";
-import { isValidDavcna, normalizeDavcna } from "@/lib/davcna";
+import { davcnaError, normalizeDavcna } from "@/lib/davcna";
 import { erecept, type ZdraviloPrej } from "@/lib/erecept";
 import { ensurePatientAccount } from "@/lib/qr/accounts";
 import { createClient } from "@/lib/supabase/server";
@@ -30,7 +30,8 @@ export type PatientLookup =
 export async function lookupPatient(davcnaInput: string): Promise<PatientLookup> {
   await requireStaff();
   const davcna = normalizeDavcna(davcnaInput);
-  if (!isValidDavcna(davcna)) return { error: "Davčna številka ni pravilna. Preverite 8 številk." };
+  const davcnaProblem = davcnaError(davcna);
+  if (davcnaProblem) return { error: davcnaProblem };
 
   const supabase = await createClient();
   const { data: p } = await supabase
@@ -81,7 +82,8 @@ export async function openRehab(input: OpenRehabInput): Promise<{ error: string 
   const predloga = await getPrilagojenaPredloga(input.templateId);
   const davcna = normalizeDavcna(input.davcna);
   if (!predloga) return { error: "Izberite skupino pacientov." };
-  if (!isValidDavcna(davcna)) return { error: "Davčna številka ni pravilna." };
+  const davcnaProblem = davcnaError(davcna);
+  if (davcnaProblem) return { error: davcnaProblem };
   if (!input.firstName.trim() || !input.lastName.trim()) return { error: "Vpišite ime in priimek pacienta." };
   if (!isDate(input.startDate) || !isDate(input.endDate) || input.endDate < input.startDate) {
     return { error: "Preverite datum konca: biti mora po začetku." };

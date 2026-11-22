@@ -2,7 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { getCurrentProfile, homePathFor, LOGIN_PATH, PATIENT_LOGIN_PATH } from "@/lib/auth";
-import { isValidDavcna, normalizeDavcna } from "@/lib/davcna";
+import { davcnaError, normalizeDavcna } from "@/lib/davcna";
 import { setOwnPassword } from "@/lib/qr/accounts";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
@@ -15,8 +15,6 @@ export type FormState = {
 };
 
 const MIN_PASSWORD = 8;
-const DAVCNA_ERROR =
-  "Davčna številka ni pravilna. Preverite, da ste vpisali vseh 8 številk.";
 
 function text(formData: FormData, name: string): string {
   const v = formData.get(name);
@@ -34,7 +32,8 @@ export async function login(_prev: FormState, formData: FormData): Promise<FormS
   const password = String(formData.get("password") ?? "");
   const values = { davcna };
 
-  if (!isValidDavcna(davcna)) return { error: DAVCNA_ERROR, values };
+  const davcnaProblem = davcnaError(davcna);
+  if (davcnaProblem) return { error: davcnaProblem, values };
   if (!password) return { error: "Vpišite geslo.", values };
 
   const supabase = await createClient();
@@ -85,7 +84,8 @@ export async function register(_prev: FormState, formData: FormData): Promise<Fo
   const values = { davcna, first_name: firstName, last_name: lastName };
 
   if (!firstName || !lastName) return { error: "Vpišite ime in priimek.", values };
-  if (!isValidDavcna(davcna)) return { error: DAVCNA_ERROR, values };
+  const davcnaProblem = davcnaError(davcna);
+  if (davcnaProblem) return { error: davcnaProblem, values };
   if (password.length < MIN_PASSWORD) {
     return { error: `Geslo naj ima vsaj ${MIN_PASSWORD} znakov.`, values };
   }
