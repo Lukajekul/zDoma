@@ -3,11 +3,11 @@ import "server-only";
 import { predlogaZaRehab, privzeteVrednosti, vrednostiIzZdravil } from "@/lib/templates";
 import { getApprovedPlan } from "@/lib/plans-server";
 import { createClient } from "@/lib/supabase/server";
-import { isRehabActive, todayLjubljana, type Checkin, type CheckinAnswers, type PatientValues, type Uuid } from "@/lib/types";
-import { danOkrevanja, planQuestions, predlogaIzNacrta } from "./checkin-nacrt";
+import { isRehabActive, todayLjubljana, type Checkin, type PatientValues, type Uuid } from "@/lib/types";
+import { brezOdgovorovIzZdravil, danOkrevanja, planQuestions, predlogaIzNacrta } from "./checkin-nacrt";
 import { dueQuestions, sameAsYesterdaySource, toViews } from "./checkin-plan";
 import { getMedsAndLogs } from "./doses";
-import { answersFromPills } from "./med-answers";
+import { answersFromPills, answersFromPillsNacrt } from "./med-answers";
 import { getMyRehab } from "./rehabs";
 import { addDays } from "./schedule";
 
@@ -46,7 +46,10 @@ export async function loadCheckinContext(patientId: Uuid, rehabId: string) {
   // An approved plan (T-80) replaces the template's questions and rules.
   if (approved) {
     const predloga = predlogaIzNacrta(template, approved.plan);
-    const questions = planQuestions(predloga, approved.plan, today, values, history);
+    const planned = planQuestions(predloga, approved.plan, today, values, history);
+    // Medicine items the pill list already answers aren't asked (T-84).
+    const fromPills = answersFromPillsNacrt(approved.plan, planned.map((q) => q.id), meds, logs, today);
+    const { questions, known } = brezOdgovorovIzZdravil(planned, fromPills);
     return {
       rehab,
       predloga,
@@ -56,7 +59,7 @@ export async function loadCheckinContext(patientId: Uuid, rehabId: string) {
       history,
       todayCheckin,
       questions,
-      known: {} as CheckinAnswers,
+      known,
       values,
       sameSource: sameAsYesterdaySource(questions, history, today),
     };

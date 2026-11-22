@@ -11,6 +11,11 @@ export function preveriBanko(b: Banka): string[] {
     if (!p.vir?.opis) napake.push(`${p.id}: missing source`);
     if (p.tip === "izbira" && p.odgovori.length < 1) napake.push(`${p.id}: no answers`);
     if (p.raven === 0 && !p.vednoVprasaj) napake.push(`${p.id}: red flags must never be filled by "Enako kot včeraj"`);
+    if (p.izZdravilModula) {
+      const { vzeto, dniNazaj } = p.izZdravilModula;
+      if (p.tip !== "izbira" || !p.odgovori.some((o) => o.id === vzeto)) napake.push(`${p.id}: izZdravilModula unknown answer ${vzeto}`);
+      if (!(dniNazaj >= 0)) napake.push(`${p.id}: izZdravilModula dniNazaj must be >= 0`);
+    }
     if (p.nadaljnje) {
       const n = poId.get(p.nadaljnje.postavka) ?? b.postavke.find((x) => x.id === p.nadaljnje!.postavka);
       if (!n) napake.push(`${p.id}: unknown follow-up ${p.nadaljnje.postavka}`);

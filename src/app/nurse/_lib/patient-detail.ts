@@ -4,6 +4,7 @@ import { getRing } from "@/app/patient/_lib/ring";
 import { addDays } from "@/app/patient/_lib/schedule";
 import { getAppointments } from "@/lib/appointments-server";
 import { getObservations } from "@/lib/observations-server";
+import { getApprovedPlan } from "@/lib/plans-server";
 import { createClient } from "@/lib/supabase/server";
 import { predlogaZaRehab } from "@/lib/templates";
 import { laceScore, tedenskiPovzetek } from "@/lib/triage";
@@ -60,7 +61,10 @@ export async function getPatientDetail(id: string, today: string) {
       .not("photo_path", "is", null)
       .order("checkin_date", { ascending: false })
       .limit(3),
-    template ? getRing(rehab, template, today) : null,
+    // With an approved plan the ring counts its items, as the patient sees it (T-84).
+    template
+      ? getApprovedPlan(id).catch(() => null).then((plan) => getRing(rehab, template, today, plan?.plan))
+      : null,
     getAppointments(id).catch(() => null),
     getObservations(rehab).catch(() => null),
   ]);

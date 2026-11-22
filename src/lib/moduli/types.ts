@@ -34,6 +34,12 @@ interface PostavkaDodatno {
    * this item when the answer is one of `ko`. The follow-up must be raven 3.
    */
   nadaljnje?: { ko: string[]; postavka: string };
+  /**
+   * Answered from the pill list (T-84): when the medicines of the item's module
+   * (matched by ATC) had doses `dniNazaj` days ago and every one is logged
+   * "vzeto", the answer is `vzeto` and the item isn't asked.
+   */
+  izZdravilModula?: { dniNazaj: number; vzeto: string };
 }
 
 type BrezPredloge<T> = Omit<T, "id" | "pogostost" | "privzetoIzbrano">;

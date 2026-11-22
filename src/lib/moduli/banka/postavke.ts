@@ -12,6 +12,8 @@ const BOLJE_ENAKO_SLABSE: Odgovor[] = [
   { id: "slabse", besedilo: "Slabše" },
 ];
 
+// Yesterday's pills all logged "vzeto" answer "Ste včeraj vzeli …?" (T-84).
+const IZ_ZDRAVIL = { dniNazaj: 1, vzeto: "da" };
 const izbira = { tip: "izbira" as const, vednoVprasaj: false, status: "zdoma" as const };
 
 export const postavke: Postavka[] = [
@@ -132,13 +134,13 @@ export const postavke: Postavka[] = [
 
   // --- Zdravila
   { ...izbira, id: "ak.vzeto.v1", koncept: "antikoagulant-vzeto", raven: 1,
-    besedilo: "Ste včeraj vzeli zdravilo za redčenje krvi?", odgovori: DA_NE, vir: v.ODPUSTNI_RECEPT },
+    besedilo: "Ste včeraj vzeli zdravilo za redčenje krvi?", odgovori: DA_NE, izZdravilModula: IZ_ZDRAVIL, vir: v.ODPUSTNI_RECEPT },
   { ...izbira, id: "ak.krvavitev.v1", koncept: "krvavitev", raven: 1,
     besedilo: "Ali ste opazili nenavadno krvavitev ali velike modrice?", odgovori: NE_DA, vir: v.ODPUSTNI_RECEPT },
   { ...izbira, id: "di.vzeto.v1", koncept: "diuretik-vzeto", raven: 1,
-    besedilo: "Ste včeraj vzeli zdravilo za vodo?", odgovori: DA_NE, vir: v.ODPUSTNI_RECEPT },
+    besedilo: "Ste včeraj vzeli zdravilo za vodo?", odgovori: DA_NE, izZdravilModula: IZ_ZDRAVIL, vir: v.ODPUSTNI_RECEPT },
   { ...izbira, id: "di.omotica.v1", koncept: "omotica", raven: 2,
     besedilo: "Ali se vam vrti, ko vstanete?", odgovori: NE_DA, vir: v.ODPUSTNI_RECEPT },
   { ...izbira, id: "ab.vzeto.v1", koncept: "antibiotik-vzeto", raven: 1,
-    besedilo: "Ste včeraj vzeli vse odmerke antibiotika?", odgovori: DA_NE, vir: v.ODPUSTNI_RECEPT },
+    besedilo: "Ste včeraj vzeli vse odmerke antibiotika?", odgovori: DA_NE, izZdravilModula: IZ_ZDRAVIL, vir: v.ODPUSTNI_RECEPT },
 ];

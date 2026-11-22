@@ -1,8 +1,9 @@
 import { describe, expect, it } from "vitest";
 import { banka, odobriNacrt, sestaviNacrt } from "@/lib/moduli";
 import { getPredloga } from "@/lib/templates";
-import type { Checkin, CheckinAnswers } from "@/lib/types";
-import { planQuestions, predlogaIzNacrta } from "./checkin-nacrt";
+import type { Checkin, CheckinAnswers, DoseLog, Medication } from "@/lib/types";
+import { brezOdgovorovIzZdravil, planQuestions, predlogaIzNacrta } from "./checkin-nacrt";
+import { answersFromPillsNacrt } from "./med-answers";
 import { collectAnswers, copyFromYesterday, sameAsYesterdaySource, withFollowUps } from "./checkin-plan";
 
 // Heart failure on a diuretic, discharged 20. 11. 2026, checked in on day 3.
@@ -47,5 +48,34 @@ describe("check-in from an approved plan", () => {
   it("offers the 112 screen on the red-flag answer", () => {
     const red = today([])[0];
     expect(red.kind === "izbira" && red.options.find((o) => o.id === "da")?.emergency?.kind).toBe("klic112");
+  });
+});
+
+describe("plan medicine items from the pill list", () => {
+  const med = (id: string, name: string, substance: string) =>
+    ({ id, name, active_substance: substance, times: ["zjutraj"], change: "novo", start_date: "2026-11-20", end_date: null }) as unknown as Medication;
+  const meds = [med("m1", "Edemid", "furosemid"), med("m2", "Concor", "bisoprolol")];
+  const log = (medication_id: string, status: DoseLog["status"]) =>
+    ({ medication_id, scheduled_date: "2026-11-22", time_of_day: "zjutraj", status }) as DoseLog;
+  const ids = today([]).map((q) => q.id);
+
+  it("answers the diuretic item when yesterday's diuretic was taken, ignoring other medicines", () => {
+    const known = answersFromPillsNacrt(nacrt, ids, meds, [log("m1", "vzeto"), log("m2", "izpusceno")], "2026-11-23");
+    expect(known).toEqual({ "di.vzeto.v1": "da" });
+    const { questions, known: saved } = brezOdgovorovIzZdravil(today([]), known);
+    expect(questions.map((q) => q.id)).not.toContain("di.vzeto.v1");
+    expect(saved).toEqual({ "di.vzeto.v1": "da" });
+  });
+
+  it("still asks when a dose was skipped or not logged", () => {
+    expect(answersFromPillsNacrt(nacrt, ids, meds, [log("m1", "izpusceno")], "2026-11-23")).toEqual({});
+    expect(answersFromPillsNacrt(nacrt, ids, meds, [], "2026-11-23")).toEqual({});
+  });
+
+  it("keeps every question when the pill list would answer all of them", () => {
+    const only = today([]).filter((q) => q.id === "di.vzeto.v1");
+    const { questions, known } = brezOdgovorovIzZdravil(only, { "di.vzeto.v1": "da" });
+    expect(questions).toHaveLength(1);
+    expect(known).toEqual({});
   });
 });

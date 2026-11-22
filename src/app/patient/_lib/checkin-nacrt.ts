@@ -4,8 +4,8 @@
 import { izberiDanes, oceniNacrt, type DanZgodovine, type Nacrt, type Postavka, type VnosNacrta } from "@/lib/moduli";
 import type { Pravilo, Predloga, Vprasanje } from "@/lib/templates";
 import { razlikaDni } from "@/lib/triage/datumi";
-import type { Checkin, IsoDate, PatientValues } from "@/lib/types";
-import { toViews, type QuestionView } from "./checkin-plan";
+import type { Checkin, CheckinAnswers, IsoDate, PatientValues } from "@/lib/types";
+import { followUpFor, toViews, type QuestionView } from "./checkin-plan";
 
 const kotVprasanje = (p: Postavka): Vprasanje => ({ ...p, pogostost: "dnevno", privzetoIzbrano: true }) as Vprasanje;
 
@@ -84,4 +84,18 @@ export function ringZaNacrt(nacrt: Nacrt): { ids: string[]; notCounting: Record<
     .filter((vn) => vn.postavka.raven <= 1 && vn.pogostost === "dnevno" && !vn.aktivniDnevi)
     .map((vn) => vn.postavka.id);
   return { ids, notCounting: {} };
+}
+
+/**
+ * Leaves out the questions the pill list already answers (T-84), as the
+ * template flow does: unless nothing else would be left, and never one whose
+ * known answer would trigger its follow-up. `known` is saved with the check-in.
+ */
+export function brezOdgovorovIzZdravil(questions: QuestionView[], fromPills: CheckinAnswers) {
+  const skip = (q: QuestionView) => fromPills[q.id] !== undefined && !followUpFor(q, fromPills[q.id]);
+  const asked = questions.filter((q) => !skip(q));
+  if (!asked.length) return { questions, known: {} as CheckinAnswers };
+  const known: CheckinAnswers = {};
+  for (const q of questions) if (skip(q)) known[q.id] = fromPills[q.id];
+  return { questions: asked, known };
 }
